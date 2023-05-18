@@ -96,4 +96,21 @@ public class UserDao {
 		}
 		return 0;
 	}
+	public int changeInfomation(String fullname,String email,String phoneNumber,User user) {
+		try {
+			String sql="UPDATE user SET fullname=?,email=?,phoneNumber=? WHERE username=?";
+			Object []params= {
+				fullname,
+				email,
+				phoneNumber
+			   ,user.getUsername()
+			};
+			int rowUpdate=_jdbcTemplate.update(sql,params);
+			return rowUpdate;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
 }

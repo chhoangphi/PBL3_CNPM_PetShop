@@ -108,13 +108,22 @@ public class UserController extends BaseController {
 		request.setAttribute("menu", HomeService.GetDataMenu());
 		request.setAttribute("personalInfo", user);
 		session.setAttribute("page", "personalInfopage");
+		request.getAttribute("changeStatus");
+		User model = userServiceImpl.findByUserNameAndPasswordAndStatus(user);
+		session.setAttribute("LoginInfo", userServiceImpl.GetUser(model));
 		return mvShare.getViewName();
 		}
 		else return "redirect:/dang-nhap";
 	}
 	@RequestMapping(value="/thong-tin-ca-nhan",method = RequestMethod.POST)
-	public void Profile(HttpSession session,@ModelAttribute("personalInfo") User user) {
-		
+	public String Profile(RedirectAttributes redirectAttributes,HttpSession session,HttpServletRequest request,@ModelAttribute("personalInfo") User user) {
+		User infoUser=(User) session.getAttribute("LoginInfo");
+		if (userServiceImpl.changeInfomation(user.getFullName(), user.getEmail(), user.getPhoneNumber(), infoUser)>0){
+			redirectAttributes.addFlashAttribute("changeStatus","Thay đổi thành công");
+			session.setAttribute("LoginInfo", userServiceImpl.GetUser(infoUser));
+			return "redirect:"+request.getHeader("Referer");
+		}
+		return "redirect:"+request.getHeader("Referer");
 	}
 	@RequestMapping(value="/tai-khoan-va-bao-mat",method = RequestMethod.GET)
 	public String Security(HttpSession session,HttpServletRequest request) {
@@ -223,8 +232,6 @@ public class UserController extends BaseController {
 		user.setUsername(username);
 		user.setPassword(password);
 		user.setStatus(1);
-		System.out.println("pass = " + password);
-		System.out.println("username = " + username);
 		User model = userServiceImpl.findByUserNameAndPasswordAndStatus(user);
 		if (model != null) {
 			//SessionUtil.getInstance().putValue(request, "model", model);

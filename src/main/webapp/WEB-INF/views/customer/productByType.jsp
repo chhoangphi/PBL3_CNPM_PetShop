@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet">
 </head>
 <body>
 	<!-- Page Header Start -->
@@ -40,7 +41,7 @@
 								class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
 								<input type="checkbox" class="custom-control-input" checked
 									id="price-all"> <a class=""
-									href='<c:url value="/san-pham/the-loai/${item.product_categ_id}/1"/>'
+									href='<c:url value="/san-pham/the-loai/${item.product_categ_id}"/>'
 									for="price-all">${item.product_categ_name}</a>
 							</div>
 							</form>
@@ -70,9 +71,9 @@
 									aria-expanded="false">Sắp xếp theo</button>
 								<div class="dropdown-menu dropdown-menu-right"
 									aria-labelledby="triggerId">
-									<a class="dropdown-item" href="#">Giá tăng dần</a> <a
-										class="dropdown-item" href="#">Giá giảm dần</a> <a
-										class="dropdown-item" href="#">Tên A->Z</a>
+									<a class="dropdown-item" href="<c:url value="/san-pham/${type_id}?sort=price-asc&currentPage=${param.currentPage}"/>">Giá tăng dần</a> <a
+										class="dropdown-item" href="<c:url value="/san-pham/${type_id}?sort=price-desc&currentPage=${param.currentPage}"/>">Giá giảm dần</a> <a
+										class="dropdown-item" href="<c:url value="/san-pham/${type_id}?sort=product_name-asc&currentPage=${param.currentPage}"/>">Tên A->Z</a>
 								</div>
 							</div>
 						</div>
@@ -94,7 +95,7 @@
 								</div>
 								<div
 									class="card-footer d-flex justify-content-between bg-light border">
-									<a href="<c:url value="/add-to-cart/${item.product_id}"/>" class="btn btn-sm text-dark p-0"><i
+									<a onclick="add('${item.product_id}')" class="btn btn-sm text-dark p-0"><i
 											class="fas fa-shopping-cart text-primary mr-1 add-to-cart"></i>Thêm vào giỏ hàng</a> 
 								</div>
 							</div>
@@ -109,12 +110,12 @@
 									varStatus="loop">
 									<c:if test="${loop.index==pageinfo.currentPage}">
 										<li class="page-item active"><a class="page-link"
-											href='<c:url value="/san-pham/${type_id}/${loop.index}"/>'>${loop.index}</a>
+											href='<c:url value="/san-pham/${type_id}?sort=${param.sort}&currentPage=${loop.index}"/>'>${loop.index}</a>
 										</li>
 									</c:if>
 									<c:if test="${loop.index!=pageinfo.currentPage}">
 										<li class="page-item"><a class="page-link"
-											href='<c:url value="/san-pham/${type_id}/${loop.index}"/>'>${loop.index}</a>
+											href='<c:url value="/san-pham/${type_id}?sort=${param.sort}&currentPage=${loop.index}"/>'>${loop.index}</a>
 										</li>
 									</c:if>
 								</c:forEach>
@@ -130,14 +131,34 @@
 
 			</div>
 
-
-
-
-
 		</div>
 	</div>
-	<!-- Shop Product End -->
-
-	<!-- Shop End -->
+	<content tag="script"> <script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+	<script>
+		function add(product_id) {
+			$
+					.ajax({
+						url : "/petshop-5/add-to-cart/" + product_id,
+						type : "get",
+						success : function() {
+							$("#addtocart").load(" #addtocart>*", "");
+							Toastify(
+									{
+										text : "Thêm vào giỏ hàng thành công!",
+										duration : 3000,
+										newWindow : true,
+										close : true,
+										gravity : "top", // hiển thị ở trên cùng màn hình
+										position : "center", // căn giữa theo chiều ngang
+										backgroundColor : "linear-gradient(to right, #00b09b, #96c93d)",
+									}).showToast();
+						}
+					});
+		}
+	</script> <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script> <script
+		src="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+	</content>
 </body>
 </html>

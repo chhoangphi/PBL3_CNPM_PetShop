@@ -23,18 +23,18 @@ public class CategoriesServiceImpl implements ICategoriesService {
 	}
 
 	@Override
-	public List<Products> GetDataProductByTypeIDLimit9(String type_id) {
-		return productDao.GetDataProductByTypeIDLimit9(type_id);
+	public List<Products> GetDataProductByTypeIDLimit9(String type_id,String sort) {
+		return productDao.GetDataProductByTypeIDLimit9(type_id,sort);
 	}
 	@Override
-	public List<Products> GetDataProductByTypeIDPaginate(String type_id,int start,int end) {
-		return productDao.GetDataProductByTypeIDPaginate(type_id,start,end);
+	public List<Products> GetDataProductByTypeIDPaginate(String type_id,int start,int end,String sort) {
+		return productDao.GetDataProductByTypeIDPaginate(type_id,start,end,sort);
 	}
 
 	@Override
-	public List<Products> GetDataProductByTypeID(String type_id) {
+	public List<Products> GetDataProductByTypeID(String type_id,String sort) {
 		// TODO Auto-generated method stub
-		return productDao.GetDataProductByTypeID(type_id);
+		return productDao.GetDataProductByTypeID(type_id,sort);
 	}
 	@Override
 	public String GetProductCategoryNameByProductCateg_ID(String product_categ_id) {
@@ -61,9 +61,9 @@ public class CategoriesServiceImpl implements ICategoriesService {
 	
 	@Override
 	public List<Products> GetDataProductByProductCategoryIDPaginate(String product_categ_id, int start,
-			int totalProductpage) {
+			int totalProductpage,String sort) {
 		// TODO Auto-generated method stub
-		return productDao.GetDataProductByProductCategoryIDPaginate(product_categ_id, start, totalProductpage);
+		return productDao.GetDataProductByProductCategoryIDPaginate(product_categ_id, start, totalProductpage,sort);
 	}
 
 	@Override

@@ -60,6 +60,7 @@
 	left: 2px;
 }
 </style>
+<link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -133,24 +134,11 @@
 				</div>
 				<h3 class="font-weight-semi-bold mb-4">${product.price}đ</h3>
 				<div class="d-flex align-items-center mb-4 pt-2">
-					<div class="input-group quantity mr-3" style="width: 130px;">
-						<div class="input-group-btn">
-							<button class="btn btn-primary btn-minus">
-								<i class="fa fa-minus"></i>
-							</button>
-						</div>
-						<input type="text" class="form-control bg-secondary text-center"
-							value="1">
-						<div class="input-group-btn">
-							<button class="btn btn-primary btn-plus">
-								<i class="fa fa-plus"></i>
-							</button>
-						</div>
-					</div>
-					<a href="<c:url value="/add-to-cart/${product.product_id}"/>"
-						class="btn btn-sm text-dark p-0"><i
-						class="fas fa-shopping-cart text-primary mr-1 add-to-cart"></i>Thêm
-						vào giỏ hàng</a>
+					<a  onclick="add('${product.product_id}')" type="submit"
+						class="btn btn-sm text-dark p-0">
+						<i class="fas fa-shopping-cart text-primary mr-1 add-to-cart"></i>
+						Thêm vào giỏ hàng
+					</a>
 				</div>
 				<div class="d-flex pt-2">
 					<p class="text-dark font-weight-medium mb-0 mr-2">Chia sẻ</p>
@@ -322,7 +310,7 @@
 							</div>
 							<div
 								class="card-footer d-flex justify-content-between bg-light border">
-								<a href="<c:url value="/add-to-cart/${item.product_id}"/>"
+								<a onclick="add('${product.product_id}')"
 									class="btn btn-sm text-dark p-0"><i
 									class="fas fa-shopping-cart text-primary mr-1 add-to-cart"></i>Thêm
 									vào giỏ hàng</a>
@@ -334,22 +322,31 @@
 		</div>
 	</div>
 
-	<!-- Products End -->
-	<!-- 	<content tag="script">
-     <script>
-     function editquantity(product_id) {
-    	 var rating=$("#star").val();
-         $.ajax({
-         	
-             url: "thay-doi-so-sao/" +"/"+quantity,
-             type: "get",
-             success: function () {
-                 $("#editcart").load(location.href + " #editcart>*","");
-             }
-         });
-     }
- 
-    </script>
-    </content> -->
+	<content tag="script"> <script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+	<script>
+		function add(product_id) {
+					$.ajax({
+						url : "/petshop-5/add-to-cart/" + product_id,
+						type : "get",
+						success : function() {
+							$("#addtocart").load(" #addtocart>*", "");
+							Toastify(
+									{
+										text : "Thêm vào giỏ hàng thành công!",
+										duration : 3000,
+										newWindow : true,
+										close : true,
+										gravity : "top", // hiển thị ở trên cùng màn hình
+										position : "center", // căn giữa theo chiều ngang
+										backgroundColor : "linear-gradient(to right, #00b09b, #96c93d)",
+									}).showToast();
+						}
+					});
+		}
+	</script> <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script> <script
+		src="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+	</content>
 </body>
 </html>

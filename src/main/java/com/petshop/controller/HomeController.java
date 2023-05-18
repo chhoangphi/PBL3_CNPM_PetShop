@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.petshop.dto.PaginatesDto;
+import com.petshop.entity.ItemType;
 import com.petshop.entity.Products;
 import com.petshop.service.CategoriesServiceImpl;
 import com.petshop.service.PaginatesServiceImpl;
@@ -31,7 +32,9 @@ public class HomeController extends BaseController{
 		mvShare.setViewName("customer/home");
 		mvShare.addObject("dataProducts", productService.GetDataProduct());
 		mvShare.addObject("productCategoryNameList", categoryService.GetDataProductCategoryNameList());
-
+		mvShare.addObject("itemType",HomeService.GetDataItemType());
+		mvShare.addObject("itemType01",HomeService.GetDataItemTypeByItemID("item01"));
+		mvShare.addObject("itemType02",HomeService.GetDataItemTypeByItemID("item02"));
 		return mvShare;
 	}
 	@RequestMapping(value = { "/deny-access" })

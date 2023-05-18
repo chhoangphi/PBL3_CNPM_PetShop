@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -46,9 +48,9 @@ public class CartController extends BaseController {
 	@Autowired
 	private OrderServiceImpl orderService;
 
-	@RequestMapping(value = "/san-pham/add-to-cart/{product_id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/add-to-cart/{product_id}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
-	public void AddCart(HttpServletRequest request, HttpSession session, @PathVariable String product_id) { //
+	public void AddCart(HttpServletRequest request, HttpSession session, @PathVariable String product_id) {
 		HashMap<String, CartDto> cart = (HashMap<String, CartDto>) session.getAttribute("cart");
 		if (cart == null) {
 			cart = new HashMap<String, CartDto>();
@@ -58,57 +60,8 @@ public class CartController extends BaseController {
 		session.setAttribute("totalQuantity", cartService.TotalQuantity(cart));
 		session.setAttribute("totalPrice", cartService.TotalPrice(cart));
 	}
-//	@RequestMapping(value = "/san-pham/add-to-cart/{product_id}", method = RequestMethod.GET)
-//	@ResponseStatus(HttpStatus.OK)
-//	public void addToCart(@PathVariable String product_id, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException, UnsupportedEncodingException {
-//
-//	    // Lấy giỏ hàng từ cookie
-//	    HashMap<String, CartDto> cart = getCartFromCookie(request);
-//	    System.out.println(cart.size());
-//	    // Thêm sản phẩm vào giỏ hàng
-//	    cart = cartService.AddCart(product_id, cart);
-//	    
-//	    // Lưu giỏ hàng vào cookie
-//	    saveCartToCookie(response, cart);
-//	}
-//	// Lấy giỏ hàng từ cookie
-//	public HashMap<String, CartDto> getCartFromCookie(HttpServletRequest request) throws UnsupportedEncodingException {
-//	    Cookie[] cookies = request.getCookies();
-//	    HashMap<String, CartDto> cart = new HashMap<>();
-//
-//	    if (cookies != null) {
-//	        for (Cookie cookie : cookies) {
-//	            if (cookie.getName().equals("cart")) {
-//	               // String value = cookie.getValue();
-////	                byte[] bytes = value.getBytes(StandardCharsets.UTF_);
-////	                String utf8EncodedString = new String(bytes, StandardCharsets.UTF_16);
-//	            //    String encode = URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
-//	                String value = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8.toString());
-//	                ObjectMapper mapper = new ObjectMapper();
-//	                try {
-//	                    cart = mapper.readValue(value, new TypeReference<HashMap<String, CartDto>>(){});
-//	                
-//	                } catch (IOException e) {
-//	                    e.printStackTrace();
-//	                }
-//	                break;
-//	            }
-//	        }
-//	    }
-//
-//	    return cart;
-//	}
-//
-//	// Lưu giỏ hàng vào cookie
-//	public void saveCartToCookie(HttpServletResponse response, HashMap<String, CartDto> cart) throws JsonProcessingException {
-//	    ObjectMapper mapper = new ObjectMapper();
-//	    String cartJson = mapper.writeValueAsString(cart);
-//	    Cookie cookie = new Cookie("cart", cartJson);
-//	    cookie.setMaxAge(30 * 24 * 60 * 60); // Thời gian sống của cookie là 30 ngày
-//	    cookie.setPath("/");
-//	    response.addCookie(cookie);
-//	}
-
+	
+	
 	@RequestMapping(value = "/xoa-san-pham/{product_id}", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public void DeleteCart(HttpServletRequest request, HttpSession session, @PathVariable String product_id) {

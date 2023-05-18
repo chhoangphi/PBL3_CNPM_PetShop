@@ -15,5 +15,5 @@ public interface IUserService {
 	public User GetUser(User user);
 	public User findByUserNameAndPasswordAndStatus(User user);
 	public int changePassword(String password,User user);
-	
+	public int changeInfomation(String fullname,String email,String phoneNumber,User user);
 }

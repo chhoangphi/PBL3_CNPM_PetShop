@@ -94,14 +94,14 @@ public class AdminController extends BaseController {
 		System.out.println("productCategoryNameByCateID = " + productCategoryNameByCateID);
 		mvShare.addObject("categoryName", productCategoryNameByCateID);
 		ProductCategory productCategory = new ProductCategory(homeservice.GetDataProductCategory(product_cate_id));
-		int totalProductPage = 12;
+		
 		int TotalData = productCategory.getProductList(productCategory).size();
 		System.out.println("here" + TotalData);
 		PaginatesDto pageinfo = paginateService.GetPatinates(TotalData, totalProductPage,
 				Integer.parseInt(currentPage));
 		mvShare.addObject("pageinfo", pageinfo);
 		mvShare.addObject("ProductPaginate", categoryService.GetDataProductByProductCategoryIDPaginate(product_cate_id,
-				pageinfo.getStart(), totalProductPage));
+				pageinfo.getStart(), totalProductPage,"price-asc"));
 		return mvShare;
 	}
 
@@ -205,7 +205,6 @@ public class AdminController extends BaseController {
 	public ModelAndView ManageOrder(@ModelAttribute("product") Products produc, HttpServletRequest request,
 			HttpServletResponse response, ModelMap model, @PathVariable String currentPage) {
 		mvShare.addObject("dataOrder", orderDetailService.GetDataOrderDetail());
-		int totalProductPage = 12;
 		int TotalData = orderDetailService.GetDataOrderDetail().size();
 		System.out.println("here" + TotalData);
 		PaginatesDto pageinfo = paginateService.GetPatinates(TotalData, totalProductPage,
