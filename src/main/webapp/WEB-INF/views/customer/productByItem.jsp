@@ -68,7 +68,7 @@
 								class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
 								<input type="checkbox" class="custom-control-input" checked
 									id="price-all"> <a class=""
-									href='<c:url value="/san-pham/${item.type_id}/1"/>'
+									href='<c:url value="/san-pham/${item.type_id}?sort=price-asc"/>'
 									for="price-all">${item.type_name}</a>
 							</div>
 						</form>
@@ -91,7 +91,7 @@
 					<c:set var="res" value="1"></c:set>
 					<div class="category">
 						<h3 class="category-title">${type.type_name}</h3> <a
-							href='<c:url value="/san-pham/${type.type_id}/1"/>'
+							href='<c:url value="/san-pham/${type.type_id}"/>'
 							class="view-all">Xem tất cả ></a>
 					</div>
 					<div class="row pb-3">
@@ -147,10 +147,10 @@
 	 <script>
 	function add(product_id) {
         $.ajax({
-            url: "add-to-cart/" + product_id,
+            url: "/petshop-5/add-to-cart/" + product_id,
             type: "get",
             success: function () {
-                $("#addtocart").load(location.href + " #addtocart>*","");
+                $("#addtocart").load(" #addtocart>*",""); 
                 Toastify({
 		    		  text: "Thêm vào giỏ hàng thành công!",
 		    		  duration: 3000,

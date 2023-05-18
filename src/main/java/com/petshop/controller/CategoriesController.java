@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.petshop.dto.PaginatesDto;
@@ -23,10 +24,10 @@ public class CategoriesController extends BaseController {
 	private CategoriesServiceImpl CategoriesService;
 	@Autowired
 	private PaginatesServiceImpl paginateService;
-
 	
-	@RequestMapping(value = "/san-pham/{item_id}")
-	public ModelAndView Product(@PathVariable String item_id) {
+	
+	@RequestMapping(value = "/san-pham")
+	public ModelAndView Product(@RequestParam(name = "shop", defaultValue = "item_01") String item_id) {
 	
 		mvShare.setViewName("customer/productByItem");
 
@@ -36,42 +37,41 @@ public class CategoriesController extends BaseController {
 		
 		for (TypeOfCategory item: itemType.getTypeOfCategoryList())
 		{
-			List<Products> tmpList=CategoriesService.GetDataProductByTypeIDLimit9(item.getType_id());
+			List<Products> tmpList=CategoriesService.GetDataProductByTypeIDLimit9(item.getType_id(),"price-asc");
 			productList.addAll(tmpList);
 		}
 		mvShare.addObject("productByTypeID",productList);
 		return mvShare;
 	}
 
-	@RequestMapping(value = "/san-pham/{type_id}/{currentPage}")
-	public ModelAndView ProductByTypeID(@PathVariable String type_id, @PathVariable String currentPage) {
+	@RequestMapping(value = "/san-pham/{type_id}")
+	public ModelAndView ProductByTypeID(@PathVariable String type_id
+			                           ,@RequestParam(name="sort",defaultValue="price-asc") String sort
+			                           ,@RequestParam(name="currentPage",defaultValue="1") String currentPage) {
 		mvShare.setViewName("customer/productByType");
 		
-		List<Products> productList=	CategoriesService.GetDataProductByTypeID(type_id);
+		List<Products> productList=	CategoriesService.GetDataProductByTypeID(type_id,sort);
 		TypeOfCategory typeOfCategory=new TypeOfCategory(HomeService.GetDataTypeOfCategory(type_id));
 		mvShare.addObject("typeOfCategory", typeOfCategory);
 		
-		int totalProductPage = 12;	
+			
 		int TotalData = productList.size();
-		System.out.println(TotalData);
 		PaginatesDto pageinfo = paginateService.GetPatinates(TotalData, totalProductPage,Integer.parseInt(currentPage));
 		mvShare.addObject("pageinfo", pageinfo);
-		mvShare.addObject("ProductPaginate",CategoriesService.GetDataProductByTypeIDPaginate(type_id, pageinfo.getStart(), totalProductPage));
+		mvShare.addObject("ProductPaginate",CategoriesService.GetDataProductByTypeIDPaginate(type_id, pageinfo.getStart(), totalProductPage,sort));
 		return mvShare;
 	}
-	@RequestMapping(value = "/san-pham/the-loai/{product_cate_id}/{currentPage}")
-	public ModelAndView ProductByProductCateg(@PathVariable String product_cate_id, @PathVariable String currentPage) {
+	@RequestMapping(value = "/san-pham/the-loai/{product_cate_id}")
+	public ModelAndView ProductByProductCateg(@PathVariable String product_cate_id,@RequestParam(name = "currentPage", defaultValue = "1") String currentPage
+			,@RequestParam(name = "sort", defaultValue = "price-asc") String sort) {
 		mvShare.setViewName("customer/productByProductcateg");
-		
 		ProductCategory productCategory=new ProductCategory(HomeService.GetDataProductCategory(product_cate_id));
 		mvShare.addObject("productCategory", productCategory);
-		
-		int totalProductPage = 12;
+		System.out.println(currentPage);
 		int TotalData = productCategory.getProductList(productCategory).size();
-		System.out.println("here"+TotalData);
 		PaginatesDto pageinfo = paginateService.GetPatinates(TotalData, totalProductPage,Integer.parseInt(currentPage));
 		mvShare.addObject("pageinfo", pageinfo);
-		mvShare.addObject("ProductPaginate",CategoriesService.GetDataProductByProductCategoryIDPaginate(product_cate_id, pageinfo.getStart(), totalProductPage));
+		mvShare.addObject("ProductPaginate",CategoriesService.GetDataProductByProductCategoryIDPaginate(product_cate_id, pageinfo.getStart(), totalProductPage,sort));
 		return mvShare;
 	}
 }

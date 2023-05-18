@@ -205,31 +205,27 @@ nav.order-status li.active {
 							<div class="tab-pane active" id="profile">
 								<h6>Thông tin cá nhân</h6>
 								<hr>
-
+									<span
+											class="red">${changeStatus}</span> 
 								<form:form action="thong-tin-ca-nhan" method="post"
 									modelAttribute="personalInfo">
 									<div class="form-group">
 										<label for="fullName">Họ và tên</label>
 										<form:input type="text" class="form-control"
-											path="fullName" disabled="true"></form:input>
-											<button id="edit-btn" class="btn btn-primary" style="display:inline-block; float:right">Sửa</button>
-                                        <button id="save-btn" class="btn btn-success" style="display:none">Lưu</button>
-                                        <button id="cancel-btn" class="btn btn-danger" style="display:none">Trở lại</button>
-
+											path="fullName"  required="required"></form:input>
+											
 									</div>
 									<div class="form-group">
 										<label for="email">Địa chỉ Email</label>
-										<form:input type="text" class="form-control" path="email" disabled="true"></form:input>
+										<form:input type="text" class="form-control" path="email"  required="required"></form:input>
 										
 									</div>
 									<div class="form-group">
 										<label for="phoneNumber">Số điện thoại</label>
 										<form:input type="text" class="form-control"
-											path="phoneNumber" disabled="true"></form:input>
-											<a href="#" class="edit-link">Sửa</a>
+											path="phoneNumber" required="required"></form:input>
 									</div>
-									<button type="button" class="btn btn-primary">Cập nhật
-										thay đổi</button>
+									<input class="btn btn-primary form-control" type="submit" value="Lưu thay đổi" name="submit" id="submit" />
 								</form:form>
 							</div>
 						</c:if>

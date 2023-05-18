@@ -10,7 +10,7 @@ import com.petshop.entity.*;
 @Repository
 public class ProductsDao extends BaseDao {
 
-	public StringBuffer SqlProductByTypeID(String type_id) {
+	public StringBuffer SqlProductByTypeID(String type_id,String sort) {
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT");
 		sql.append(" pd.product_name");
@@ -31,12 +31,13 @@ public class ProductsDao extends BaseDao {
 		sql.append(" pd.product_categ_id=pc.product_categ_id");
 		sql.append(" WHERE tc.id=");
 		sql.append("'" + type_id + "'");
-		sql.append(" ORDER BY pd.sold_quantity DESC");
+		String []s=sort.split("-");
+		sql.append(" ORDER BY "+s[0]+" "+s[1]);
 		return sql;
 	}
 
-	public StringBuffer SqlProductByTypeIDLimit9(String type_id) {
-		StringBuffer sql = SqlProductByTypeID(type_id);
+	public StringBuffer SqlProductByTypeIDLimit9(String type_id,String sort) {
+		StringBuffer sql = SqlProductByTypeID(type_id,sort);
 		sql.append(" LIMIT 9");
 		return sql;
 	}
@@ -61,8 +62,8 @@ public class ProductsDao extends BaseDao {
 		return sql;
 	}
 
-	public StringBuffer SqlProductByTypeIDPaginate(String type_id, int start, int totalPage) {
-		StringBuffer sql = SqlProductByTypeID(type_id);
+	public StringBuffer SqlProductByTypeIDPaginate(String type_id, int start, int totalPage,String sort) {
+		StringBuffer sql = SqlProductByTypeID(type_id,sort);
 		sql.append(" LIMIT ");
 		sql.append(start + ", " + totalPage);
 		return sql;
@@ -118,10 +119,10 @@ public class ProductsDao extends BaseDao {
 		return sql;
 	}
 
-	public List<Products> GetDataProductByTypeIDLimit9(String type_id) {
+	public List<Products> GetDataProductByTypeIDLimit9(String type_id,String sort) {
 		List<Products> listproduct = new ArrayList<>();
 		try {
-			String sql = SqlProductByTypeIDLimit9(type_id).toString();
+			String sql = SqlProductByTypeIDLimit9(type_id,sort).toString();
 			System.out.println("SQL Query: " + sql);
 			listproduct = _JdbcTemplate.query(sql, new MapperProducts());
 			return listproduct;
@@ -131,10 +132,10 @@ public class ProductsDao extends BaseDao {
 		}
 	}
 
-	public List<Products> GetDataProductByTypeID(String type_id) {
+	public List<Products> GetDataProductByTypeID(String type_id,String sort) {
 		List<Products> listproduct = new ArrayList<>();
 		try {
-			String sql = SqlProductByTypeID(type_id).toString();
+			String sql = SqlProductByTypeID(type_id,sort).toString();
 			System.out.println("SQL Query: " + sql);
 			listproduct = _JdbcTemplate.query(sql, new MapperProducts());
 			return listproduct;
@@ -144,12 +145,11 @@ public class ProductsDao extends BaseDao {
 		}
 	}
 
-	public List<Products> GetDataProductByTypeIDPaginate(String type_id, int start, int end) {
+	public List<Products> GetDataProductByTypeIDPaginate(String type_id, int start, int end,String sort) {
 		List<Products> listproduct = new ArrayList<>();
 		try {
-			String sql = SqlProductByTypeIDPaginate(type_id, start, end).toString();
-			System.out.println("SQL Query: " + sql);
-			listproduct = _JdbcTemplate.query(sql, new MapperProducts());
+			StringBuffer sql = SqlProductByTypeIDPaginate(type_id, start, end,sort);
+			listproduct = _JdbcTemplate.query(sql.toString(), new MapperProducts());
 			return listproduct;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -168,7 +168,6 @@ public class ProductsDao extends BaseDao {
 		List<Products> listproduct = new ArrayList<>();
 		try {
 			String sql = SqlProductByCategIDPaginate(product_categ_id, start, end).toString();
-			System.out.println("SQL Query: " + sql);
 			listproduct = _JdbcTemplate.query(sql, new MapperProducts());
 			return listproduct;
 		} catch (Exception e) {
@@ -191,10 +190,12 @@ public class ProductsDao extends BaseDao {
 	}
 
 	public List<Products> GetDataProductByProductCategoryIDPaginate(String product_categ_id, int start,
-			int totalProductpage) {
+			int totalProductpage,String sort) {
 		List<Products> listproduct = new ArrayList<>();
+		String []s=sort.split("-");
 		try {
 			StringBuffer sql = SqlProductByProductCategoryID(product_categ_id);
+			sql.append("ORDER BY "+s[0]+" "+s[1]);
 			sql.append(" LIMIT ");
 			sql.append(start + ", " + totalProductpage);
 			System.out.println("SQL Query: " + sql);

@@ -81,4 +81,9 @@ public class UserServiceImpl implements IUserService {
 		return userDao.changePassword(password, user);
 	}
 
+	@Override
+	public int changeInfomation(String fullname, String email, String phoneNumber, User user) {
+		return userDao.changeInfomation(fullname, email, phoneNumber, user);
+	}
+
 }
