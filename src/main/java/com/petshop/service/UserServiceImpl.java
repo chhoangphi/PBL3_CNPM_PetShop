@@ -86,4 +86,22 @@ public class UserServiceImpl implements IUserService {
 		return userDao.changeInfomation(fullname, email, phoneNumber, user);
 	}
 
+	@Override
+	public List<User> GetDataUserPaginate(int start, int end) {
+		// TODO Auto-generated method stub
+		return userDao.GetDataUserPaginate(start, end);
+	}
+
+	@Override
+	public int DeleteUser(User user) {
+		// TODO Auto-generated method stub
+		return userDao.DeleteUser(user);
+	}
+
+	@Override
+	public int UpdateUser(User user) {
+		// TODO Auto-generated method stub
+		return userDao.UpdateUser(user);
+	}
+
 }

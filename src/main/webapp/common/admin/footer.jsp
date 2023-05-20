@@ -70,6 +70,11 @@
 							<i class="fas fa-chart-area"></i>
 						</div> Quản lý đơn hàng
 					</a>
+					<a class="nav-link" href="/petshop-5/admin/quan-ly-tai-khoan/1">
+						<div class="sb-nav-link-icon">
+							<i class="fas fa-chart-area"></i>
+						</div> Quản lý tài khoản
+					</a>
 
 				</div>
 			</div>

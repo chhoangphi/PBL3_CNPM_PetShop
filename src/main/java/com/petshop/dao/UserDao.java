@@ -113,4 +113,62 @@ public class UserDao {
 		}
 		return 0;
 	}
+	public List<User> GetDataUserPaginate(int start, int end) {
+		List<User> listUser = new ArrayList<>();
+		try {
+			String sql = SqlUserPaginate(start, end).toString();
+			System.out.println("SQL Query: " + sql);
+			listUser = _jdbcTemplate.query(sql, new MapperUser());
+			return listUser;
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	public StringBuffer SqlUserPaginate(int start, int totalPage) {
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT * FROM user ");
+		sql.append(" LIMIT ");
+		sql.append(start + ", " + totalPage);
+		return sql;
+	}
+	public int DeleteUser(User user)
+	{
+		try {
+			String sql = "UPDATE USER SET status = 0 WHERE username='"+user.getUsername()+"'";
+			int rowUpdate=_jdbcTemplate.update(sql);
+			return rowUpdate;
+		} catch (DataAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return 0;
+		}
+ 	}
+	public int UpdateUser(User user) {
+		try {
+			StringBuffer sql = new StringBuffer();
+			sql.append("UPDATE user");
+			sql.append(" SET ");
+			sql.append(" username='");
+			sql.append(user.getUsername()+"',");
+			sql.append(" fullname='");
+			sql.append(user.getFullName()+"',");
+			sql.append(" gender='");
+			sql.append(user.getGender()+"',");
+			sql.append(" phonenumber='");
+			sql.append(user.getPhoneNumber()+"',");
+			sql.append(" dateofbirth='");
+			sql.append(user.getDateOfBirth()+"',");
+			sql.append(" email='");
+			sql.append(user.getEmail()+"'");
+			sql.append(" WHERE username='" + user.getUsername()+"'");
+			int rowUpdate=_jdbcTemplate.update(sql.toString());
+			System.out.println(sql.toString());
+			return rowUpdate;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
 }

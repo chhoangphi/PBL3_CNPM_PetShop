@@ -65,5 +65,29 @@ public class OrderServiceImpl implements IOrderService{
 		return orderDao.findOrderByStatus(status, customerID);
 	}
 
+	@Override
+	public List<Order> GetDataOrder() {
+		// TODO Auto-generated method stub
+		return orderDao.GetDataOrder();
+	}
+	
+
+	@Override
+	public List<Order> GetDataOrderPaginate(int start, int end) {
+		// TODO Auto-generated method stub
+		return orderDao.GetDataOrderPaginate(start, end);
+	}
+	@Override
+	public List<Order> GetDataOrderByUsername(String username) {
+		// TODO Auto-generated method stub
+		return orderDao.GetDataOrderByUsername(username);
+	}
+
+	@Override
+	public int UpdateOrder(String status, String address, String orderID) {
+		// TODO Auto-generated method stub
+		return orderDao.UpdateOrder(status, address, orderID);
+	}
+
 
 }

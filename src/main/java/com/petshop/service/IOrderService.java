@@ -18,4 +18,8 @@ public interface IOrderService {
 	public long TotalPriceProducts(List<OrderDetail> orderDetailList);
 	public int DeleteOrder(String orderID);
 	public List<Order> findOrderByStatus(String status,String customerID);
+	public List<Order> GetDataOrder();
+	public List<Order> GetDataOrderByUsername(String username);
+	public List<Order> GetDataOrderPaginate(int start, int end);
+	public int UpdateOrder(String status, String address,String orderID);
 }

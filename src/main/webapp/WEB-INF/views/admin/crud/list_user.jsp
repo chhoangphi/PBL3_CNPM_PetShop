@@ -327,13 +327,13 @@ table.table .avatar {
 					<div class="row">
 						<div class="col-sm-6">
 							<h2>
-								Manage <b>Order</b>
+								Manage <b>User</b>
 							</h2>
 						</div>
 						<div class="col-sm-6">
 							<a href="#addEmployeeModal" class="btn btn-success"
 								data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add
-									New Order</span></a> <a href="#deleteEmployeeModal"
+									New User</span></a> <a href="#deleteEmployeeModal"
 								class="btn btn-danger" data-toggle="modal"><i
 								class="material-icons">&#xE15C;</i> <span>Delete</span></a>
 						</div>
@@ -345,37 +345,39 @@ table.table .avatar {
 							<th><span class="custom-checkbox"> <input
 									type="checkbox" id="selectAll"> <label for="selectAll"></label>
 							</span></th>
-							<th>Order ID</th>
-							<th>Recipient Name</th>
+							<th>Username</th>
+							<th>Fullname</th>
+							<th>Gender</th>
+							<th>Date Of Birth</th>
 							<th>Phone Number</th>
-							<th>Address</th>
-							<th>Status</th>
-							<th>Actions</th>
+							<th>Action</th>
+							
 						</tr>
 					</thead>
 					<tbody>
-						 <c:forEach var="item" items="${OrderPaginate}">
+						 <c:forEach var="item" items="${userPaginate}">
+						 <c:if test = "${item.status==1}">
 							<tr>
 								<td><span class="custom-checkbox"> <input
 										type="checkbox" id="checkbox1" name="options[]" value="1">
 										<label for="checkbox1"></label>
 								</span></td>
-								<td>${item.orderId}</td>
-								<td>${item.recipientName}</td>
-								<td>${item.phoneNumber}</td>
- 								<td>${item.address}</td>
- 								<td>${item.status}</td>
- 								<td><a
-									href="<c:url value="/chi-tiet-don-hang/${item.orderId}"/>"
-									class="view" title="View" data-toggle="tooltip"><i
-										class="material-icons">&#xE417;</i></a> <a
-									href="<c:url value="/admin/cap-nhat-don-hang/${item.orderId}"/>"
+								<td>${item.username}</td>
+								<td>${item.fullName}</td>
+								<td>${item.gender}</td>
+ 								<td>${item.dateOfBirth}</td>
+ 								<td>${item.phoneNumber}</td>
+ 								
+ 								
+ 								<td> <a
+									href="<c:url value="/admin/cap-nhat-tai-khoan/${item.username }"/>"
 									class="edit" title="Edit" data-toggle="tooltip"><i
 										class="material-icons">&#xE254;</i></a> <a
-									href="<c:url value="/admin/xoa-don-hang/${item.orderId}"/>"
+									href="<c:url value="/admin/xoa-tai-khoan/${item.username}"/>"
 									class="delete" title="Delete" data-toggle="tooltip"><i
 										class="material-icons">&#xE872;</i></a></td>
 							</tr>
+							</c:if>
 						</c:forEach>
 					</tbody>
 				</table>
@@ -386,10 +388,10 @@ table.table .avatar {
 					<ul class="pagination">
 					<c:forEach var="item" begin="1" end="${pageinfo.totalPage}" varStatus ="loop">
 					<c:if test="${loop.index==pageinfo.currentPage}">
-						<li class="page-item active"><a href="<c:url value="/admin/quan-ly-don-hang/${loop.index}"/>" class="page-link">${loop.index }</a></li>
+						<li class="page-item active"><a href="<c:url value="/admin/quan-ly-tai-khoan/${loop.index}"/>" class="page-link">${loop.index }</a></li>
 						</c:if>
 						<c:if test="${loop.index!=pageinfo.currentPage}">
-						<li class="page-item"><a href="<c:url value="/admin/quan-ly-don-hang/${loop.index}"/>" class="page-link">${loop.index }</a></li>
+						<li class="page-item"><a href="<c:url value="/admin/quan-ly-tai-khoan/${loop.index}"/>" class="page-link">${loop.index }</a></li>
 						</c:if>
 						</c:forEach>
 					</ul>
@@ -401,41 +403,46 @@ table.table .avatar {
 	<div id="addEmployeeModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				 <form:form action="/petshop-5/admin/them-san-pham" method="POST"
-					modelAttribute="product">
+				 <form:form action="/petshop-5/admin/them-tai-khoan" method="POST"
+					modelAttribute="user">
 					<div class="modal-header">
-						<h4 class="modal-title">Add Product</h4>
+						<h4 class="modal-title">Add User</h4>
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
-							<form:label path="product_id">Product ID</form:label>
-							<form:input type="text" class="form-control" path="product_id" />
+							<form:label path="username">Username</form:label>
+							<form:input type="text" class="form-control" path="username" />
 						</div>
 						<div class="form-group">
-							<form:label path="product_name">Product Name</form:label>
-							<form:input type="text" class="form-control" path="product_name" />
+							<form:label path="password">Password</form:label>
+							<form:input type="password" class="form-control" path="password" />
 						</div>
 						<div class="form-group">
-							<form:label path="img">Product Image URL</form:label>
-							<form:input type="text" class="form-control" path="img" />
+							<form:label path="fullName">Fullname</form:label>
+							<form:input type="text" class="form-control" path="fullName" />
 						</div>
 						<div class="form-group">
-							<form:label path="price">Product Price</form:label>
-							<form:input type="text" class="form-control" path="price" />
+							<form:label path="email">Email</form:label>
+							<form:input type="text" class="form-control" path="email" />
 						</div>
 						<div class="form-group">
-							<form:label path="description">Product Description</form:label>
-							<form:input type="text" class="form-control" path="description" />
+							<form:label path="dateOfBirth">Date Of Birth</form:label>
+							<form:input type="date" class="form-control" path="dateOfBirth" />
+						</div>
+						<div class="form-group">
+							<form:label path="phoneNumber">Phone Number</form:label>
+							<form:input type="text" class="form-control" path="phoneNumber" />
 						</div>
 						<div class="mb-3">
-							<label for="product_categ_name" class="form-label">Product
-								Category Name</label> <select class="form-control"
-								id="product_categ_name" name="product_categ_name">
-								<c:forEach var="item" items="${productCategory1}">
-									<option value="${categoryName}" label="${categoryName}" />
-								</c:forEach>
+							<label for="gender" class="form-label">Gender</label> <select class="form-control"
+								id="gender" name="gender">
+								
+									<option value="Nam" label="Nam" />
+									<option value="Nữ" label="Nữ" />
+									<option value="Khác" label="Khác" />
+								
 							</select>
 						</div>
 					</div>
@@ -452,36 +459,55 @@ table.table .avatar {
 	<div id="editEmployeeModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form>
+				 <form:form action="/petshop-5/admin/chinh-sua-tai-khoan" method="POST"
+					modelAttribute="user">
 					<div class="modal-header">
-						<h4 class="modal-title">Edit Product</h4>
+						<h4 class="modal-title">Edit User</h4>
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
-							<label>Name</label> <input type="text" class="form-control"
-								required>
+							<form:label path="username">Username</form:label>
+							<form:input type="text" class="form-control" path="username" />
 						</div>
 						<div class="form-group">
-							<label>Email</label> <input type="email" class="form-control"
-								required>
+							<form:label path="password">Password</form:label>
+							<form:input type="password" class="form-control" path="password" />
 						</div>
 						<div class="form-group">
-							<label>Address</label>
-							<textarea class="form-control" required></textarea>
+							<form:label path="fullName">Fullname</form:label>
+							<form:input type="text" class="form-control" path="fullName" />
 						</div>
 						<div class="form-group">
-							<label>Phone</label> <input type="text" class="form-control"
-								required>
+							<form:label path="email">Email</form:label>
+							<form:input type="email" class="form-control" path="email" />
+						</div>
+						<div class="form-group">
+							<form:label path="dateOfBirth">Date Of Birth</form:label>
+							<form:input type="text" class="form-control" path="dateOfBirth" />
+						</div>
+						<div class="form-group">
+							<form:label path="phoneNumber">Phone Number</form:label>
+							<form:input type="text" class="form-control" path="phoneNumber" />
+						</div>
+						<div class="mb-3">
+							<label for="gender" class="form-label">Gender</label> <select class="form-control"
+								id="gender" name="gender">
+								
+									<option value="Nam" label="Nam" />
+									<option value="Nữ" label="Nữ" />
+									<option value="Khác" label="Khác" />
+								
+							</select>
 						</div>
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal"
-							value="Cancel"> <input type="submit" class="btn btn-info"
-							value="Save">
+							value="Cancel"> <input type="submit"
+							class="btn btn-success" value="Update">
 					</div>
-				</form>
+				</form:form> 
 			</div>
 		</div>
 	</div>
