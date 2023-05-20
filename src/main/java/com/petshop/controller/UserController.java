@@ -2,7 +2,10 @@ package com.petshop.controller;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,9 +25,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.petshop.entity.Activity;
 import com.petshop.entity.Order;
 import com.petshop.entity.Role;
 import com.petshop.entity.User;
+import com.petshop.service.ActivityServiceImpl;
 import com.petshop.service.OrderServiceImpl;
 import com.petshop.service.UserServiceImpl;
 
@@ -32,6 +37,8 @@ import com.petshop.service.UserServiceImpl;
 public class UserController extends BaseController {
 	@Autowired
 	UserServiceImpl userServiceImpl = new UserServiceImpl();
+	@Autowired
+	ActivityServiceImpl activityServiceImpl = new ActivityServiceImpl();
 	@Autowired
 	private OrderServiceImpl orderService;
 	//ResourceBundle resourceBundle = ResourceBundle.getBundle("message");
@@ -80,7 +87,15 @@ public class UserController extends BaseController {
 
 			if (count > 0) {
 				mvShare.addObject("status", "Đăng ký tài khoản thành công");
+				activityHistory = "Đăng ký tài khoản " + user.getUsername();
+				Random rd = new Random();
+				String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
+				String activityTime = System.currentTimeMillis() + "";
+				
+				Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now());
+				int add = activityServiceImpl.AddActivity(activity);
 				mvShare.setViewName("customer/thanhcong");
+				
 			} else {
 				mvShare.addObject("status", "Đăng ký tài khoản thất bại");
 				mvShare.setViewName("customer/register");
@@ -89,6 +104,9 @@ public class UserController extends BaseController {
 
 		}
 		// mvShare.setViewName("customer/thanhcong");
+		
+		
+		
 
 		return mvShare;
 	}
@@ -160,7 +178,10 @@ public class UserController extends BaseController {
 		if (user!=null) {
 			mvShare.setViewName("customer/profile");
 		List<Order> orderList=orderService.findOrderByStatus(status,user.getUsername());
+		List<Order> dataOrder=orderService.GetDataOrderByUsername(user.getUsername());
+		System.out.println("dtaordersize=" + dataOrder.size());
 		request.setAttribute("Order", orderList);
+		request.setAttribute("dataOrder", dataOrder);
 		request.setAttribute("customer", user);
 		session.setAttribute("page", "orderpage");
 		request.setAttribute("menu", HomeService.GetDataMenu());
@@ -189,6 +210,13 @@ public class UserController extends BaseController {
 	@GetMapping("/huy-don-hang/{orderID}")
 	public String Cancel(RedirectAttributes redirectAttributes,HttpServletRequest request,@PathVariable String orderID) {
 			orderService.DeleteOrder(orderID);
+			activityHistory = "Hủy đơn hàng " + orderID ;
+			Random rd = new Random();
+			String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
+			String activityTime = System.currentTimeMillis() + "";
+			
+			Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now());
+			int add = activityServiceImpl.AddActivity(activity);
 			redirectAttributes.addFlashAttribute("abc",1);
 
 			return "redirect:"+request.getHeader("Referer");

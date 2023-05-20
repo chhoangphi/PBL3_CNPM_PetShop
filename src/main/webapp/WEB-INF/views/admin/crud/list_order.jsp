@@ -346,33 +346,33 @@ table.table .avatar {
 									type="checkbox" id="selectAll"> <label for="selectAll"></label>
 							</span></th>
 							<th>Order ID</th>
-							<th>Product ID</th>
-							<th>Product Name</th>
-							<th>Quantity</th>
-							<th>Price</th>
+							<th>Recipient Name</th>
+							<th>Phone Number</th>
+							<th>Address</th>
+							<th>Status</th>
 							<th>Actions</th>
 						</tr>
 					</thead>
 					<tbody>
-						 <c:forEach var="item" items="${OrderDetailPaginate}">
+						 <c:forEach var="item" items="${OrderPaginate}">
 							<tr>
 								<td><span class="custom-checkbox"> <input
 										type="checkbox" id="checkbox1" name="options[]" value="1">
 										<label for="checkbox1"></label>
 								</span></td>
 								<td>${item.orderId}</td>
-								<td>${item.product.product_id}</td>
-								<td>${item.product.product_name}</td>
- 								<td>${item.quantity}</td>
- 								<td>${item.product.price}</td>
+								<td>${item.recipientName}</td>
+								<td>${item.phoneNumber}</td>
+ 								<td>${item.address}</td>
+ 								<td>${item.status}</td>
  								<td><a
-									href="<c:url value="/chi-tiet-san-pham/${products.product_id}"/>"
+									href="<c:url value="/chi-tiet-don-hang/${item.orderId}"/>"
 									class="view" title="View" data-toggle="tooltip"><i
 										class="material-icons">&#xE417;</i></a> <a
-									href="<c:url value="/admin/chinh-sua-thong-tin-san-pham/${products.product_id}"/>"
+									href="<c:url value="/admin/cap-nhat-don-hang/${item.orderId}"/>"
 									class="edit" title="Edit" data-toggle="tooltip"><i
 										class="material-icons">&#xE254;</i></a> <a
-									href="<c:url value="/admin/xoa-san-pham/${products.product_id}"/>"
+									href="<c:url value="/admin/xoa-don-hang/${item.orderId}"/>"
 									class="delete" title="Delete" data-toggle="tooltip"><i
 										class="material-icons">&#xE872;</i></a></td>
 							</tr>

@@ -25,6 +25,8 @@ public class BaseController {
 	public CategoriesServiceImpl categoriesServiceImpl;
 	public ModelAndView mvShare = new ModelAndView();
 	public static final int totalProductPage = 12;
+	public static  String activityHistory = "";
+	
 	
 	@PostConstruct
 	public ModelAndView Init () {

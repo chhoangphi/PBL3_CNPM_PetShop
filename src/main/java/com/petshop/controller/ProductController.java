@@ -1,6 +1,8 @@
 package com.petshop.controller;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -115,6 +117,7 @@ public class ProductController extends BaseController {
 			long millis = System.currentTimeMillis();
 			System.out.println("Millis=" + millis);
 			Date currentDate = new Date(millis);
+			
 			System.out.println(currentDate);
 			reviews.setReviewDate(currentDate);
 			String reviewID = product_id + "_" + System.currentTimeMillis() + "";

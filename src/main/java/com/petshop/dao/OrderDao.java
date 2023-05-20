@@ -102,6 +102,60 @@ public class OrderDao extends BaseDao{
 				return null;
 			}
 		}
+		public List<Order> GetDataOrder()
+		{
+			try {
+				List<Order> orderList=new ArrayList<>();
+				String sql="SELECT * FROM order_customer";
+				orderList=_JdbcTemplate.query(sql, new MapperOrder(orderDetailDao));
+				return orderList;
+			}catch(Exception e) {	
+				System.out.println(e);
+				return null;
+			}
+		}
+		public List<Order> GetDataOrderByUsername(String username)
+		{
+			try {
+				List<Order> orderList=new ArrayList<>();
+				String sql="SELECT * FROM order_customer where customerID ='" + username + "'";
+				orderList=_JdbcTemplate.query(sql, new MapperOrder(orderDetailDao));
+				return orderList;
+			}catch(Exception e) {	
+				System.out.println(e);
+				return null;
+			}
+		}
+		public List<Order> GetDataOrderPaginate(int start, int end) {
+			List<Order> listOrder = new ArrayList<>();
+			try {
+				String sql = SqlOrderPaginate(start, end).toString();
+				System.out.println("SQL Query: " + sql);
+				listOrder = _JdbcTemplate.query(sql, new MapperOrder(orderDetailDao));
+				return listOrder;
+			} catch (Exception e) {
+				System.out.println(e);
+				return null;
+			}
+		}
+		public StringBuffer SqlOrderPaginate(int start, int totalPage) {
+			StringBuffer sql = new StringBuffer();
+			sql.append("SELECT * FROM order_customer ");
+			sql.append(" LIMIT ");
+			sql.append(start + ", " + totalPage);
+			return sql;
+		}
+		public int UpdateOrder(String status, String address,String orderID) {
+			try {
+			String sql="  UPDATE order_customer SET order_status='" + status + "', address='"+address+"' " + " WHERE orderID=?";
+			Object param=orderID;
+			int updatedRow=_JdbcTemplate.update(sql,param);
+			return updatedRow;
+			}catch(Exception e){
+				System.out.println(e);
+				return 0;
+			}
+		}
 		
 }
 

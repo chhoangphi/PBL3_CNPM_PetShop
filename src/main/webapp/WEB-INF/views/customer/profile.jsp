@@ -86,67 +86,70 @@ input {
 }
 
 nav.order-status {
-  padding: 10px;
+	padding: 10px;
 }
 
 nav.order-status ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
 }
 
 nav.order-status li {
-  margin-right: 10px;
+	margin-right: 10px;
 }
 
 nav.order-status a {
-  display: block;
-  color: #333;
-  padding: 15px;
-  text-decoration: none;
+	display: block;
+	color: #333;
+	padding: 15px;
+	text-decoration: none;
 }
 
 nav.order-status a:hover {
-  background-color: #ddd;
+	background-color: #ddd;
 }
 
 nav.order-status a.active {
-  color: #E51F28;
- 
-}
-.btn-view-order {
-  background-color: #E51F28;
-  border: none;
-  margin-bottom: 10px;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  float: right;
-  margin-top: 10px;
-}
-.btn-view-order:hover{
-background-color: #c94b50
-}
-nav.order-status li.active {
-  border-bottom: 2px solid #E51F28;
-  border-bottom-color: #E51F28;
-}
-.hKbGrP {
-    margin: 20px 0 0;
-    font-size: 18px;
-    line-height: 1.4;
-    color: rgba(0,0,0,.8);
-}
-.form-group .edit-link {
-    display: inline-block;
-    float: right;
-    margin-left: 10px; /* tùy chỉnh khoảng cách giữa input và a */
+	color: #E51F28;
 }
 
+.btn-view-order {
+	background-color: #E51F28;
+	border: none;
+	margin-bottom: 10px;
+	color: white;
+	padding: 10px 20px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	float: right;
+	margin-top: 10px;
+}
+
+.btn-view-order:hover {
+	background-color: #c94b50
+}
+
+nav.order-status li.active {
+	border-bottom: 2px solid #E51F28;
+	border-bottom-color: #E51F28;
+}
+
+.hKbGrP {
+	margin: 20px 0 0;
+	font-size: 18px;
+	line-height: 1.4;
+	color: rgba(0, 0, 0, .8);
+}
+
+.form-group .edit-link {
+	display: inline-block;
+	float: right;
+	margin-left: 10px; /* tùy chỉnh khoảng cách giữa input và a */
+}
 </style>
 </head>
 <body>
@@ -205,27 +208,28 @@ nav.order-status li.active {
 							<div class="tab-pane active" id="profile">
 								<h6>Thông tin cá nhân</h6>
 								<hr>
-									<span
-											class="red">${changeStatus}</span> 
+								<span class="red">${changeStatus}</span>
 								<form:form action="thong-tin-ca-nhan" method="post"
 									modelAttribute="personalInfo">
 									<div class="form-group">
 										<label for="fullName">Họ và tên</label>
-										<form:input type="text" class="form-control"
-											path="fullName"  required="required"></form:input>
-											
+										<form:input type="text" class="form-control" path="fullName"
+											required="required"></form:input>
+
 									</div>
 									<div class="form-group">
 										<label for="email">Địa chỉ Email</label>
-										<form:input type="text" class="form-control" path="email"  required="required"></form:input>
-										
+										<form:input type="text" class="form-control" path="email"
+											required="required"></form:input>
+
 									</div>
 									<div class="form-group">
 										<label for="phoneNumber">Số điện thoại</label>
 										<form:input type="text" class="form-control"
 											path="phoneNumber" required="required"></form:input>
 									</div>
-									<input class="btn btn-primary form-control" type="submit" value="Lưu thay đổi" name="submit" id="submit" />
+									<input class="btn btn-primary form-control" type="submit"
+										value="Lưu thay đổi" name="submit" id="submit" />
 								</form:form>
 							</div>
 						</c:if>
@@ -244,12 +248,19 @@ nav.order-status li.active {
 
 									<div class="form-group">
 										<label class="d-block">Thay đổi mật khẩu</label> <span
-											class="red">${changeStatus}</span> 
-										<input id="oldPassword" placeholder="Nhập mật khẩu cũ" class="form-control"  type="password" name="oldPassword" required="required" autocomplete="new-password"> 
-										<input id="newPassword" placeholder="Nhập mật khẩu mới" class="form-control" type="password" name="newPassword" onkeyup="kiemTraMatKhau()" required="required">
-										<input id="confirmPassword" placeholder="Xác nhận mật khẩu cũ" class="form-control" type="password" onkeyup="kiemTraMatKhau()" required="required"> <span id="msg" class="red"></span>
+											class="red">${changeStatus}</span> <input id="oldPassword"
+											placeholder="Nhập mật khẩu cũ" class="form-control"
+											type="password" name="oldPassword" required="required"
+											autocomplete="new-password"> <input id="newPassword"
+											placeholder="Nhập mật khẩu mới" class="form-control"
+											type="password" name="newPassword" onkeyup="kiemTraMatKhau()"
+											required="required"> <input id="confirmPassword"
+											placeholder="Xác nhận mật khẩu cũ" class="form-control"
+											type="password" onkeyup="kiemTraMatKhau()"
+											required="required"> <span id="msg" class="red"></span>
 									</div>
-									<input class="btn btn-primary form-control" type="submit" value="Lưu mật khẩu" name="submit" id="submit" />
+									<input class="btn btn-primary form-control" type="submit"
+										value="Lưu mật khẩu" name="submit" id="submit" />
 									<hr>
 
 								</form>
@@ -260,61 +271,137 @@ nav.order-status li.active {
 								<h6>Quản lý đơn hàng</h6>
 								<nav class="order-status">
 									<ul>
-										<li class="${status=='pending' ? 'active' : ''}"><a href='<c:url value="/don-hang/pending"/>' class="${status=='pending' ? 'active' : ''}">Chờ xác nhận</a></li>
-										<li class="${status=='to_ship' ? 'active' : ''}"><a href='<c:url value="/don-hang/to_ship"/>' class="${status=='to_ship' ? 'active' : ''}">Chờ lấy hàng</a></li>
-										<li class="${status=='to_receive' ? 'active' : ''}"><a href='<c:url value="/don-hang/to_receive"/>' class="${status=='to_receive' ? 'active' : ''}">Đang giao</a></li>
-										<li class="${status=='completed' ? 'active' : ''}"><a href='<c:url value="/don-hang/completed"/>' class="${status=='completed' ? 'active' : ''}">Đã giao</a></li>
-										<li class="${status=='canceled' ? 'active' : ''}"><a href='<c:url value="/don-hang/canceled"/>' class="${status=='canceled' ? 'active' : ''}">Đã hủy</a></li>
+										<li class="${status=='all' ? 'active' : ''}"><a
+											href='<c:url value="/don-hang/all"/>'
+											class="${status=='all' ? 'active' : ''}">Tất cả</a></li>
+										<li class="${status=='pending' ? 'active' : ''}"><a
+											href='<c:url value="/don-hang/pending"/>'
+											class="${status=='pending' ? 'active' : ''}">Chờ xác nhận</a></li>
+										<li class="${status=='to_ship' ? 'active' : ''}"><a
+											href='<c:url value="/don-hang/to_ship"/>'
+											class="${status=='to_ship' ? 'active' : ''}">Chờ lấy hàng</a></li>
+										<li class="${status=='to_receive' ? 'active' : ''}"><a
+											href='<c:url value="/don-hang/to_receive"/>'
+											class="${status=='to_receive' ? 'active' : ''}">Đang giao</a></li>
+										<li class="${status=='completed' ? 'active' : ''}"><a
+											href='<c:url value="/don-hang/completed"/>'
+											class="${status=='completed' ? 'active' : ''}">Đã giao</a></li>
+										<li class="${status=='canceled' ? 'active' : ''}"><a
+											href='<c:url value="/don-hang/canceled"/>'
+											class="${status=='canceled' ? 'active' : ''}">Đã hủy</a></li>
 									</ul>
 								</nav>
 								<hr>
 								<form>
 									<div class="form-group">
-		<c:if test="${ empty Order}">
-		<div class="hKbGrP">Chưa có đơn hàng</div>
-		</c:if>
-		<c:if test="${not empty Order}">
-		<c:forEach var="order" items="${Order}">
-											<div class="card mb-4">
-        <div class="card-body">
-          <div class="mb-3 d-flex justify-content-between">
-            <div>
-              <span class="me-3">Trạng thái</span>
-              <span class="badge rounded-pill bg-info">${status=='pending' ? 'Chờ xác nhận' : ((status=='to_ship') ? 'Chờ lấy hàng ' : (status=='to_receive')  ?  'Đang giao hàng' : (status=='completed') ? 'Đã giao' : 'Đã hủy')}</span>
-            </div>
-          </div>
-          <table class="table table-borderless">
-            <tbody>
-              <c:forEach var="item" items="${order.orderDetailList}">
-              <tr>
-                <td>
-                  <div class="d-flex mb-2">
-                    <div class="flex-shrink-0">
-                      <img src="${item.product.img}" alt="" width="35" class="img-fluid">
-                    </div>
-                    <div class="flex-lg-grow-1 ms-3">
-                      <h6 class="small mb-0"><a href="#" class="text-reset">${item.product_name}</a></h6>
-                      <span class="small">Số lượng: ${item.quantity}</span>
-                    </div>
-                  </div>
-                </td>
-                <td></td>
-                <td class="text-end">${item.price}đ</td>
-              </tr>
-              </c:forEach>
-            </tbody>
-            <tfoot>
+										<c:if test="${empty dataOrder}">
+											<div class="hKbGrP">Chưa có đơn hàng</div>
+										</c:if>
+										<c:if test="${not empty Order && status != 'all'}">
+											<c:forEach var="order" items="${Order}">
+												<div class="card mb-4">
 
-              <tr class="fw-bold">
-                <td colspan="2">Thành tiền</td>
-                <td class="text-end">${order.totalPrice}đ</td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-          <a href='<c:url value="/chi-tiet-don-hang/${order.orderId}"/>' ><span class="btn-view-order">Xem chi tiết</span></a>
-      </div>
-										</c:forEach>
+													<div class="card-body">
+														<div class="mb-3 d-flex justify-content-between">
+															<div>
+																<span class="me-3">Trạng thái</span> <span
+																	class="badge rounded-pill bg-info">${status=='pending' ? 'Chờ xác nhận' : ((status=='to_ship') ? 'Chờ lấy hàng ' : (status=='to_receive')  ?  'Đang giao hàng' : (status=='completed') ? 'Đã giao' : 'Đã hủy')}</span>
+															</div>
+														</div>
+														<table class="table table-borderless">
+															<tbody>
+																<c:forEach var="item" items="${order.orderDetailList}">
+																	<tr>
+																		<td>
+																			<div class="d-flex mb-2">
+																				<div class="flex-shrink-0">
+																					<img src="${item.product.img}" alt="" width="35"
+																						class="img-fluid">
+																				</div>
+																				<div class="flex-lg-grow-1 ms-3">
+																					<h6 class="small mb-0">
+																						<a href="#" class="text-reset">${item.product_name}</a>
+																					</h6>
+																					<span class="small">Số lượng:
+																						${item.quantity}</span>
+																				</div>
+																			</div>
+																		</td>
+																		<td></td>
+																		<td class="text-end">${item.price}đ</td>
+																	</tr>
+																</c:forEach>
+															</tbody>
+															<tfoot>
+
+																<tr class="fw-bold">
+																	<td colspan="2">Thành tiền</td>
+																	<td class="text-end">${order.totalPrice}đ</td>
+																</tr>
+															</tfoot>
+														</table>
+
+
+													</div>
+													<a
+														href='<c:url value="/chi-tiet-don-hang/${order.orderId}"/>'><span
+														class="btn-view-order">Xem chi tiết</span></a>
+												</div>
+											</c:forEach>
+										</c:if>
+										<c:if test="${not empty dataOrder && status == 'all'}">
+											<c:forEach var="order" items="${dataOrder}">
+												<div class="card mb-4">													
+														<div class="card-body">
+														<div class="mb-3 d-flex justify-content-between">
+															<div>
+																<span class="me-3">Trạng thái</span> <span
+																	class="badge rounded-pill bg-info">${order.status}</span>
+															</div>
+														</div>
+															<table class="table table-borderless">
+																<tbody>
+																	<c:forEach var="item"
+																		items="${order.orderDetailList}">
+																		<tr>
+																			<td>
+																				<div class="d-flex mb-2">
+																					<div class="flex-shrink-0">
+																						<img src="${item.product.img}" alt="" width="35"
+																							class="img-fluid">
+																					</div>
+																					<div class="flex-lg-grow-1 ms-3">
+																						<h6 class="small mb-0">
+																							<a href="#" class="text-reset">${item.product_name}</a>
+																						</h6>
+																						<span class="small">Số lượng:
+																							${item.quantity}</span>
+																					</div>
+																				</div>
+																			</td>
+																			<td></td>
+																			<td class="text-end">${item.price}đ</td>
+																		</tr>
+																	</c:forEach>
+																</tbody>
+																<tfoot>
+
+																	<tr class="fw-bold">
+																		<td colspan="2">Thành tiền</td>
+																		<td class="text-end">${order.totalPrice}đ</td>
+																	</tr>
+																</tfoot>
+															</table>
+
+
+														</div>
+
+													
+													<a
+														href='<c:url value="/chi-tiet-don-hang/${order.orderId}"/>'><span
+														class="btn-view-order">Xem chi tiết</span></a>
+												</div>
+											</c:forEach>
 										</c:if>
 									</div>
 
@@ -326,30 +413,5 @@ nav.order-status li.active {
 			</div>
 		</div>
 	</div>
-	<content tag="script"> <script>
-		function kiemTraMatKhau() {
-			var newPassword = document.getElementById("newPassword").value;
-			var confirmPassword = document.getElementById("confirmPassword").value;
-			var oldPassword = document.getElementById("oldPassword").value;
-			if (newPassword != confirmPassword) {
-				document.getElementById("msg").innerHTML = "Mật khẩu nhập lại không khớp!";
-			} else {
-				document.getElementById("msg").innerHTML = "";
-			}
-		}
-		document.getElementById('submit')
-		.addEventListener(
-				'click',
-				function(event) {
-					var newPassword = document
-							.getElementById("newPassword").value;
-					var confirmPassword = document
-							.getElementById("confirmPassword").value;
-					if (newPassword != confirmPassword) {
-						event.preventDefault();
-					}
-				});
-	</script>
-	 </content>
 </body>
 </html>
