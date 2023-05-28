@@ -64,7 +64,6 @@ public class AdminController extends BaseController {
 	private OrderServiceImpl orderService;
 	@Autowired
 	private UserServiceImpl userService;
-	
 
 	@RequestMapping(value = "/admin/home", method = RequestMethod.GET)
 	public ModelAndView Admin(HttpServletRequest request, HttpServletResponse response, HttpSession session,
@@ -112,7 +111,7 @@ public class AdminController extends BaseController {
 		mvShare.addObject("categoryName", productCategoryNameByCateID);
 		ProductCategory productCategory = new ProductCategory(homeservice.GetDataProductCategory(product_cate_id));
 		
-		int TotalData = productCategory.getProductList(productCategory).size();
+		int TotalData = productCategory.getProductList().size();
 		System.out.println("here" + TotalData);
 		PaginatesDto pageinfo = paginateService.GetPatinates(TotalData, totalProductPage,
 				Integer.parseInt(currentPage));

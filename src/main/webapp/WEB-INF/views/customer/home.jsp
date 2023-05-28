@@ -6,6 +6,36 @@
 <head>
 <meta charset="utf-8">
 <title>PET SHOP</title>
+<style>
+.img-fetured{
+max-width: 100%;
+height: 130px;
+}
+.title-product-list-2 {
+    background: url(https://www.petcity.vn/media/lib/shopcho.png);
+        position: relative;
+    padding: 19px 0;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 0 0 20px;
+    color: #fff;
+    font-size: 30px;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+.button3 {
+  background-color: white; 
+  color: black; 
+  border: 2px solid #f44336;
+  margin-left: 750px;
+}
+.button3:hover{
+  background-color: #f44336; 
+  color: #fff; 
+  border: 2px solid #f44336;
+}
+</style>
+<link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet">
 </head>
 <body>
 	<div class="container-fluid mb-5">
@@ -22,7 +52,7 @@
                             <a href="#" class="nav-link" data-toggle="dropdown">Shop Cún<i class="fa fa-angle-down float-right mt-1"></i></a>
                             <div class="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
                            <c:forEach var="type01" items="${itemType01.typeOfCategoryList}">
-                                <a href="" class="dropdown-item">${type01.type_name}</a>
+                                <a href='<c:url value="/san-pham/${type01.type_id}"/>' class="dropdown-item">${type01.type_name}</a>
                                 </c:forEach>
                             </div>
                         </div>
@@ -30,7 +60,7 @@
                             <a href="#" class="nav-link" data-toggle="dropdown">Shop mèo<i class="fa fa-angle-down float-right mt-1"></i></a>
                             <div class="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
                            <c:forEach var="type02" items="${itemType02.typeOfCategoryList}">
-                                <a href="" class="dropdown-item">${type02.type_name}</a>
+                                <a href='<c:url value="/san-pham/${type02.type_id}"/>' class="dropdown-item">${type02.type_name}</a>
                                 </c:forEach>
                             </div>
                         </div>
@@ -88,7 +118,7 @@
 				<div class="d-flex align-items-center border mb-4"
 					style="padding: 30px;">
 					<h1 class="fa fa-check text-primary m-0 mr-3"></h1>
-					<h5 class="font-weight-semi-bold m-0">Sản phẩm chất lượng</h5>
+					<h5 class="font-weight-semi-bold m-0">Cam kết chất lượng</h5>
 				</div>
 			</div>
 			<div class="col-lg-3 col-md-6 col-sm-12 pb-1">
@@ -118,77 +148,162 @@
 
 	<!-- Categories Start -->
 	<div class="container-fluid pt-5">
+	<div class="text-center mb-4">
+			<h2 class="section-title px-5">
+				<span class="px-2">Danh mục nổi bật</span>
+			</h2>
+		</div>
 		<div class="row px-xl-5 pb-3">
+		<c:forEach var="featured" items="${featuredCateg}">
 			<div class="col-lg-4 col-md-6 pb-1">
 				<div class="cat-item d-flex flex-column border mb-4"
 					style="padding: 30px;">
-					<p class="text-right">15 Products</p>
 					<a href="" class="cat-img position-relative overflow-hidden mb-3">
-						<img class="img-fluid" src="img/cat-1.jpg" alt="">
+						<img class="img-fetured" src="${featured.img}" alt="">
 					</a>
-					<h5 class="font-weight-semi-bold m-0">Men's dresses</h5>
+					<h5 class="font-weight-semi-bold m-0">${featured.product_categ_name}</h5>
 				</div>
 			</div>
-			<div class="col-lg-4 col-md-6 pb-1">
-				<div class="cat-item d-flex flex-column border mb-4"
-					style="padding: 30px;">
-					<p class="text-right">15 Products</p>
-					<a href="" class="cat-img position-relative overflow-hidden mb-3">
-						<img class="img-fluid" src="img/cat-2.jpg" alt="">
-					</a>
-					<h5 class="font-weight-semi-bold m-0">Women's dresses</h5>
-				</div>
-			</div>
-			<div class="col-lg-4 col-md-6 pb-1">
-				<div class="cat-item d-flex flex-column border mb-4"
-					style="padding: 30px;">
-					<p class="text-right">15 Products</p>
-					<a href="" class="cat-img position-relative overflow-hidden mb-3">
-						<img class="img-fluid" src="img/cat-3.jpg" alt="">
-					</a>
-					<h5 class="font-weight-semi-bold m-0">Baby's dresses</h5>
-				</div>
-			</div>
+		
+		</c:forEach>
 		</div>
 	</div>
 	<!-- Categories End -->
 
 	<!-- Products Start -->
 	<div class="container-fluid pt-5">
-		<div class="text-center mb-4">
-			<h2 class="section-title px-5">
-				<span class="px-2">Trandy Products</span>
-			</h2>
-		</div>
-		<div class="row px-xl-5 pb-3">
-			<div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-				<div class="card product-item border-0 mb-4">
-					<div
-						class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
-						<img class="img-fluid w-100" src="img/product-8.jpg" alt="">
-					</div>
-					<div
-						class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-						<h6 class="text-truncate mb-3">Colorful Stylish Shirt</h6>
-						<div class="d-flex justify-content-center">
-							<h6>$123.00</h6>
-							<h6 class="text-muted ml-2">
-								<del>$123.00</del>
-							</h6>
-						</div>
-					</div>
-					<div
-						class="card-footer d-flex justify-content-between bg-light border">
-						<a href="" class="btn btn-sm text-dark p-0"><i
-							class="fas fa-eye text-primary mr-1"></i>View Detail</a> <a href=""
-							class="btn btn-sm text-dark p-0"><i
-							class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
-					</div>
+		<div class="row px-xl-5">
+
+			<!-- Shop Sidebar End -->
+<c:forEach var="itemtype" items="${listItem}">
+<div class="container-fluid pt-5">
+		<div class="row px-xl-5">
+			<!-- Shop Sidebar Start -->
+			<div class="col-lg-3 col-md-12">
+				<!-- Price Start -->
+				<div class="border-bottom mb-4 pb-4">
+					 <h5 class="title-product-list-2">${itemtype.name}</h5> 
+					 <c:if test="${itemtype.item_id=='item01'}">
+					<c:forEach var="item" items="${featuredCategByItem01}">
+						<form>
+							<div
+								class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+								<input type="checkbox" class="custom-control-input" checked
+									id="price-all"> <a class=""
+									href='<c:url value="/san-pham/the-loai/${item.product_categ_id}?sort=price-asc"/>'
+									for="price-all">${item.product_categ_name}</a>
+							</div>
+							
+						</form>
+					</c:forEach> 
+					<img border="0" src="https://www.petcity.vn/media/banner/20_Maya16f779002f7bc582b44b7de773be4e2.jpg" width="271" height="363">
+					</c:if>
+					<c:if test="${itemtype.item_id=='item02'}">
+					<c:forEach var="item" items="${featuredCategByItem02}">
+						<form>
+							<div
+								class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+								<input type="checkbox" class="custom-control-input" checked
+									id="price-all"> <a class=""
+									href='<c:url value="/san-pham/the-loai/${item.product_categ_id}?sort=price-asc"/>'
+									for="price-all">${item.product_categ_name}</a>
+							</div>
+						</form>
+					</c:forEach> 
+					<img border="0" src="https://www.petcity.vn/media/banner/20_May3d39ea8769def8185db999a14b7aa354.jpg" width="271" height="363">
+					</c:if>
+					
 				</div>
+				<!-- Price End -->
+
+		
 			</div>
+			<!-- Shop Sidebar End -->
+
+
+			<!-- Shop Product Start -->
+			 <c:if test="${itemtype.item_id=='item01'}">
+			<div class="col-lg-9 col-md-12">
+					<div class="row pb-3">
+						<c:forEach var="product" items="${productLimit12ByItem01}">
+							<div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+								<div class="card product-item border-0 mb-4">
+									<div
+										class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+										<a
+											href="<c:url value="/chi-tiet-san-pham/${product.product_id}"/>"><img
+											class="img-fluid w-100" src="${product.img}" alt=""></a>
+									</div>
+									<div
+										class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+										<a
+											href="<c:url value="/chi-tiet-san-pham/${product.product_id}"/>"><h6
+												class="text-truncate mb-3">${product.product_name}</h6> </a>
+										<div class="d-flex justify-content-center">
+											<h6>${product.price}đ</h6>
+
+										</div>
+									</div>
+									<div
+										class="card-footer d-flex justify-content-between bg-light border">
+											<a onclick="add('${product.product_id}')" class="btn btn-sm text-dark p-0"><i
+											class="fas fa-shopping-cart text-primary mr-1 add-to-cart"></i>Thêm vào giỏ hàng</a>  
+						
+									</div>
+								</div>
+							</div>
+						</c:forEach>
+						<a href="<c:url value="/san-pham?shop=item01"/>"><button class="button button3">Xem tất cả ></button></a>
+					</div>
+				
+			</div>
+			<img border="0" src="https://www.petcity.vn/media/banner/05_Mayb79bb0ccfcdb92f81a8b801322cf0abd.jpg" width="1300" height="113">
+			</c:if>
+			
+			 <c:if test="${itemtype.item_id=='item02'}">
+			<div class="col-lg-9 col-md-12">
+					<div class="row pb-3">
+						<c:forEach var="product" items="${productLimit12ByItem02}">
+							<div class="col-lg-3 col-md-6 col-sm-12 pb-1">
+								<div class="card product-item border-0 mb-4">
+									<div
+										class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+										<a
+											href="<c:url value="/chi-tiet-san-pham/${product.product_id}"/>"><img
+											class="img-fluid w-100" src="${product.img}" alt=""></a>
+									</div>
+									<div
+										class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+										<a
+											href="<c:url value="/chi-tiet-san-pham/${product.product_id}"/>"><h6
+												class="text-truncate mb-3">${product.product_name}</h6> </a>
+										<div class="d-flex justify-content-center">
+											<h6>${product.price}đ</h6>
+
+										</div>
+									</div>
+									<div
+										class="card-footer d-flex justify-content-between bg-light border">
+											<a onclick="add('${product.product_id}')" class="btn btn-sm text-dark p-0"><i
+											class="fas fa-shopping-cart text-primary mr-1 add-to-cart"></i>Thêm vào giỏ hàng</a>  
+						
+									</div>
+								</div>
+							</div>
+						</c:forEach>
+					<a href="<c:url value="/san-pham?shop=item02"/>">	<button class="button button3">Xem tất cả ></button></a>
+					</div>
+				
+			</div>
+			</c:if>
+
+
+
 		</div>
-
-
+	</div>
+</c:forEach>
+</div>
+</div>
 
 
 		<style type="text/css">
@@ -369,6 +484,32 @@
 				pf204652bottomLayer.style.display = 'none';
 			}
 		</script>
+		 <content tag="script"> 
+	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+	 <script>
+	function add(product_id) {
+        $.ajax({
+            url: "/petshop-5/add-to-cart/" + product_id,
+            type: "get",
+            success: function () {
+                $("#addtocart").load(" #addtocart>*",""); 
+                Toastify({
+		    		  text: "Thêm vào giỏ hàng thành công!",
+		    		  duration: 3000,
+		    		  newWindow: true,
+		    		  close: true,
+		    		  gravity: "top", // hiển thị ở trên cùng màn hình
+		    		  position: "center", // căn giữa theo chiều ngang
+		    		  backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+		    		}).showToast();
+            }
+        });
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	 </content> 
 </body>
 
 </html>

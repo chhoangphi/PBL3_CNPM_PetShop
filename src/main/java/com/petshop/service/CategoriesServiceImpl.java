@@ -23,8 +23,8 @@ public class CategoriesServiceImpl implements ICategoriesService {
 	}
 
 	@Override
-	public List<Products> GetDataProductByTypeIDLimit9(String type_id,String sort) {
-		return productDao.GetDataProductByTypeIDLimit9(type_id,sort);
+	public List<Products> GetDataProductByTypeIDLimit8(String type_id,String sort) {
+		return productDao.GetDataProductByTypeIDLimit8(type_id,sort);
 	}
 	@Override
 	public List<Products> GetDataProductByTypeIDPaginate(String type_id,int start,int end,String sort) {
@@ -70,6 +70,18 @@ public class CategoriesServiceImpl implements ICategoriesService {
 	public List<String> GetDataProductCategoryNameList() {
 		// TODO Auto-generated method stub
 		return categoryDao.GetDataProductCategoryNameList();
+	}
+
+	@Override
+	public List<ProductCategory> GetFeaturedCategory() {
+		// TODO Auto-generated method stub
+		return categoryDao.GetFeaturedCategory();
+	}
+
+	@Override
+	public List<ProductCategory> GetFeaturedCategoryByItemId(String item_id) {
+		// TODO Auto-generated method stub
+		return categoryDao.GetFeaturedCategoryByItemId(item_id);
 	}
 
 	

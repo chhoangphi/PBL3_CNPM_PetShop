@@ -40,16 +40,9 @@
 		<div 
 			class="d-flex flex-column align-items-center justify-content-center"
 			style="background-image: url('https://www.petcity.vn/media/banner/banner_839ab468.png'); background-repeat: no-repeat; min-height: 300px; background-size: 100%">
-			<!-- <h1 class="font-weight-semi-bold text-uppercase mb-3" > Shop
-				Detail </h1>
-			<div class="d-inline-flex">
-				<p class="m-0">
-					<a href="">Home</a>
-				</p>
-				<p class="m-0 px-2">-</p>
-				<p class="m-0">Shop Detail</p> -->
 			</div>
 		</div>
+		
 	<!-- Page Header End -->
 
 	
@@ -60,24 +53,66 @@
 			<div class="col-lg-3 col-md-12">
 				<!-- Price Start -->
 				<div class="border-bottom mb-4 pb-4">
-					<%-- <h5 class="font-weight-semi-bold mb-4">${ItemType.name}</h5> --%>
+			
+					<c:if test="${param.shop=='item01'}">
 					<img class="img-logo" src="https://i.imgur.com/UkZCWsu.png" alt="">
+					</c:if>
+						<c:if test="${param.shop=='item02'}">
+					<img class="img-logo" src="https://www.petcity.vn/media/banner/banner_357a6fdf.jpg" alt="">
+					</c:if>
+					
 					<c:forEach var="item" items="${ItemType.typeOfCategoryList}">
 						<form>
 							<div
 								class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
 								<input type="checkbox" class="custom-control-input" checked
 									id="price-all"> <a class=""
-									href='<c:url value="/san-pham/${item.type_id}?sort=price-asc"/>'
+									href='<c:url value="/san-pham/${item.type_id}"/>'
 									for="price-all">${item.type_name}</a>
 							</div>
 						</form>
 					</c:forEach> 
+					 <h5 class="font-weight-semi-bold mb-4">Khoảng giá</h5>
+                    <form>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+							 <a href='<c:url value="/loc-san-pham-theo-gia?min=0&max=49000"/>'>
+                            <label class="custom-control-label" for="price-1">Dưới 50.000đ</label>
+                            </a>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <a href='<c:url value="/loc-san-pham-theo-gia?min=50000&max=69000"/>'>
+                            <label class="custom-control-label" for="price-2">50.000đ - 69.000đ</label>
+                            </a>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <a href='<c:url value="/loc-san-pham-theo-gia?min=70000&max=990000"/>'>
+                            <label class="custom-control-label" for="price-2">70.000đ - 99.000đ</label>
+                            </a>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <a href='<c:url value="/loc-san-pham-theo-gia?min=100000&max=199000"/>'>
+                            <label class="custom-control-label" for="price-3">100.000đ - 199.000đ</label>
+                            </a>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <a href='<c:url value="/loc-san-pham-theo-gia?min=200000&max=499000"/>'>
+                            <label class="custom-control-label" for="price-4">200.000đ - 499.000đ</label>
+                            </a>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                            <a href='<c:url value="/loc-san-pham-theo-gia?min=500000&max=699000"/>'>
+                            <label class="custom-control-label" for="price-4">500.000đ - 699.000đđ</label>
+                            </a>
+                        </div>
+                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">	
+                            <a href='<c:url value="/loc-san-pham-theo-gia?min=700000&max=50000"/>'>
+                            <label class="custom-control-label" for="price-5">Trên 700.000đ</label>
+                            </a>
+                        </div>
+                    </form>
 				</div>
-				<!-- Price End -->
-
-
 			</div>
+			
 			<!-- Shop Sidebar End -->
 
 
@@ -85,7 +120,7 @@
 
 			<div class="col-lg-9 col-md-12">
 				<c:set var="start" value="0"></c:set>
-				<c:set var="finish" value="8"></c:set>
+				<c:set var="finish" value="7"></c:set>
 				<c:set var="count" value="1"></c:set>
 				<c:forEach var="type" items="${ItemType.typeOfCategoryList}">
 					<c:set var="res" value="1"></c:set>
@@ -125,9 +160,9 @@
 									</div>
 								</div>
 							</div>
-							<c:if test="${res==9}">
+							<c:if test="${res==8}">
 								<c:set var="start" value="${count}"></c:set>
-								<c:set var="finish" value="${count+8}"></c:set>
+								<c:set var="finish" value="${count+7}"></c:set>
 
 							</c:if>
 						</c:forEach>

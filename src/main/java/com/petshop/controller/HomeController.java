@@ -15,9 +15,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.petshop.dto.PaginatesDto;
 import com.petshop.entity.ItemType;
+import com.petshop.entity.ProductCategory;
 import com.petshop.entity.Products;
 import com.petshop.service.CategoriesServiceImpl;
+import com.petshop.service.ItemTypeServiceImpl;
 import com.petshop.service.PaginatesServiceImpl;
+import com.petshop.service.ProductService;
 
 
 
@@ -27,14 +30,25 @@ public class HomeController extends BaseController{
 	private PaginatesServiceImpl paginateService;
 	@Autowired
 	private CategoriesServiceImpl categoryService;
+	@Autowired
+	private ItemTypeServiceImpl itemTypeService;
+	@Autowired
+	private ProductService productService;
 	@RequestMapping(value = { "/trang-chu", "/" })
 	public ModelAndView Index() {
 		mvShare.setViewName("customer/home");
+		List<ItemType> listItem=itemTypeService.GetDataItemType();
+		mvShare.addObject("listItem", listItem);
 		mvShare.addObject("dataProducts", productService.GetDataProduct());
 		mvShare.addObject("productCategoryNameList", categoryService.GetDataProductCategoryNameList());
 		mvShare.addObject("itemType",HomeService.GetDataItemType());
-		mvShare.addObject("itemType01",HomeService.GetDataItemTypeByItemID("item01"));
-		mvShare.addObject("itemType02",HomeService.GetDataItemTypeByItemID("item02"));
+		mvShare.addObject("itemType01",HomeService.GetDataItemTypeByItemID(listItem.get(0).getItem_id()));
+		mvShare.addObject("itemType02",HomeService.GetDataItemTypeByItemID(listItem.get(1).getItem_id()));
+		mvShare.addObject("featuredCateg", categoriesServiceImpl.GetFeaturedCategory());
+		mvShare.addObject("featuredCategByItem01", categoriesServiceImpl.GetFeaturedCategoryByItemId(listItem.get(0).getItem_id()));
+		mvShare.addObject("featuredCategByItem02", categoriesServiceImpl.GetFeaturedCategoryByItemId(listItem.get(1).getItem_id()));
+		mvShare.addObject("productLimit12ByItem01", productService.GetDataProductLimit12(listItem.get(0).getItem_id()));
+		mvShare.addObject("productLimit12ByItem02", productService.GetDataProductLimit12(listItem.get(1).getItem_id()));
 		return mvShare;
 	}
 	@RequestMapping(value = { "/deny-access" })

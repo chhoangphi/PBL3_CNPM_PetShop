@@ -7,6 +7,14 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet">
+<style>
+.category-title {
+	font-size: 18px;
+	font-weight: bold;
+	color: #4c4c4c;
+}
+
+</style>
 </head>
 <body>
 	<!-- Page Header Start -->
@@ -14,14 +22,6 @@
 		<div 
 			class="d-flex flex-column align-items-center justify-content-center"
 			style="background-image: url('https://www.petcity.vn/media/banner/banner_839ab468.png'); background-repeat: no-repeat; min-height: 300px; background-size: 100%">
-			<!-- <h1 class="font-weight-semi-bold text-uppercase mb-3" > Shop
-				Detail </h1>
-			<div class="d-inline-flex">
-				<p class="m-0">
-					<a href="">Home</a>
-				</p>
-				<p class="m-0 px-2">-</p>
-				<p class="m-0">Shop Detail</p> -->
 			</div>
 		</div>
 	<!-- Page Header End -->
@@ -48,7 +48,7 @@
 					</c:forEach>
 				</div>
 				<!-- Price End -->
-
+				
 			</div>
 			<!-- Shop Sidebar End -->
 
@@ -63,7 +63,7 @@
 						<div
 							class="d-flex align-items-center justify-content-between mb-4">
 							<div class="category">
-								<a class="category-title">Tất cả</a>
+								<h3 class="category-title">Tất cả</h3>
 							</div>
 							<div class="dropdown ml-4">
 								<button class="btn border dropdown-toggle" type="button"

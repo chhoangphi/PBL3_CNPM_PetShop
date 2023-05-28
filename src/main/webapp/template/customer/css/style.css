@@ -401,7 +401,7 @@ h4, .h4 {
 }
 
 h5, .h5 {
-  font-size: 1.25rem;
+  font-size: 0.9rem;
 }
 
 h6, .h6 {
@@ -1234,12 +1234,12 @@ pre code {
     max-width: 16.66667%;
   }
   .col-lg-3 {
-    flex: 0 0 25%;
+    flex: 1 0 0%;
     max-width: 25%;
   }
   .col-lg-4 {
     flex: 0 0 33.33333%;
-    max-width: 33.33333%;
+    max-width: 15%;
   }
   .col-lg-5 {
     flex: 0 0 41.66667%;
@@ -9008,7 +9008,7 @@ button.bg-dark:focus {
   }
   .pl-xl-5,
   .px-xl-5 {
-    padding-left: 3rem !important;
+    padding-left: 7rem !important;
   }
   .m-xl-n1 {
     margin: -0.25rem !important;
@@ -9454,7 +9454,7 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 .font-weight-semi-bold {
-  font-weight: 600;
+  font-weight: 500;
 }
 
 [class^=flaticon-]:before,

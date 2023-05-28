@@ -7,6 +7,7 @@ public class ProductCategory {
 	 private String product_categ_id;
 	 private String product_categ_name;
 	 private String type_id;
+	 private String img;
 	 private List<Products> productList;
 	
 	public ProductCategory() {
@@ -43,8 +44,8 @@ public class ProductCategory {
 	public void setType_id(String type_id) {
 		this.type_id = type_id;
 	}
-	public List<Products> getProductList(ProductCategory productCategory) {
-		return productCategory.productList;
+	public List<Products> getProductList() {
+		return productList;
 	}
 	public void setProductList(List<Products> productList) {
 		this.productList =new ArrayList<>(productList);
@@ -52,4 +53,12 @@ public class ProductCategory {
 	public String getProduct_categ_id() {
 		return product_categ_id;
 	}
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+	
 }

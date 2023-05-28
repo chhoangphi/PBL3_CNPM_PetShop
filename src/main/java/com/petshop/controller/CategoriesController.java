@@ -27,7 +27,7 @@ public class CategoriesController extends BaseController {
 	
 	
 	@RequestMapping(value = "/san-pham")
-	public ModelAndView Product(@RequestParam(name = "shop", defaultValue = "item_01") String item_id) {
+	public ModelAndView Product(@RequestParam(name = "shop", defaultValue = "item01") String item_id) {
 	
 		mvShare.setViewName("customer/productByItem");
 
@@ -37,13 +37,12 @@ public class CategoriesController extends BaseController {
 		
 		for (TypeOfCategory item: itemType.getTypeOfCategoryList())
 		{
-			List<Products> tmpList=CategoriesService.GetDataProductByTypeIDLimit9(item.getType_id(),"price-asc");
+			List<Products> tmpList=CategoriesService.GetDataProductByTypeIDLimit8(item.getType_id(),"price-asc");
 			productList.addAll(tmpList);
 		}
 		mvShare.addObject("productByTypeID",productList);
 		return mvShare;
 	}
-
 	@RequestMapping(value = "/san-pham/{type_id}")
 	public ModelAndView ProductByTypeID(@PathVariable String type_id
 			                           ,@RequestParam(name="sort",defaultValue="price-asc") String sort
@@ -62,16 +61,40 @@ public class CategoriesController extends BaseController {
 		return mvShare;
 	}
 	@RequestMapping(value = "/san-pham/the-loai/{product_cate_id}")
-	public ModelAndView ProductByProductCateg(@PathVariable String product_cate_id,@RequestParam(name = "currentPage", defaultValue = "1") String currentPage
-			,@RequestParam(name = "sort", defaultValue = "price-asc") String sort) {
+	public ModelAndView ProductByProductCateg(@PathVariable String product_cate_id
+											 ,@RequestParam(name = "currentPage", defaultValue = "1") String currentPage
+											 ,@RequestParam(name = "sort", defaultValue = "price-asc") String sort) {
 		mvShare.setViewName("customer/productByProductcateg");
 		ProductCategory productCategory=new ProductCategory(HomeService.GetDataProductCategory(product_cate_id));
 		mvShare.addObject("productCategory", productCategory);
 		System.out.println(currentPage);
-		int TotalData = productCategory.getProductList(productCategory).size();
+		int TotalData = productCategory.getProductList().size();
 		PaginatesDto pageinfo = paginateService.GetPatinates(TotalData, totalProductPage,Integer.parseInt(currentPage));
 		mvShare.addObject("pageinfo", pageinfo);
 		mvShare.addObject("ProductPaginate",CategoriesService.GetDataProductByProductCategoryIDPaginate(product_cate_id, pageinfo.getStart(), totalProductPage,sort));
+		return mvShare;
+	}
+	@RequestMapping(value = "/loc-san-pham-theo-gia")
+	public ModelAndView FilterByPrice(@RequestParam(name = "shop", defaultValue = "item01") String item_id
+									 ,@RequestParam(name = "min",defaultValue = "null") String min
+									 ,@RequestParam(name = "max",defaultValue = "null") String max) {
+	
+		mvShare.setViewName("customer/filterProduct");
+		if (min.equals("null") && max.equals("null")) {
+			min="0";
+			max="49000";
+		}
+		else {
+		if (min.equals("null")) {
+			min="-333";
+		}
+		if (max.equals("null")) {
+			max="-333";
+		}
+		}
+		ItemType itemType=new ItemType(HomeService.GetDataItemTypeByItemID(item_id));
+		mvShare.addObject("ItemType",itemType);
+		mvShare.addObject("productFilter",productService.GetDataProductFilterByPrice(item_id, Long.parseLong(min), Long.parseLong(max)));
 		return mvShare;
 	}
 }

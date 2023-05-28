@@ -36,9 +36,9 @@ public class ProductsDao extends BaseDao {
 		return sql;
 	}
 
-	public StringBuffer SqlProductByTypeIDLimit9(String type_id,String sort) {
+	public StringBuffer SqlProductByTypeIDLimit8(String type_id,String sort) {
 		StringBuffer sql = SqlProductByTypeID(type_id,sort);
-		sql.append(" LIMIT 9");
+		sql.append(" LIMIT 8");
 		return sql;
 	}
 
@@ -119,10 +119,10 @@ public class ProductsDao extends BaseDao {
 		return sql;
 	}
 
-	public List<Products> GetDataProductByTypeIDLimit9(String type_id,String sort) {
+	public List<Products> GetDataProductByTypeIDLimit8(String type_id,String sort) {
 		List<Products> listproduct = new ArrayList<>();
 		try {
-			String sql = SqlProductByTypeIDLimit9(type_id,sort).toString();
+			String sql = SqlProductByTypeIDLimit8(type_id,sort).toString();
 			System.out.println("SQL Query: " + sql);
 			listproduct = _JdbcTemplate.query(sql, new MapperProducts());
 			return listproduct;
@@ -351,6 +351,62 @@ public class ProductsDao extends BaseDao {
 			String sqlQuery =sql.toString();
 			System.out.println("SQL Query: " + sqlQuery);
 			listproduct = _JdbcTemplate.query(sqlQuery, new MapperProducts());
+			return listproduct;
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	public List<Products> GetDataProductLimit12(String item_id) {
+		List<Products> listproduct = new ArrayList<>();
+		try {
+			String sql="SELECT * FROM products WHERE products.product_id LIKE ?  ORDER BY products.sold_quantity DESC LIMIT 0,8 ";
+			Object param=null;
+			if (item_id.equals("item01")) param="d%";
+			else param="c%";
+			listproduct = _JdbcTemplate.query(sql, new MapperProducts(),param);
+			return listproduct;
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	public List<Products> GetDataProductFilterByPrice(String item_id,long min,long max) {
+		List<Products> listproduct = new ArrayList<>();
+		try {
+			StringBuffer sql=new StringBuffer();
+			String name,Min,Max;
+			Object[] params = null;
+			if (item_id.equals("item01")) name="d%";
+			else name="c%";
+			
+			sql.append("SELECT * FROM products WHERE products.product_id LIKE ? AND ");
+			if (min!=333 && max!=-333) 
+				{
+				   sql.append(" products.price >= ? AND  products.price <=? ");
+				   Min=String.valueOf(min);
+				   Max=String.valueOf(max);
+				   params = new Object[]{name, Min, Max};
+				}
+			else
+			{
+			if (min!=-333) {
+				sql.append(" products.price >= ? ");
+				Min=String.valueOf(min);
+				 params = new Object[]{name, Min};
+			}
+			if (max!=-333) {
+				sql.append(" products.price >= ? ");
+				Max=String.valueOf(max);
+				 params = new Object[]{name, Max};
+			}
+			}
+			sql.append(" ORDER BY products.price ASC ");
+			
+			
+			System.out.println(sql);
+			listproduct = _JdbcTemplate.query(sql.toString(), new MapperProducts(),params);
+			System.out.println(sql);
 			return listproduct;
 		} catch (Exception e) {
 			System.out.println(e);
