@@ -66,15 +66,22 @@ username = (username.equals("null")) ? "" : username;
 
 							<c:if test="${not index.first}">
 								<c:if test="${empty item.item_id}">
-									<a href='<c:url value="/san-pham?shop=${item.item_id}"/>'
+								<c:if test="${index.index==3 }">
+									 <a href='<c:url value="/gioi-thieu"/>'
 										class="nav-item nav-link">${item.menu_name}</a>
+										</c:if>
+									<c:if test="${index.index==4 }">
+									 <a href="https://zalo.me/84377382067"
+										class="nav-item nav-link">${item.menu_name}</a>
+										</c:if>
 								</c:if>
 
 								<c:if test="${not empty item.item_id}">
 									<div class="nav-item dropdown">
 
-										<a href='<c:url value="/san-pham?shop=${item.item_id}"/>'
-											class="nav-link dropdown-toggle">${item.menu_name} </a>
+										<a href='<c:url value="/gioi-thieu"/>'
+											class="nav-link dropdown-toggle">${item.menu_name}  </a>
+
 										<div class="dropdown-menu rounded-0 m-0">
 
 											<%-- <c:if test="${count==1}">

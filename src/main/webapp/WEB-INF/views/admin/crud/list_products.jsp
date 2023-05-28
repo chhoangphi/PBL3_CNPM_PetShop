@@ -354,6 +354,7 @@ table.table .avatar {
 					</thead>
 					<tbody>
 						 <c:forEach var="products" items="${ProductPaginate}">
+						 <%-- <c:if test="${products.status == 0}"> --%>
 							<tr>
 								<td><span class="custom-checkbox"> <input
 										type="checkbox" id="checkbox1" name="options[]" value="1">
@@ -374,7 +375,8 @@ table.table .avatar {
 									class="delete" title="Delete" data-toggle="tooltip"><i
 										class="material-icons">&#xE872;</i></a></td>
 							</tr>
-						</c:forEach>
+<%-- 							</c:if>
+ --%>						</c:forEach>
 					</tbody>
 				</table>
 				<div class="clearfix">

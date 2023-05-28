@@ -56,9 +56,9 @@ public class ProductService implements IProductService{
 		return productsDao.getStringProductNameByProductID(product_id);
 	}
 	@Override
-	public List<String> GetDataProductID() {
+	public List<String> GetDataProductID(String product_categ_id) {
 		// TODO Auto-generated method stub
-		return productsDao.GetDataProductID();
+		return productsDao.GetDataProductID(product_categ_id);
 	}
 	@Override
 	public List<Products> SearchProducts(String productName) {

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -54,6 +55,12 @@ public class HomeController extends BaseController{
 	@RequestMapping(value = { "/deny-access" })
 	public ModelAndView Test() {
 		mvShare.setViewName("error/denyaccess");
+
+		return mvShare;
+	}
+	@RequestMapping(value = { "/gioi-thieu" })
+	public ModelAndView AboutUs() {
+		mvShare.setViewName("customer/aboutus");
 
 		return mvShare;
 	}

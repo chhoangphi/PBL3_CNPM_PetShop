@@ -195,10 +195,11 @@ public class ProductsDao extends BaseDao {
 		String []s=sort.split("-");
 		try {
 			StringBuffer sql = SqlProductByProductCategoryID(product_categ_id);
+			sql.append(" AND Status = 1 ");
 			sql.append("ORDER BY "+s[0]+" "+s[1]);
 			sql.append(" LIMIT ");
 			sql.append(start + ", " + totalProductpage);
-			System.out.println("SQL Query: " + sql);
+			System.out.println("SQL status Query: " + sql);
 
 			listproduct = _JdbcTemplate.query(sql.toString(), new MapperProducts());
 			return listproduct;
@@ -273,8 +274,8 @@ public class ProductsDao extends BaseDao {
 
 	public int DeleteProduct(Products products) {
 		StringBuffer sql = new StringBuffer();
-		sql.append("DELETE FROM ");
-		sql.append("products ");
+		sql.append("UPDATE  ");
+		sql.append("products SET status = 0");
 		sql.append("  WHERE product_id ='" + products.getProduct_id() + "';");
 		System.out.println(sql.toString());
 		int insert = _JdbcTemplate.update(sql.toString());
@@ -319,9 +320,10 @@ public class ProductsDao extends BaseDao {
 			return null;
 		}
 	}
-	public List<String> GetDataProductID() {
+	public List<String> GetDataProductID(String product_categ_id) {
 		// TODO Auto-generated method stub
-		String sql = "SELECT product_id from products";
+		String sql = "SELECT product_id from products WHERE product_categ_id LIKE '"+product_categ_id+"%'";
+		System.out.println("sql = " +sql);
 //		List<String> list =new ArrayList<>();
 //		list =_JdbcTemplate.execute(sql, list));
 //		//list=_JdbcTemplate.query(sql,new MapperProductCategory());
@@ -335,6 +337,7 @@ public class ProductsDao extends BaseDao {
 		try {
 			String sql = "SELECT * FROM products where product_name like '%"+productName+"%'";
 			listproduct = _JdbcTemplate.query(sql, new MapperProducts());
+			System.out.println("sql = " +sql);
 			return listproduct;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -413,4 +416,5 @@ public class ProductsDao extends BaseDao {
 			return null;
 		}
 	}
+	
 }

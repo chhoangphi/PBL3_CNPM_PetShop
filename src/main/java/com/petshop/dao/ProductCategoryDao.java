@@ -9,7 +9,9 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.petshop.entity.MapperProductCategory;
+import com.petshop.entity.MapperProducts;
 import com.petshop.entity.ProductCategory;
+import com.petshop.entity.Products;
 
 
 @Repository
@@ -135,4 +137,17 @@ public class ProductCategoryDao extends BaseDao {
 	        return null;
 	    }
 	}
+//	public String getTypeIdByProductCateg_id(String product_categ_id)
+//	{
+//		Products product = new Products();
+//		try {
+//			String sql = "SELECT * FROM products WHERE product_categ_id=" + "'" + product_id + "'";
+//			product = _JdbcTemplate.queryForObject(sql, new MapperProducts());
+//			System.out.println("SQL Query: " + sql);
+//			return product.getProduct_categ_id();
+//		} catch (Exception e) {
+//			System.out.println(e);
+//			return null;
+//		}
+//	}
 }

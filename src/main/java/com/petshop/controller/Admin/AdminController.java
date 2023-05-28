@@ -59,8 +59,6 @@ public class AdminController extends BaseController {
 	@Autowired
 	private HomeServiceImpl homeservice;
 	@Autowired
-	private OrderDetailServiceImpl orderDetailService;
-	@Autowired
 	private OrderServiceImpl orderService;
 	@Autowired
 	private UserServiceImpl userService;
@@ -123,7 +121,7 @@ public class AdminController extends BaseController {
 
 	@RequestMapping(value = "/admin/chinh-sua-thong-tin-san-pham/{product_id}", method = RequestMethod.GET)
 	public ModelAndView UpdateProductGET(HttpServletRequest request, HttpServletResponse response, Model model,
-			@PathVariable String product_id) {
+			@PathVariable String product_id,HttpSession session) {
 		// mv.setViewName("index")
 
 		mvShare.addObject("dataProducts", productService.GetDataProduct());
@@ -141,7 +139,7 @@ public class AdminController extends BaseController {
 
 	@RequestMapping(value = "/admin/cap-nhat-san-pham/{product_id}", method = RequestMethod.POST)
 	public String editsave(HttpServletRequest request, HttpServletResponse response,
-			@ModelAttribute("product") Products product, ModelMap model,
+			@ModelAttribute("product") Products product, ModelMap model,HttpSession session,
 			@RequestParam(name = "product_categ_name", required = true) String product_categ_name) {
 		request.setAttribute("product_categ_name", product_categ_name);
 		String categoryID = categoriesServiceImpl.getStringProductCategoryIDByName(product_categ_name);
@@ -151,8 +149,8 @@ public class AdminController extends BaseController {
 		Random rd = new Random();
 		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
 		String activityTime = System.currentTimeMillis() + "";
-		
-		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now());
+		User admin=(User) session.getAttribute("LoginInfo");
+		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
 		int add = activityServiceImpl.AddActivity(activity);
 		// mvShare.setViewName("redirect:/home/danh-sach-san-pham");
 
@@ -161,7 +159,7 @@ public class AdminController extends BaseController {
 	}
 
 	@RequestMapping(value = "/admin/xoa-san-pham/{product_id}", method = RequestMethod.GET)
-	public String DeleteProduct(HttpServletRequest request, HttpServletResponse response,
+	public String DeleteProduct(HttpSession session,HttpServletRequest request, HttpServletResponse response,
 			@ModelAttribute("product") Products product, ModelMap model, @PathVariable String product_id) {
 		product.setProduct_id(product_id);
 		String categoryID = productService.getStringProductCategory(product_id);
@@ -171,38 +169,50 @@ public class AdminController extends BaseController {
 		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
 		String activityTime = System.currentTimeMillis() + "";
 		
-		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now());
+		User admin=(User) session.getAttribute("LoginInfo");
+		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
 		int add = activityServiceImpl.AddActivity(activity);
 
 		return "redirect:/admin/danh-sach-san-pham/the-loai/" + categoryID + "/1";
 	}
 
 	@RequestMapping(value = "/admin/them-san-pham", method = RequestMethod.GET)
-	public ModelAndView AddProduct(HttpServletRequest request, HttpServletResponse response, Model model) {
+	public ModelAndView AddProduct(HttpSession session,HttpServletRequest request, HttpServletResponse response, Model model) {
 		mvShare.addObject("productCategoryNameList", categoryService.GetDataProductCategoryNameList());
 		mvShare.setViewName("admin/crud/list_products");
 		return mvShare;
 	}
 
 	@RequestMapping(value = "/admin/them-san-pham", method = RequestMethod.POST)
-	public String CreateProduct(HttpServletRequest request, HttpServletResponse response,
+	public String CreateProduct(HttpSession session,HttpServletRequest request, HttpServletResponse response,
 			@ModelAttribute("product") Products product, ModelMap model,
 			@RequestParam(name = "product_categ_name", required = true) String product_categ_name) {
 		request.setAttribute("product_categ_name", product_categ_name);
 		String categoryID = categoriesServiceImpl.getStringProductCategoryIDByName(product_categ_name);
 		System.out.println("pdid = " + product.getProduct_id());
-		List<String> product_idList = productService.GetDataProductID();
+		List<String> product_idList = productService.GetDataProductID(categoryID.substring(0,1));
 		System.out.println("size=" + product_idList.size());
 		int x = 0;
-		String tmp1 = "d_pd";
+		
+		String tmp1 = "";
+		if(categoryID.substring(0,1).equals("d"))
+			tmp1="d_pd";
+		else tmp1="c_pd";
 		int max = 0;
+		for (int i = 0; i < product_idList.size();i++) {
+			System.out.println("elm = " + product_idList.get(i));
+		}
+		
 		// String tmp1 = id.substring(0, 4);
 		for (String string : product_idList) {
 			x = Integer.parseInt(string.substring(4));
 			System.out.println("x = " + x);
-			System.out.println("elm = " + string);
+			if(string.substring(4)==null)
+				x = 0;
 			if (x > max)
 				max = x;
+			
+			System.out.println("max = " + max);
 
 		}
 		max++;
@@ -217,13 +227,15 @@ public class AdminController extends BaseController {
 		product_idList.add(tmpID);
 		System.out.println("id =" + tmpID);
 		product.setProduct_categ_id(categoryID);
+		product.setStatus(1);
 		productService.AddProduct(product);
 		activityHistory = "Thêm sản phẩm " + product.getProduct_id() ;
 		Random rd = new Random();
 		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
 		String activityTime = System.currentTimeMillis() + "";
 		
-		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now());
+		User admin=(User) session.getAttribute("LoginInfo");
+		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
 		int add = activityServiceImpl.AddActivity(activity);
 		
 		return "redirect:/admin/danh-sach-san-pham/the-loai/" + categoryID + "/1";
@@ -256,7 +268,7 @@ public class AdminController extends BaseController {
 		return mvShare;
 	}
 	@RequestMapping(value = "/admin/xoa-don-hang/{orderId}", method = RequestMethod.GET)
-	public String DeleteOrder(@ModelAttribute("product") Products produc, HttpServletRequest request,
+	public String DeleteOrder(HttpSession session,@ModelAttribute("product") Products produc, HttpServletRequest request,
 			HttpServletResponse response, ModelMap model, @PathVariable String orderId) {
 		int x = orderService.DeleteOrder(orderId);
 		activityHistory = "Xóa đơn hàng " + orderId ;
@@ -264,13 +276,14 @@ public class AdminController extends BaseController {
 		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
 		String activityTime = System.currentTimeMillis() + "";
 		
-		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now());
+		User admin=(User) session.getAttribute("LoginInfo");
+		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
 		int add = activityServiceImpl.AddActivity(activity);
 		mvShare.setViewName("admin/crud/list_order");
 		return "redirect:/admin/quan-ly-don-hang/1";
 	}
 	@RequestMapping(value = "/admin/cap-nhat-don-hang/{orderId}", method = RequestMethod.GET)
-	public ModelAndView UpdateOrderGET(HttpServletRequest request, HttpServletResponse response, Model model,
+	public ModelAndView UpdateOrderGET(HttpSession session,HttpServletRequest request, HttpServletResponse response, Model model,
 			@PathVariable String orderId) {
 		mvShare.addObject("order", orderService.findOrder(orderId));
 		mvShare.setViewName("admin/crud/update_order");
@@ -278,7 +291,7 @@ public class AdminController extends BaseController {
 	}
 
 	@RequestMapping(value = "/admin/cap-nhat-don-hang/{orderId}", method = RequestMethod.POST)
-	public String UpdateOrderPost(HttpServletRequest request, HttpServletResponse response,@PathVariable String orderId,
+	public String UpdateOrderPost(HttpSession session,HttpServletRequest request, HttpServletResponse response,@PathVariable String orderId,
 			@ModelAttribute("order") Order order, ModelMap model,
 			@RequestParam(name = "status", required = true) String status,
 			@RequestParam(name = "address", required = true) String address){
@@ -300,7 +313,8 @@ public class AdminController extends BaseController {
 		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
 		String activityTime = System.currentTimeMillis() + "";
 		
-		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now());
+		User admin=(User) session.getAttribute("LoginInfo");
+		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
 		int add = activityServiceImpl.AddActivity(activity);
 		mvShare.addObject("order",orderService.findOrder(orderId));
 		mvShare.setViewName("admin/crud/upadate_order");
@@ -323,7 +337,7 @@ public class AdminController extends BaseController {
 		return mvShare;
 	}
 	@RequestMapping(value = "/admin/them-tai-khoan", method = RequestMethod.POST)
-	public String CreateAccount(HttpServletRequest request, HttpServletResponse response,
+	public String CreateAccount(HttpSession session,HttpServletRequest request, HttpServletResponse response,
 			@ModelAttribute("user") User user, ModelMap model,
 			@RequestParam(name = "gender", required = true) String gender) {
 		request.setAttribute("gender", gender);
@@ -348,7 +362,8 @@ public class AdminController extends BaseController {
 				String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
 				String activityTime = System.currentTimeMillis() + "";
 				
-				Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now());
+				User admin=(User) session.getAttribute("LoginInfo");
+				Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
 				int add = activityServiceImpl.AddActivity(activity);
 				
 				
@@ -365,7 +380,7 @@ public class AdminController extends BaseController {
 		return "redirect:/admin/quan-ly-tai-khoan/1";
 	}
 	@RequestMapping(value = "/admin/xoa-tai-khoan/{username}", method = RequestMethod.GET)
-	public String DeleteUser(@ModelAttribute("user") User user, HttpServletRequest request,
+	public String DeleteUser(HttpSession session,@ModelAttribute("user") User user, HttpServletRequest request,
 			HttpServletResponse response, ModelMap model, @PathVariable String username) {
 		int x = userService.DeleteUser(user);
 		activityHistory = "Xóa tài khoản " + user.getUsername() ;
@@ -373,19 +388,20 @@ public class AdminController extends BaseController {
 		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
 		String activityTime = System.currentTimeMillis() + "";
 		
-		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now());
+		User admin=(User) session.getAttribute("LoginInfo");
+		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
 		int add = activityServiceImpl.AddActivity(activity);
 //		mvShare.setViewName("admin/crud/list_order");
 		return "redirect:/admin/quan-ly-tai-khoan/1";
 	}
 	@RequestMapping(value = "/admin/cap-nhat-tai-khoan/{username}", method = RequestMethod.GET)
-	public ModelAndView UpdateUserGET(HttpServletRequest request, HttpServletResponse response, Model model,
+	public ModelAndView UpdateUserGET(HttpSession session,HttpServletRequest request, HttpServletResponse response, Model model,
 			@PathVariable String username) {
 		mvShare.setViewName("admin/crud/update_user");
 		return mvShare;
 	}
 	@RequestMapping(value = "/admin/cap-nhat-tai-khoan/{username}", method = RequestMethod.POST)
-	public String UpdateUser(HttpServletRequest request, HttpServletResponse response,
+	public String UpdateUser(HttpSession session,HttpServletRequest request, HttpServletResponse response,
 			@ModelAttribute("user") User user, ModelMap model,
 			@PathVariable String username,
 			@RequestParam(name = "password", required = true) String password,
@@ -412,7 +428,8 @@ public class AdminController extends BaseController {
 		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
 		String activityTime = System.currentTimeMillis() + "";
 		
-		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now());
+		User admin=(User) session.getAttribute("LoginInfo");
+		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
 		int add = activityServiceImpl.AddActivity(activity);
 		System.out.println(x);
 //		mvShare.setViewName("admin/crud/list_order");

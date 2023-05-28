@@ -331,9 +331,7 @@ table.table .avatar {
 							</h2>
 						</div>
 						<div class="col-sm-6">
-							<a href="#addEmployeeModal" class="btn btn-success"
-								data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add
-									New Order</span></a> <a href="#deleteEmployeeModal"
+							 <a href="#deleteEmployeeModal"
 								class="btn btn-danger" data-toggle="modal"><i
 								class="material-icons">&#xE15C;</i> <span>Delete</span></a>
 						</div>
@@ -398,56 +396,7 @@ table.table .avatar {
 		</div>
 	</div>
 	<!-- Edit Modal HTML -->
-	<div id="addEmployeeModal" class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				 <form:form action="/petshop-5/admin/them-san-pham" method="POST"
-					modelAttribute="product">
-					<div class="modal-header">
-						<h4 class="modal-title">Add Product</h4>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-hidden="true">&times;</button>
-					</div>
-					<div class="modal-body">
-						<div class="form-group">
-							<form:label path="product_id">Product ID</form:label>
-							<form:input type="text" class="form-control" path="product_id" />
-						</div>
-						<div class="form-group">
-							<form:label path="product_name">Product Name</form:label>
-							<form:input type="text" class="form-control" path="product_name" />
-						</div>
-						<div class="form-group">
-							<form:label path="img">Product Image URL</form:label>
-							<form:input type="text" class="form-control" path="img" />
-						</div>
-						<div class="form-group">
-							<form:label path="price">Product Price</form:label>
-							<form:input type="text" class="form-control" path="price" />
-						</div>
-						<div class="form-group">
-							<form:label path="description">Product Description</form:label>
-							<form:input type="text" class="form-control" path="description" />
-						</div>
-						<div class="mb-3">
-							<label for="product_categ_name" class="form-label">Product
-								Category Name</label> <select class="form-control"
-								id="product_categ_name" name="product_categ_name">
-								<c:forEach var="item" items="${productCategory1}">
-									<option value="${categoryName}" label="${categoryName}" />
-								</c:forEach>
-							</select>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal"
-							value="Cancel"> <input type="submit"
-							class="btn btn-success" value="Add">
-					</div>
-				</form:form> 
-			</div>
-		</div>
-	</div> 
+	 
 	<!-- Edit Modal HTML -->
 	<div id="editEmployeeModal" class="modal fade">
 		<div class="modal-dialog">

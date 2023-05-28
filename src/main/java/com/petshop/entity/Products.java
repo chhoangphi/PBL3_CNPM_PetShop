@@ -7,6 +7,7 @@ public class Products {
 	private long price;
 	private String description;
 	private String product_categ_id;
+	private int status;
 	
 	public Products() {
 		super();
@@ -19,9 +20,10 @@ public class Products {
 		this.price =product.price;
 		this.description = product.description;
 		this.product_categ_id = product.product_categ_id;
+		this.status = 1;
 	}
 	public Products(String product_id, String product_name, String img, long price, String description,
-			String product_categ_id) {
+			String product_categ_id,int status) {
 		super();
 		this.product_id = product_id;
 		this.product_name = product_name;
@@ -29,12 +31,21 @@ public class Products {
 		this.price = price;
 		this.description = description;
 		this.product_categ_id = product_categ_id;
+		this.status = 1;
+		
 	}
 
 	public String getProduct_id() {
 		return product_id;
 	}
 
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+		//this.status = 0;
+	}
 	public void setProduct_id(String product_id) {
 		this.product_id = product_id;
 	}
