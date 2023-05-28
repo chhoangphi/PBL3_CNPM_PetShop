@@ -18,9 +18,12 @@ public interface IProductService {
 	public int AddProduct(Products products);
 	public List<Products> GetDataProductPaginate(int start,int end);
 	public String getStringProductNameByProductID(String product_id) ;
-	public List<String> GetDataProductID();
+	public List<String> GetDataProductID(String product_categ_id);
 	public List<Products> SearchProducts(String productName);
 	public List<Products> GetDataProductPaginateInSearchFeature(int start, int end, String productName);
+	public List<Products> GetDataProductLimit12(String item_id);
+	public List<Products> GetDataProductFilterByPrice(String item_id,long min,long max);
+	
 }
 
 

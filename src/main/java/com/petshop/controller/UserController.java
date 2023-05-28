@@ -91,10 +91,10 @@ public class UserController extends BaseController {
 				Random rd = new Random();
 				String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
 				String activityTime = System.currentTimeMillis() + "";
-				
-				Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now());
+				User admin=(User) session.getAttribute("LoginInfo");
+				Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
 				int add = activityServiceImpl.AddActivity(activity);
-				mvShare.setViewName("customer/thanhcong");
+				mvShare.setViewName("redirect:dang-nhap");
 				
 			} else {
 				mvShare.addObject("status", "Đăng ký tài khoản thất bại");
@@ -208,14 +208,14 @@ public class UserController extends BaseController {
 		}
 	}
 	@GetMapping("/huy-don-hang/{orderID}")
-	public String Cancel(RedirectAttributes redirectAttributes,HttpServletRequest request,@PathVariable String orderID) {
+	public String Cancel(HttpSession session,RedirectAttributes redirectAttributes,HttpServletRequest request,@PathVariable String orderID) {
 			orderService.DeleteOrder(orderID);
 			activityHistory = "Hủy đơn hàng " + orderID ;
 			Random rd = new Random();
 			String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
 			String activityTime = System.currentTimeMillis() + "";
-			
-			Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now());
+			User admin=(User) session.getAttribute("LoginInfo");
+			Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
 			int add = activityServiceImpl.AddActivity(activity);
 			redirectAttributes.addFlashAttribute("abc",1);
 

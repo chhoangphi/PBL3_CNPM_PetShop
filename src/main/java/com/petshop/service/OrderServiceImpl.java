@@ -70,8 +70,6 @@ public class OrderServiceImpl implements IOrderService{
 		// TODO Auto-generated method stub
 		return orderDao.GetDataOrder();
 	}
-	
-
 	@Override
 	public List<Order> GetDataOrderPaginate(int start, int end) {
 		// TODO Auto-generated method stub
@@ -88,6 +86,4 @@ public class OrderServiceImpl implements IOrderService{
 		// TODO Auto-generated method stub
 		return orderDao.UpdateOrder(status, address, orderID);
 	}
-
-
 }

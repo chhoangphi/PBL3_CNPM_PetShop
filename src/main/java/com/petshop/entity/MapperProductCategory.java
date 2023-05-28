@@ -21,6 +21,7 @@ public class MapperProductCategory implements RowMapper<ProductCategory>{
 		productCategory.setProduct_categ_id(product_categ_id);
 		productCategory.setProduct_categ_name(rs.getString("product_categ_name"));
 		productCategory.setType_id(rs.getString("type_id"));
+		productCategory.setImg(rs.getString("img"));
 		productCategory.setProductList(productDao.GetDataProductByProductCategoryID(product_categ_id));
 		return productCategory;
 	}

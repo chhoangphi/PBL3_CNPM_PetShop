@@ -2,12 +2,16 @@ package com.petshop.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.petshop.entity.MapperProductCategory;
+import com.petshop.entity.MapperProducts;
 import com.petshop.entity.ProductCategory;
+import com.petshop.entity.Products;
 
 
 @Repository
@@ -19,9 +23,7 @@ public class ProductCategoryDao extends BaseDao {
 	{
 		StringBuffer sql=new StringBuffer();
 		sql.append("SELECT");
-		sql.append(" pdr.product_categ_name");
-		sql.append(", pdr.product_categ_id");
-		sql.append(", pdr.type_id");
+		sql.append(" pdr.*");
 		sql.append(" FROM");
 		sql.append("  product_categories AS pdr");
 		sql.append(" WHERE");
@@ -109,4 +111,43 @@ public class ProductCategoryDao extends BaseDao {
 			return null;
 		}
 	}
+	public List<ProductCategory> GetFeaturedCategory(){
+		try {
+	        String sql = "SELECT pdc.* FROM product_categories AS pdc INNER JOIN products AS pd\n"
+	                + "ON pd.product_categ_id=pdc.product_categ_id GROUP BY pdc.product_categ_id ORDER BY SUM(pd.sold_quantity) DESC LIMIT 0,6";
+	        System.out.println("SQL Query: " + sql);
+	        List<ProductCategory> list = _JdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductCategory.class));
+	        return list;
+	    } catch (Exception e) {
+	        System.out.println(e);
+	        return null;
+	    }
+	}
+	public List<ProductCategory> GetFeaturedCategoryByItemId(String item_id){
+		try {
+	        String sql = "SELECT pdc.* FROM product_categories AS pdc INNER JOIN products AS pd\n"
+	        		+ "ON pd.product_categ_id=pdc.product_categ_id INNER JOIN type_of_category AS typeof ON\n"
+	        		+ "typeof.id=pdc.type_id INNER JOIN  items_type AS it ON\n"
+	        		+ "it.item_id=typeof.item_id WHERE it.item_id=? GROUP BY pdc.product_categ_id ORDER BY SUM(pd.sold_quantity) DESC LIMIT 0,8";
+	        Object param=item_id;
+	        List<ProductCategory> list = _JdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductCategory.class),param);
+	        return list;
+	    } catch (Exception e) {
+	        System.out.println(e);
+	        return null;
+	    }
+	}
+//	public String getTypeIdByProductCateg_id(String product_categ_id)
+//	{
+//		Products product = new Products();
+//		try {
+//			String sql = "SELECT * FROM products WHERE product_categ_id=" + "'" + product_id + "'";
+//			product = _JdbcTemplate.queryForObject(sql, new MapperProducts());
+//			System.out.println("SQL Query: " + sql);
+//			return product.getProduct_categ_id();
+//		} catch (Exception e) {
+//			System.out.println(e);
+//			return null;
+//		}
+//	}
 }

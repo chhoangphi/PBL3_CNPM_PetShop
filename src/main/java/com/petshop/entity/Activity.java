@@ -8,6 +8,7 @@ public class Activity {
 		private String activity_id;
 		private String activity;
 		private LocalDateTime activityTime;
+		private String modifiedBy;
 		public String getActivity_id() {
 			return activity_id;
 		}
@@ -26,11 +27,19 @@ public class Activity {
 		public void setActivityTime(LocalDateTime activityTime) {
 			this.activityTime = activityTime;
 		}
-		public Activity(String activity_id, String activity, LocalDateTime activityTime) {
+		public Activity(String activity_id, String activity, LocalDateTime activityTime,String modifiedBy) {
 			super();
 			this.activity_id = activity_id;
 			this.activity = activity;
 			this.activityTime = activityTime;
+			this.activityTime = activityTime;
+			this.modifiedBy = modifiedBy;
+		}
+		public String getModifiedBy() {
+			return modifiedBy;
+		}
+		public void setModifiedBy(String modifiedBy) {
+			this.modifiedBy = modifiedBy;
 		}
 		public Activity() {
 			super();

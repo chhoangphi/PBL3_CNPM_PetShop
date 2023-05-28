@@ -37,13 +37,15 @@ public class ActivityDao extends BaseDao {
 			sql.append("( ");
 			sql.append("    activity_id, ");
 			sql.append("    activity, ");
-			sql.append("    activity_time ");	
+			sql.append("    activity_time ,");	
+			sql.append("    modifiedBy ");
 			sql.append(") ");
 			sql.append("VALUES ");
 			sql.append("(");
 			sql.append("'"+activity.getActivity_id()+"',");
 			sql.append("'"+activity.getActivity()+"',");
-			sql.append("'"+activity.getActivityTime()+"'");
+			sql.append("'"+activity.getActivityTime()+"',");
+			sql.append("'"+activity.getModifiedBy()+"'");
 			sql.append(")");
 			int insert = _JdbcTemplate.update(sql.toString());
 			System.out.println("sql query:" + sql);

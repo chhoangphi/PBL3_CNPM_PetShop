@@ -56,9 +56,9 @@ public class ProductService implements IProductService{
 		return productsDao.getStringProductNameByProductID(product_id);
 	}
 	@Override
-	public List<String> GetDataProductID() {
+	public List<String> GetDataProductID(String product_categ_id) {
 		// TODO Auto-generated method stub
-		return productsDao.GetDataProductID();
+		return productsDao.GetDataProductID(product_categ_id);
 	}
 	@Override
 	public List<Products> SearchProducts(String productName) {
@@ -69,6 +69,16 @@ public class ProductService implements IProductService{
 	public List<Products> GetDataProductPaginateInSearchFeature(int start, int end, String productName) {
 		// TODO Auto-generated method stub
 		return productsDao.GetDataProductPaginateInSearchFeature(start, end, productName);
+	}
+	@Override
+	public List<Products> GetDataProductLimit12(String item_id) {
+		// TODO Auto-generated method stub
+		return productsDao.GetDataProductLimit12(item_id);
+	}
+	@Override
+	public List<Products> GetDataProductFilterByPrice(String item_id, long min, long max) {
+		// TODO Auto-generated method stub
+		return productsDao.GetDataProductFilterByPrice(item_id, min, max);
 	}
 	
 
