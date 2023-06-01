@@ -106,8 +106,22 @@ public class OrderDao extends BaseDao{
 		{
 			try {
 				List<Order> orderList=new ArrayList<>();
-				String sql="SELECT * FROM order_customer";
+				String sql="SELECT * FROM order_customer ";
 				orderList=_JdbcTemplate.query(sql, new MapperOrder(orderDetailDao));
+				System.out.println(sql);
+				return orderList;
+			}catch(Exception e) {	
+				System.out.println(e);
+				return null;
+			}
+		}
+		public List<Order> GetDataOrderByStatus( String status )
+		{
+			try {
+				List<Order> orderList=new ArrayList<>();
+				String sql="SELECT * FROM order_customer WHERE order_status ='" + status + "'";
+				orderList=_JdbcTemplate.query(sql, new MapperOrder(orderDetailDao));
+				System.out.println(sql);
 				return orderList;
 			}catch(Exception e) {	
 				System.out.println(e);
@@ -126,10 +140,10 @@ public class OrderDao extends BaseDao{
 				return null;
 			}
 		}
-		public List<Order> GetDataOrderPaginate(int start, int end) {
+		public List<Order> GetDataOrderPaginate(int start, int end,String status) {
 			List<Order> listOrder = new ArrayList<>();
 			try {
-				String sql = SqlOrderPaginate(start, end).toString();
+				String sql = SqlOrderPaginate(start, end,status).toString();
 				System.out.println("SQL Query: " + sql);
 				listOrder = _JdbcTemplate.query(sql, new MapperOrder(orderDetailDao));
 				return listOrder;
@@ -138,9 +152,12 @@ public class OrderDao extends BaseDao{
 				return null;
 			}
 		}
-		public StringBuffer SqlOrderPaginate(int start, int totalPage) {
+		public StringBuffer SqlOrderPaginate(int start, int totalPage, String status) {
 			StringBuffer sql = new StringBuffer();
-			sql.append("SELECT * FROM order_customer ");
+			if(status.equals("all"))
+				sql.append("SELECT * FROM order_customer");
+			else
+				sql.append("SELECT * FROM order_customer WHERE order_status ='"+status+"'");
 			sql.append(" LIMIT ");
 			sql.append(start + ", " + totalPage);
 			return sql;

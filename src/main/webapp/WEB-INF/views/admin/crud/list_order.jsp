@@ -36,11 +36,11 @@ body {
 .table-wrapper {
 	background: #fff;
 	padding: 20px 25px;
-	margin:30px;
+	margin: 30px;
 	border-radius: 3px;
 	min-width: 1000px;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-	padding-left:150px;
+	padding-left: 150px;
 }
 
 .table-title {
@@ -255,7 +255,35 @@ table.table .avatar {
 .modal .modal-dialog {
 	max-width: 400px;
 }
+nav.order-status {
+	padding: 10px;
+}
 
+nav.order-status ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+}
+
+nav.order-status li {
+	margin-right: 10px;
+}
+
+nav.order-status a {
+	display: block;
+	color: #333;
+	padding: 15px;
+	text-decoration: none;
+}
+
+nav.order-status a:hover {
+	background-color: #ddd;
+}
+
+nav.order-status a.active {
+	color: #E51F28;
+}
 .modal .modal-header, .modal .modal-body, .modal .modal-footer {
 	padding: 20px 30px;
 }
@@ -331,12 +359,33 @@ table.table .avatar {
 							</h2>
 						</div>
 						<div class="col-sm-6">
-							 <a href="#deleteEmployeeModal"
-								class="btn btn-danger" data-toggle="modal"><i
-								class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+							<a href="#deleteEmployeeModal" class="btn btn-danger"
+								data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
 						</div>
 					</div>
 				</div>
+				<nav class="order-status">
+					<ul>
+						<li class="${status=='all' ? 'active' : ''}"><a
+							href='<c:url value="/admin/quan-ly-don-hang/all/1"/>'
+							class="${status=='all' ? 'active' : ''}">Tất cả</a></li>
+						<li class="${status=='pending' ? 'active' : ''}"><a
+							href='<c:url value="/admin/quan-ly-don-hang/pending/1"/>'
+							class="${status=='pending' ? 'active' : ''}">Chờ xác nhận</a></li>
+						<li class="${status=='to_ship' ? 'active' : ''}"><a
+							href='<c:url value="/admin/quan-ly-don-hang/to_ship/1"/>'
+							class="${status=='to_ship' ? 'active' : ''}">Chờ lấy hàng</a></li>
+						<li class="${status=='to_receive' ? 'active' : ''}"><a
+							href='<c:url value="/admin/quan-ly-don-hang/to_receive/1"/>'
+							class="${status=='to_receive' ? 'active' : ''}">Đang giao</a></li>
+						<li class="${status=='completed' ? 'active' : ''}"><a
+							href='<c:url value="/admin/quan-ly-don-hang/completed/1"/>'
+							class="${status=='completed' ? 'active' : ''}">Đã giao</a></li>
+						<li class="${status=='canceled' ? 'active' : ''}"><a
+							href='<c:url value="/admin/quan-ly-don-hang/canceled/1"/>'
+							class="${status=='canceled' ? 'active' : ''}">Đã hủy</a></li>
+					</ul>
+				</nav>
 				<table class="table table-striped table-hover">
 					<thead>
 						<tr>
@@ -352,7 +401,7 @@ table.table .avatar {
 						</tr>
 					</thead>
 					<tbody>
-						 <c:forEach var="item" items="${OrderPaginate}">
+						<c:forEach var="item" items="${OrderPaginate}">
 							<tr>
 								<td><span class="custom-checkbox"> <input
 										type="checkbox" id="checkbox1" name="options[]" value="1">
@@ -361,9 +410,9 @@ table.table .avatar {
 								<td>${item.orderId}</td>
 								<td>${item.recipientName}</td>
 								<td>${item.phoneNumber}</td>
- 								<td>${item.address}</td>
- 								<td>${item.status}</td>
- 								<td><a
+								<td>${item.address}</td>
+								<td>${item.status}</td>
+								<td><a
 									href="<c:url value="/chi-tiet-don-hang/${item.orderId}"/>"
 									class="view" title="View" data-toggle="tooltip"><i
 										class="material-icons">&#xE417;</i></a> <a
@@ -382,13 +431,18 @@ table.table .avatar {
 						Showing <b>5</b> out of <b>25</b> entries
 					</div>
 					<ul class="pagination">
-					<c:forEach var="item" begin="1" end="${pageinfo.totalPage}" varStatus ="loop">
-					<c:if test="${loop.index==pageinfo.currentPage}">
-						<li class="page-item active"><a href="<c:url value="/admin/quan-ly-don-hang/${loop.index}"/>" class="page-link">${loop.index }</a></li>
-						</c:if>
-						<c:if test="${loop.index!=pageinfo.currentPage}">
-						<li class="page-item"><a href="<c:url value="/admin/quan-ly-don-hang/${loop.index}"/>" class="page-link">${loop.index }</a></li>
-						</c:if>
+						<c:forEach var="item" begin="1" end="${pageinfo.totalPage}"
+							varStatus="loop">
+							<c:if test="${loop.index==pageinfo.currentPage}">
+								<li class="page-item active"><a
+									href="<c:url value="/admin/quan-ly-don-hang/${status}/${loop.index}"/>"
+									class="page-link">${loop.index }</a></li>
+							</c:if>
+							<c:if test="${loop.index!=pageinfo.currentPage}">
+								<li class="page-item"><a
+									href="<c:url value="/admin/quan-ly-don-hang/${status}/${loop.index}"/>"
+									class="page-link">${loop.index }</a></li>
+							</c:if>
 						</c:forEach>
 					</ul>
 				</div>
@@ -396,7 +450,7 @@ table.table .avatar {
 		</div>
 	</div>
 	<!-- Edit Modal HTML -->
-	 
+
 	<!-- Edit Modal HTML -->
 	<div id="editEmployeeModal" class="modal fade">
 		<div class="modal-dialog">

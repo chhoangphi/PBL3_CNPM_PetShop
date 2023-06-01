@@ -65,7 +65,7 @@
 
 					</c:forEach>
 					<div class="sb-sidenav-menu-heading">Addons</div>
-					<a class="nav-link" href="/petshop-5/admin/quan-ly-don-hang/1">
+					<a class="nav-link" href="/petshop-5/admin/quan-ly-don-hang/all/1">
 						<div class="sb-nav-link-icon">
 							<i class="fas fa-chart-area"></i>
 						</div> Quản lý đơn hàng

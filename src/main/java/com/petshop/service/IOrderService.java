@@ -20,6 +20,7 @@ public interface IOrderService {
 	public List<Order> findOrderByStatus(String status,String customerID);
 	public List<Order> GetDataOrder();
 	public List<Order> GetDataOrderByUsername(String username);
-	public List<Order> GetDataOrderPaginate(int start, int end);
+	public List<Order> GetDataOrderPaginate(int start, int end,String status);
 	public int UpdateOrder(String status, String address,String orderID);
+	public List<Order> GetDataOrderByStatus(String status);
 }

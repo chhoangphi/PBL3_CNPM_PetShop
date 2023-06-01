@@ -71,9 +71,9 @@ public class OrderServiceImpl implements IOrderService{
 		return orderDao.GetDataOrder();
 	}
 	@Override
-	public List<Order> GetDataOrderPaginate(int start, int end) {
+	public List<Order> GetDataOrderPaginate(int start, int end, String status) {
 		// TODO Auto-generated method stub
-		return orderDao.GetDataOrderPaginate(start, end);
+		return orderDao.GetDataOrderPaginate(start, end,status);
 	}
 	@Override
 	public List<Order> GetDataOrderByUsername(String username) {
@@ -85,5 +85,10 @@ public class OrderServiceImpl implements IOrderService{
 	public int UpdateOrder(String status, String address, String orderID) {
 		// TODO Auto-generated method stub
 		return orderDao.UpdateOrder(status, address, orderID);
+	}
+	@Override
+	public List<Order> GetDataOrderByStatus(String status) {
+		// TODO Auto-generated method stub
+		return orderDao.GetDataOrderByStatus(status);
 	}
 }

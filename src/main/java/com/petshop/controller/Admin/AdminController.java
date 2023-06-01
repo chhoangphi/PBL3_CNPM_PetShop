@@ -250,19 +250,44 @@ public class AdminController extends BaseController {
 		mvShare.setViewName("admin/index");
 		return mvShare;
 	}
+//	@RequestMapping(value = "/admin/quan-ly-don-hang/{currentPage}", method = RequestMethod.GET)
+//	public ModelAndView ManageOrder(@ModelAttribute("product") Products produc, HttpServletRequest request,
+//			HttpServletResponse response, ModelMap model, @PathVariable String currentPage) {
+//		mvShare.addObject("dataOrder", orderService.GetDataOrder());
+//		int TotalData = orderService.GetDataOrder().size();
+//		//int TotalData = 10;
+//		System.out.println("here" + TotalData);
+//		PaginatesDto pageinfo = paginateService.GetPatinates(TotalData, totalProductPage,
+//				Integer.parseInt(currentPage));
+//		mvShare.addObject("pageinfo", pageinfo);
+//		mvShare.addObject("OrderPaginate",
+//				orderService.GetDataOrderPaginate(pageinfo.getStart(), totalProductPage));
+//		mvShare.setViewName("admin/crud/list_order");
+//
+//		return mvShare;
+//	}
 
-	@RequestMapping(value = "/admin/quan-ly-don-hang/{currentPage}", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/quan-ly-don-hang/{orderStatus}/{currentPage}", method = RequestMethod.GET)
 	public ModelAndView ManageOrder(@ModelAttribute("product") Products produc, HttpServletRequest request,
-			HttpServletResponse response, ModelMap model, @PathVariable String currentPage) {
+			HttpServletResponse response, ModelMap model, @PathVariable String currentPage, @PathVariable String orderStatus) {
+		System.out.println("status = " + orderStatus);
 		mvShare.addObject("dataOrder", orderService.GetDataOrder());
-		int TotalData = orderService.GetDataOrder().size();
+		mvShare.addObject("status", orderStatus);
+		int TotalData = 0;
+		if(orderStatus.equals("all")) {
+			TotalData = orderService.GetDataOrder().size();
+		}
+		
+		else TotalData = orderService.GetDataOrderByStatus(orderStatus).size();
+		
+		
 		//int TotalData = 10;
 		System.out.println("here" + TotalData);
 		PaginatesDto pageinfo = paginateService.GetPatinates(TotalData, totalProductPage,
 				Integer.parseInt(currentPage));
 		mvShare.addObject("pageinfo", pageinfo);
 		mvShare.addObject("OrderPaginate",
-				orderService.GetDataOrderPaginate(pageinfo.getStart(), totalProductPage));
+				orderService.GetDataOrderPaginate(pageinfo.getStart(), totalProductPage,orderStatus));
 		mvShare.setViewName("admin/crud/list_order");
 
 		return mvShare;
