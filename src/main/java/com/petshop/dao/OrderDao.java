@@ -1,6 +1,8 @@
 package com.petshop.dao;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.petshop.entity.MapperOrder;
@@ -15,6 +18,7 @@ import com.petshop.entity.MapperOrderDetail;
 import com.petshop.entity.Order;
 import com.petshop.entity.OrderDetail;
 import com.petshop.entity.Order.OrderStatus;
+import com.mysql.cj.protocol.a.SqlTimestampValueEncoder;
 import com.petshop.dao.OrderDetailDao;
 @Repository
 public class OrderDao extends BaseDao{
@@ -110,12 +114,12 @@ public class OrderDao extends BaseDao{
 				orderList=_JdbcTemplate.query(sql, new MapperOrder(orderDetailDao));
 				System.out.println(sql);
 				return orderList;
-			}catch(Exception e) {	
+			}catch(NullPointerException e) {	
 				System.out.println(e);
 				return null;
 			}
 		}
-		public List<Order> GetDataOrderByStatus( String status )
+		public List<Order> GetDataOrderByStatus( String status ) throws SQLException, NullPointerException
 		{
 			try {
 				List<Order> orderList=new ArrayList<>();
@@ -123,7 +127,7 @@ public class OrderDao extends BaseDao{
 				orderList=_JdbcTemplate.query(sql, new MapperOrder(orderDetailDao));
 				System.out.println(sql);
 				return orderList;
-			}catch(Exception e) {	
+			}catch( DataAccessException e) {	
 				System.out.println(e);
 				return null;
 			}
@@ -162,11 +166,14 @@ public class OrderDao extends BaseDao{
 			sql.append(start + ", " + totalPage);
 			return sql;
 		}
-		public int UpdateOrder(String status, String address,String orderID) {
+		public int UpdateOrder(Order order) {
 			try {
-			String sql="  UPDATE order_customer SET order_status='" + status + "', address='"+address+"' " + " WHERE orderID=?";
-			Object param=orderID;
-			int updatedRow=_JdbcTemplate.update(sql,param);
+				
+			
+			String sql="  UPDATE order_customer SET order_status='" + order.getStatus() + "', address='"+order.getAddress()+"', confirmtime = '"+ order.getConfirmTime()  + "' WHERE orderID='"+order.getOrderId()+"'";
+			//Object param=orderID;
+			System.out.println(sql);
+			int updatedRow=_JdbcTemplate.update(sql);
 			return updatedRow;
 			}catch(Exception e){
 				System.out.println(e);

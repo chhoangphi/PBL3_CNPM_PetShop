@@ -36,11 +36,11 @@ body {
 .table-wrapper {
 	background: #fff;
 	padding: 20px 25px;
-	margin:30px;
+	margin: 30px;
 	border-radius: 3px;
 	min-width: 1000px;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-	padding-left:150px;
+	padding-left: 150px;
 }
 
 .table-title {
@@ -292,6 +292,10 @@ table.table .avatar {
 .modal form label {
 	font-weight: normal;
 }
+
+.red {
+	color: red;
+}
 </style>
 <script>
 	$(document).ready(function() {
@@ -319,6 +323,24 @@ table.table .avatar {
 	});
 </script>
 </head>
+<%
+String username = request.getAttribute("username") + "";
+username = (username.equals("null")) ? "" : username;
+String fullName = request.getAttribute("fullName") + "";
+fullName = (fullName.equals("null")) ? "" : fullName;
+
+String gender = request.getAttribute("gender") + "";
+gender = (gender.equals("null")) ? "" : gender;
+
+String dateofbirth = request.getAttribute("dateofbirth") + "";
+dateofbirth = (dateofbirth.equals("null")) ? "" : dateofbirth;
+
+String phonenumber = request.getAttribute("phonenumber") + "";
+phonenumber = (phonenumber.equals("null")) ? "" : phonenumber;
+
+String email = request.getAttribute("email") + "";
+email = (email.equals("null")) ? "" : email;
+%>
 <body>
 	<div class="container-xl">
 		<div class="table-responsive">
@@ -333,12 +355,13 @@ table.table .avatar {
 						<div class="col-sm-6">
 							<a href="#addEmployeeModal" class="btn btn-success"
 								data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add
-									New User</span></a> <a href="#deleteEmployeeModal"
-								class="btn btn-danger" data-toggle="modal"><i
-								class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+									New User</span></a> <a href="#deleteEmployeeModal" class="btn btn-danger"
+								data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
 						</div>
 					</div>
 				</div>
+				<div class="red" id="baoLoi">${registerStatus}
+					${registerStatus1}</div>
 				<table class="table table-striped table-hover">
 					<thead>
 						<tr>
@@ -350,13 +373,15 @@ table.table .avatar {
 							<th>Gender</th>
 							<th>Date Of Birth</th>
 							<th>Phone Number</th>
+							<th>Email</th>
+							<th>Status</th>
 							<th>Action</th>
-							
+
 						</tr>
 					</thead>
 					<tbody>
-						 <c:forEach var="item" items="${userPaginate}">
-						 <c:if test = "${item.status==1}">
+						<c:forEach var="item" items="${userPaginate}">
+
 							<tr>
 								<td><span class="custom-checkbox"> <input
 										type="checkbox" id="checkbox1" name="options[]" value="1">
@@ -365,11 +390,18 @@ table.table .avatar {
 								<td>${item.username}</td>
 								<td>${item.fullName}</td>
 								<td>${item.gender}</td>
- 								<td>${item.dateOfBirth}</td>
- 								<td>${item.phoneNumber}</td>
- 								
- 								
- 								<td> <a
+								<td>${item.dateOfBirth}</td>
+								<td>${item.phoneNumber}</td>
+								<td>${item.email}</td>
+								<c:if test="${item.status == 1}">
+									<td style="color: green;">Active</td>
+								</c:if>
+								<c:if test="${item.status == 0}">
+									<td style="color: red;">Inactive</td>
+								</c:if>
+
+
+								<td><a
 									href="<c:url value="/admin/cap-nhat-tai-khoan/${item.username }"/>"
 									class="edit" title="Edit" data-toggle="tooltip"><i
 										class="material-icons">&#xE254;</i></a> <a
@@ -377,7 +409,7 @@ table.table .avatar {
 									class="delete" title="Delete" data-toggle="tooltip"><i
 										class="material-icons">&#xE872;</i></a></td>
 							</tr>
-							</c:if>
+
 						</c:forEach>
 					</tbody>
 				</table>
@@ -386,13 +418,18 @@ table.table .avatar {
 						Showing <b>5</b> out of <b>25</b> entries
 					</div>
 					<ul class="pagination">
-					<c:forEach var="item" begin="1" end="${pageinfo.totalPage}" varStatus ="loop">
-					<c:if test="${loop.index==pageinfo.currentPage}">
-						<li class="page-item active"><a href="<c:url value="/admin/quan-ly-tai-khoan/${loop.index}"/>" class="page-link">${loop.index }</a></li>
-						</c:if>
-						<c:if test="${loop.index!=pageinfo.currentPage}">
-						<li class="page-item"><a href="<c:url value="/admin/quan-ly-tai-khoan/${loop.index}"/>" class="page-link">${loop.index }</a></li>
-						</c:if>
+						<c:forEach var="item" begin="1" end="${pageinfo.totalPage}"
+							varStatus="loop">
+							<c:if test="${loop.index==pageinfo.currentPage}">
+								<li class="page-item active"><a
+									href="<c:url value="/admin/quan-ly-tai-khoan/${loop.index}"/>"
+									class="page-link">${loop.index }</a></li>
+							</c:if>
+							<c:if test="${loop.index!=pageinfo.currentPage}">
+								<li class="page-item"><a
+									href="<c:url value="/admin/quan-ly-tai-khoan/${loop.index}"/>"
+									class="page-link">${loop.index }</a></li>
+							</c:if>
 						</c:forEach>
 					</ul>
 				</div>
@@ -403,7 +440,7 @@ table.table .avatar {
 	<div id="addEmployeeModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				 <form:form action="/petshop-5/admin/them-tai-khoan" method="POST"
+				<form:form action="/petshop-5/admin/them-tai-khoan" method="POST"
 					modelAttribute="user">
 					<div class="modal-header">
 						<h4 class="modal-title">Add User</h4>
@@ -411,9 +448,14 @@ table.table .avatar {
 							aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">
+
+
 						<div class="form-group">
 							<form:label path="username">Username</form:label>
-							<form:input type="text" class="form-control" path="username" />
+							<form:input type="text" class="form-control" path="username"
+								id="username" name="username" required="required"
+								value="<%=username%>" />
+
 						</div>
 						<div class="form-group">
 							<form:label path="password">Password</form:label>
@@ -421,28 +463,35 @@ table.table .avatar {
 						</div>
 						<div class="form-group">
 							<form:label path="fullName">Fullname</form:label>
-							<form:input type="text" class="form-control" path="fullName" />
+							<form:input type="text" class="form-control" path="fullName"
+								id="fullName" name="fullName" required="required"
+								value="<%=fullName%>" />
 						</div>
 						<div class="form-group">
 							<form:label path="email">Email</form:label>
-							<form:input type="text" class="form-control" path="email" />
+							<form:input type="text" class="form-control" path="email"
+								id="email" name="email" required="required" value="<%=email%>" />
 						</div>
 						<div class="form-group">
 							<form:label path="dateOfBirth">Date Of Birth</form:label>
-							<form:input type="date" class="form-control" path="dateOfBirth" />
+							<form:input type="date" class="form-control" path="dateOfBirth"
+								id="dateOfBirth" name="dateOfBirth" required="required"
+								value="<%=dateofbirth%>" />
 						</div>
 						<div class="form-group">
 							<form:label path="phoneNumber">Phone Number</form:label>
-							<form:input type="text" class="form-control" path="phoneNumber" />
+							<form:input type="text" class="form-control" path="phoneNumber"
+								id="phonenumber" name="phonenumber" required="required"
+								value="<%=phonenumber%>" />
 						</div>
 						<div class="mb-3">
-							<label for="gender" class="form-label">Gender</label> <select class="form-control"
-								id="gender" name="gender">
-								
-									<option value="Nam" label="Nam" />
-									<option value="Nữ" label="Nữ" />
-									<option value="Khác" label="Khác" />
-								
+							<label for="gender" class="form-label">Gender</label> <select
+								class="form-control" id="gender" name="gender">
+
+								<option value="Nam" label="Nam" />
+								<option value="Nữ" label="Nữ" />
+								<option value="Khác" label="Khác" />
+
 							</select>
 						</div>
 					</div>
@@ -451,16 +500,16 @@ table.table .avatar {
 							value="Cancel"> <input type="submit"
 							class="btn btn-success" value="Add">
 					</div>
-				</form:form> 
+				</form:form>
 			</div>
 		</div>
-	</div> 
+	</div>
 	<!-- Edit Modal HTML -->
 	<div id="editEmployeeModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				 <form:form action="/petshop-5/admin/chinh-sua-tai-khoan" method="POST"
-					modelAttribute="user">
+				<form:form action="/petshop-5/admin/chinh-sua-tai-khoan"
+					method="POST" modelAttribute="user">
 					<div class="modal-header">
 						<h4 class="modal-title">Edit User</h4>
 						<button type="button" class="close" data-dismiss="modal"
@@ -492,13 +541,13 @@ table.table .avatar {
 							<form:input type="text" class="form-control" path="phoneNumber" />
 						</div>
 						<div class="mb-3">
-							<label for="gender" class="form-label">Gender</label> <select class="form-control"
-								id="gender" name="gender">
-								
-									<option value="Nam" label="Nam" />
-									<option value="Nữ" label="Nữ" />
-									<option value="Khác" label="Khác" />
-								
+							<label for="gender" class="form-label">Gender</label> <select
+								class="form-control" id="gender" name="gender">
+
+								<option value="Nam" label="Nam" />
+								<option value="Nữ" label="Nữ" />
+								<option value="Khác" label="Khác" />
+
 							</select>
 						</div>
 					</div>
@@ -507,7 +556,7 @@ table.table .avatar {
 							value="Cancel"> <input type="submit"
 							class="btn btn-success" value="Update">
 					</div>
-				</form:form> 
+				</form:form>
 			</div>
 		</div>
 	</div>
@@ -536,5 +585,101 @@ table.table .avatar {
 			</div>
 		</div>
 	</div>
+	<c:forEach var="itemTypeOfCategory" items="${typeOfCategory}">
+		<div id="addTypeOfCategory${itemTypeOfCategory.type_id }"
+			class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<form
+						action="/petshop-5/admin/them-loai-san-pham/${itemTypeOfCategory.type_id }"
+						method="POST">
+
+						<div class="modal-header">
+							<h4 class="modal-title">Thêm ${itemTypeOfCategory.type_name }</h4>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">&times;</button>
+						</div>
+						<div class="modal-body">
+
+
+							<div class="form-group">
+								<label>Tên loại sản phẩm <label> <input
+										type="text" class="form-control" id="productCategoryName"
+										name="productCategoryName" required="required" value="" />
+							</div>
+
+						</div>
+						<div class="modal-footer">
+							<input type="button" class="btn btn-default" data-dismiss="modal"
+								value="Cancel"> <input type="submit"
+								class="btn btn-success" value="Add">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</c:forEach>
+	<c:forEach var="itemType" items="${dataItemType}">
+		<div id="addItemType${itemType.item_id }" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<form
+						action="/petshop-5/admin/them-dong-san-pham/${itemType.item_id}"
+						method="POST">
+
+						<div class="modal-header">
+							<h4 class="modal-title">Thêm dòng sản phẩm cho
+								${itemType.name}</h4>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">&times;</button>
+						</div>
+						<div class="modal-body">
+
+
+							<div class="form-group">
+								<label>Tên dòng sản phẩm <label> <input
+										type="text" class="form-control" id="typeOfCategoryName"
+										name="typeOfCategoryName" required="required" value="" />
+							</div>
+						</div>
+						<div class="modal-footer">
+							<input type="button" class="btn btn-default" data-dismiss="modal"
+								value="Cancel"> <input type="submit"
+								class="btn btn-success" value="Add">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</c:forEach>
+	<div id="addShop" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form action="/petshop-5/admin/them-shop" method="POST">
+
+					<div class="modal-header">
+						<h4 class="modal-title">Thêm shop mới</h4>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">
+
+
+						<div class="form-group">
+							<label>Tên shop <label> <input type="text"
+									class="form-control" id="shopName" name="shopName"
+									required="required" value="" />
+						</div>
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal"
+							value="Cancel"> <input type="submit"
+							class="btn btn-success" value="Add">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+		
 </body>
 </html>

@@ -137,17 +137,95 @@ public class ProductCategoryDao extends BaseDao {
 	        return null;
 	    }
 	}
-//	public String getTypeIdByProductCateg_id(String product_categ_id)
-//	{
-//		Products product = new Products();
-//		try {
-//			String sql = "SELECT * FROM products WHERE product_categ_id=" + "'" + product_id + "'";
-//			product = _JdbcTemplate.queryForObject(sql, new MapperProducts());
-//			System.out.println("SQL Query: " + sql);
-//			return product.getProduct_categ_id();
-//		} catch (Exception e) {
-//			System.out.println(e);
-//			return null;
-//		}
-//	}
+	public String GetMaxTypeID()
+	{
+		
+		try {
+			String sql = "SELECT item_id FROM items_type";
+			List<String> data = _JdbcTemplate.queryForList(sql, String.class);
+			int x = 0;
+			
+			int max = 0;
+			
+			// String tmp1 = id.substring(0, 4);
+			for (String string : data) {
+				x = Integer.parseInt(string.substring(5));
+				System.out.println("x = " + x);
+				if(string.substring(5)==null)
+					x = 0;
+				if (x > max)
+					max = x;
+			}
+			max++;
+			System.out.println("max = " + max);
+			String tmp = Integer.toString(max);
+			if (max < 10)
+				tmp = "0" + tmp;
+			return tmp;
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	public String GetMaxProduct_cageID()
+	{
+		
+		try {
+			String sql = "SELECT product_categ_id FROM product_categories";
+			List<String> data = _JdbcTemplate.queryForList(sql, String.class);
+			int x = 0;
+			
+			int max = 0;
+			
+			// String tmp1 = id.substring(0, 4);
+			for (String string : data) {
+				x = Integer.parseInt(string.substring(5));
+				System.out.println("x = " + x);
+				if(string.substring(5)==null)
+					x = 0;
+				if (x > max)
+					max = x;
+			}
+			max++;
+			System.out.println("max = " + max);
+			String tmp = Integer.toString(max);
+			if (max < 10)
+				tmp = "00" + tmp;
+			else if (max < 100)
+				tmp = "0" + tmp;
+			
+			return tmp;
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	public List<String> GetDataTypeID()
+	{
+		
+		try {
+			String sql = "SELECT product_categ_id FROM product_categories";
+			List<String> data = _JdbcTemplate.queryForList(sql, String.class);
+			
+			return data;
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	public int AddProductCategory(ProductCategory productCategory)
+	{
+		String sql="  INSERT INTO product_categories VALUES(?,?,?,?,?)";
+		
+		Object[] param= {
+				productCategory.getProduct_categ_id(),
+				productCategory.getProduct_categ_name(),
+				productCategory.getProduct_categ_name(),
+				productCategory.getType_id()
+				,null
+		};
+		System.out.println(sql);
+		int updatedRow=_JdbcTemplate.update(sql,param);
+		return updatedRow;
+	}
 }

@@ -34,7 +34,7 @@
 							aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
 							<nav class="sb-sidenav-menu-nested nav accordion"
 								id="sidenavAccordionPages">
-								<c:forEach var="itemTypeOfCategory" items="${typeOfCategory}">
+								<c:forEach var="itemTypeOfCategory" items="${typeOfCategory}" varStatus="loop">
 									<c:if test="${itemType.item_id==itemTypeOfCategory.item_id}">
 										<a class="nav-link collapsed" href="#"
 											data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth"
@@ -55,15 +55,19 @@
 															href="<c:url value="/admin/danh-sach-san-pham/the-loai/${itemCategory.product_categ_id}/1"/>">${itemCategory.product_categ_name}</a>
 													</c:if>
 												</c:forEach>
+												<a data-toggle="modal" href="#addTypeOfCategory${itemTypeOfCategory.type_id}" type="button" class="btn btn-success"><span class="bi bi-plus" ></span>Thêm ${itemTypeOfCategory.type_name}</a>
+												
+											
 											</nav>
 										</div>
 									</c:if>
 								</c:forEach>
+								<a data-toggle="modal" href="#addItemType${itemType.item_id }" type="button" class="btn btn-success"><span class="bi bi-plus"></span>Thêm loại sản phẩm cho ${itemType.name } </a>
+ 								
 							</nav>
 						</div>
-
-
 					</c:forEach>
+					<a data-toggle="modal" href="#addShop" type="button" class="btn btn-success"><span class="bi bi-plus"></span>Thêm shop mới</a>
 					<div class="sb-sidenav-menu-heading">Addons</div>
 					<a class="nav-link" href="/petshop-5/admin/quan-ly-don-hang/all/1">
 						<div class="sb-nav-link-icon">
@@ -75,10 +79,12 @@
 							<i class="fas fa-chart-area"></i>
 						</div> Quản lý tài khoản
 					</a>
+						
+						
 
 				</div>
 			</div>
-			<c:if test="${not empty LoginInfo}">
+			<%-- <c:if test="${not empty LoginInfo}">
 			 <div class="sb-sidenav-footer">
 				<div class="small">Logged in as:</div>
 				${LoginInfo.username}
@@ -89,7 +95,9 @@
 				<div class="small">Not logged in</div>
 				
 			</div> 
-			</c:if>
+			</c:if> --%>
+			
+		
 		</nav>
 	</div>
 </div>

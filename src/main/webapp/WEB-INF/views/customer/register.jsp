@@ -50,6 +50,7 @@
 
 					<div class="red" id="baoLoi">
 						<%=baoLoi%>
+						
 					</div>
 					<div class="mb-3">
 						<label for="username" class="form-label">Tên đăng nhập<span
