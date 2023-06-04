@@ -13,12 +13,7 @@ public class ProductsDao extends BaseDao {
 	public StringBuffer SqlProductByTypeID(String type_id,String sort) {
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT");
-		sql.append(" pd.product_name");
-		sql.append(",pd.product_id");
-		sql.append(", pd.img");
-		sql.append(", pd.price");
-		sql.append(", pd.description");
-		sql.append(", pd.product_categ_id");
+		sql.append(" pd.*");
 		sql.append(" FROM");
 		sql.append(" product_categories AS pc");
 		sql.append(" INNER JOIN");
@@ -29,7 +24,7 @@ public class ProductsDao extends BaseDao {
 		sql.append(" products AS pd");
 		sql.append(" ON");
 		sql.append(" pd.product_categ_id=pc.product_categ_id");
-		sql.append(" WHERE tc.id=");
+		sql.append(" WHERE status=1 AND tc.id=");
 		sql.append("'" + type_id + "'");
 		String []s=sort.split("-");
 		sql.append(" ORDER BY "+s[0]+" "+s[1]);
@@ -97,12 +92,7 @@ public class ProductsDao extends BaseDao {
 	public StringBuffer SqlProductByCategID(String product_categ_id) {
 		StringBuffer sql = new StringBuffer();
 		sql.append("SELECT");
-		sql.append(" pd.product_name");
-		sql.append(",pd.product_id");
-		sql.append(", pd.img");
-		sql.append(", pd.price");
-		sql.append(", pd.description");
-		sql.append(", pd.product_categ_id");
+		sql.append(" pd.*");
 		sql.append(" FROM");
 		sql.append(" product_categories AS pc");
 		sql.append(" INNER JOIN");
@@ -195,12 +185,9 @@ public class ProductsDao extends BaseDao {
 		String []s=sort.split("-");
 		try {
 			StringBuffer sql = SqlProductByProductCategoryID(product_categ_id);
-			sql.append(" AND Status = 1 ");
-			sql.append("ORDER BY "+s[0]+" "+s[1]);
+			sql.append(" ORDER BY "+s[0]+" "+s[1]);
 			sql.append(" LIMIT ");
 			sql.append(start + ", " + totalProductpage);
-			System.out.println("SQL status Query: " + sql);
-
 			listproduct = _JdbcTemplate.query(sql.toString(), new MapperProducts());
 			return listproduct;
 		} catch (Exception e) {
@@ -249,26 +236,18 @@ public class ProductsDao extends BaseDao {
 	}
 
 	public int UpdateProduct(Products products) {
-		StringBuffer sql = new StringBuffer();
-		sql.append("UPDATE ");
-		sql.append("products ");
-		sql.append("SET ");
-//		sql.append("    product_id = ");
-//		sql.append("'"+products.getProduct_id()+"',");
-		sql.append("    product_name = ");
-		sql.append("'" + products.getProduct_name() + "',");
-		sql.append("    img =  ");
-		sql.append("'" + products.getImg() + "',");
-		sql.append("    price =  ");
-		sql.append(products.getPrice() + ",");
-		sql.append("    description = ");
-		sql.append("'" + products.getDescription() + "',");
-		sql.append("    product_categ_id = ");
-		sql.append("'" + products.getProduct_categ_id() + "'");
-		sql.append("  WHERE product_id ='" + products.getProduct_id() + "';");
-		System.out.println(sql.toString());
-
-		int insert = _JdbcTemplate.update(sql.toString());
+		String sql = "UPDATE products SET product_name=?, img =?, price =?, description=?,product_categ_id =?,status=?"
+				+ " WHERE product_id =?";
+		Object []params= {
+				products.getProduct_name()
+				,products.getImg()
+				,products.getPrice()
+				,products.getDescription()
+				,products.getProduct_categ_id()
+				,products.getStatus()
+				,products.getProduct_id()
+		};
+		int insert = _JdbcTemplate.update(sql,params);
 		return insert;
 	}
 
@@ -289,6 +268,7 @@ public class ProductsDao extends BaseDao {
 		sql.append("( ");
 		sql.append("    product_id, ");
 		sql.append("    product_name, ");
+		sql.append("    status, ");
 		sql.append("    img, ");
 		sql.append("    price, ");
 		sql.append("    product_categ_id, ");
@@ -298,6 +278,7 @@ public class ProductsDao extends BaseDao {
 		sql.append("(");
 		sql.append("'" + products.getProduct_id() + "',");
 		sql.append("'" + products.getProduct_name() + "',");
+		sql.append("'" + products.getStatus() + "',");
 		sql.append("'" + products.getImg() + "',");
 		sql.append("" + products.getPrice() + ",");
 		sql.append("'" + products.getProduct_categ_id() + "',");
@@ -363,7 +344,7 @@ public class ProductsDao extends BaseDao {
 	public List<Products> GetDataProductLimit12(String item_id) {
 		List<Products> listproduct = new ArrayList<>();
 		try {
-			String sql="SELECT * FROM products WHERE products.product_id LIKE ?  ORDER BY products.sold_quantity DESC LIMIT 0,8 ";
+			String sql="SELECT * FROM products WHERE products.product_id LIKE ? AND status=1 ORDER BY products.sold_quantity DESC LIMIT 0,8 ";
 			Object param=null;
 			if (item_id.equals("item01")) param="d%";
 			else param="c%";
@@ -410,6 +391,58 @@ public class ProductsDao extends BaseDao {
 			System.out.println(sql);
 			listproduct = _JdbcTemplate.query(sql.toString(), new MapperProducts(),params);
 			System.out.println(sql);
+			return listproduct;
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	public List<Products> findProductByProductCategory(String product_categ_id,String status){
+		List<Products> listproduct = new ArrayList<>();
+		try {
+			StringBuffer sql=new StringBuffer("SELECT * FROM products  WHERE product_categ_id =?");
+			Object []param=null;
+			if (status.equals("all")) param=new Object[] {product_categ_id};
+			if (status.equals("active")) {
+				sql.append(" AND status=?");
+				param=new Object[] {product_categ_id,1};
+			}
+			if (status.equals("inactive")) {
+				sql.append(" AND status=?");
+				param=new Object[] {product_categ_id,0};
+			}
+			listproduct = _JdbcTemplate.query(sql.toString(), new MapperProducts(),param);
+			return listproduct;
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+	}
+	public List<Products> findProductByProductCategoryIDPaginate(String product_categ_id,String status,int start, int totalPage,String sort){
+		List<Products> listproduct = new ArrayList<>();
+		try {
+			StringBuffer sql=new StringBuffer("SELECT * FROM products  WHERE product_categ_id =?");
+			String []s=sort.split("-");
+			
+			Object []param=null;
+			if (status.equals("all")) {
+				sql.append(" ORDER BY ? ?");
+				sql.append(" LIMIT ? ,?");
+				param=new Object[] {product_categ_id,s[0],s[1],start,totalPage};
+			}
+			if (status.equals("active")) {
+				sql.append(" AND status=?");
+				sql.append(" ORDER BY ? ?");
+				sql.append(" LIMIT ? ,?");
+				param=new Object[] {product_categ_id,1,s[0],s[1],start,totalPage};
+			}
+			if (status.equals("inactive")) {
+				sql.append(" AND status=?");
+				sql.append(" ORDER BY ? ?");
+				sql.append(" LIMIT ? ,?");
+				param=new Object[] {product_categ_id,0,s[0],s[1],start,totalPage};
+			}
+			listproduct = _JdbcTemplate.query(sql.toString(), new MapperProducts(),param);
 			return listproduct;
 		} catch (Exception e) {
 			System.out.println(e);

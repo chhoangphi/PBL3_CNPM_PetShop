@@ -37,15 +37,17 @@ padding-right:150px;
 					<div class="text-center">
 						<h3>UPDATE PRODUCT</h3>
 					</div>
-					<!-- <div class="mb-3">
-						<label for="product_id" class="form-label">Product ID</label> <input
-							type="text" class="form-control" id="product_id"
-							name="product_id">
-					</div> -->
-
 					<div class="mb-3">
 						<label for="product_name" class="form-label">Product Name</label>
 						<form:input type="text" class="form-control" path="product_name"></form:input>
+					</div>
+					<div class="mb-3">
+						<label for="status" class="form-label">Status</label>
+						<select class="form-control"
+								id="status" name="status">
+									<option value="1" label="Active &#9660" ${product.status=='1' ? 'selected' : ''} />
+									<option value="0" label="Inactive &#9660" ${product.status=='0' ? 'selected' : ''}/>
+						</select>
 					</div>
 					<div class="mb-3">
 						<label for="img" class="form-label">Product Image URL</label>

@@ -102,7 +102,7 @@ height: 130px;
 						<div class="btn btn-dark" style="width: 45px; height: 45px;">
 							<span class="carousel-control-prev-icon mb-n2"></span>
 						</div>
-					</a> <a class="carousel-control-next" href="" data-slide="next">
+					</a> <a class="carousel-control-next" href="#header-carousel" data-slide="next">
 						<div class="btn btn-dark" style="width: 45px; height: 45px;">
 							<span class="carousel-control-next-icon mb-n2"></span>
 						</div>
@@ -158,10 +158,12 @@ height: 130px;
 			<div class="col-lg-4 col-md-6 pb-1">
 				<div class="cat-item d-flex flex-column border mb-4"
 					style="padding: 30px;">
-					<a href="" class="cat-img position-relative overflow-hidden mb-3">
+					<a href='<c:url value="/san-pham/the-loai/${featured.product_categ_id}?sort=price-asc"/>' class="cat-img position-relative overflow-hidden mb-3">
 						<img class="img-fetured" src="${featured.img}" alt="">
 					</a>
+					<a href='<c:url value="/san-pham/the-loai/${featured.product_categ_id}?sort=price-asc"/>'>
 					<h5 class="font-weight-semi-bold m-0">${featured.product_categ_name}</h5>
+					</a>
 				</div>
 			</div>
 		

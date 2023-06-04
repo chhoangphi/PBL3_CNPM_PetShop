@@ -6,6 +6,7 @@ import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import com.petshop.entity.*;
@@ -15,10 +16,29 @@ public class UserDao {
 	@Autowired
 	public JdbcTemplate _jdbcTemplate;
 	
-	public List<User> GetDataUser(){
+	public List<User> GetDataUser(String code,String status){
 		List<User> list = new ArrayList<User>();
-		String sql = "SELECT * FROM user";
-		list = _jdbcTemplate.query(sql, new MapperUser());
+		StringBuffer sql=new StringBuffer("SELECT * FROM user as u INNER JOIN role AS r ON r.roleid = u.roleid WHERE code=?");
+		Object []params=null;
+		if (status.equals("all")) {
+			params=new Object[] {
+					code
+			};
+		}
+		if (status.equals("active")) {
+			sql.append(" AND status=?");
+			params=new Object[] {
+					code,1
+			};
+		}
+		if (status.equals("inactive")) {
+			sql.append(" AND status=?");
+			params=new Object[] {
+					code,0
+			};
+		}
+		list = _jdbcTemplate.query(sql.toString(), new MapperUser(),params);
+		System.out.println(sql);
 		return list;
 	}
 	public int AddUser(User user)
@@ -113,12 +133,32 @@ public class UserDao {
 		}
 		return 0;
 	}
-	public List<User> GetDataUserPaginate(int start, int end) {
+	public List<User> GetDataUserPaginate(String code,String status,int start, int end) {
 		List<User> listUser = new ArrayList<>();
 		try {
-			String sql = SqlUserPaginate(start, end).toString();
-			System.out.println("SQL Query: " + sql);
-			listUser = _jdbcTemplate.query(sql, new MapperUser());
+			StringBuffer sql=new StringBuffer("SELECT * FROM user as u INNER JOIN role AS r ON r.roleid = u.roleid WHERE code=?");
+			Object []params=null;
+			if (status.equals("all")) {
+				sql.append(" LIMIT ?, ?");
+				params=new Object[] {
+						code,start,end
+				};
+			}
+			if (status.equals("active")) {
+				sql.append(" AND status=?");
+				sql.append(" LIMIT ?, ?");
+				params=new Object[] {
+						code,1,start,end
+				};
+			}
+			if (status.equals("inactive")) {
+				sql.append(" AND status=?");
+				sql.append(" LIMIT ?, ?");
+				params=new Object[] {
+						code,0,start,end
+				};
+			}
+			listUser = _jdbcTemplate.query(sql.toString(), new MapperUser(),params);
 			return listUser;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -145,30 +185,37 @@ public class UserDao {
 		}
  	}
 	public int UpdateUser(User user) {
-		try {
-			StringBuffer sql = new StringBuffer();
-			sql.append("UPDATE user");
-			sql.append(" SET ");
-			sql.append(" username='");
-			sql.append(user.getUsername()+"',");
-			sql.append(" fullname='");
-			sql.append(user.getFullName()+"',");
-			sql.append(" gender='");
-			sql.append(user.getGender()+"',");
-			sql.append(" phonenumber='");
-			sql.append(user.getPhoneNumber()+"',");
-			sql.append(" dateofbirth='");
-			sql.append(user.getDateOfBirth()+"',");
-			sql.append(" email='");
-			sql.append(user.getEmail()+"'");
-			sql.append(" WHERE username='" + user.getUsername()+"'");
-			int rowUpdate=_jdbcTemplate.update(sql.toString());
-			System.out.println(sql.toString());
+		try {			
+			String sql = "UPDATE user SET fullname=?, status=? , phonenumber=?, email=? WHERE username=?";
+			Object []params= {
+				    user.getFullName(),
+				    user.getStatus(),
+					user.getPhoneNumber(),
+				    user.getEmail(),
+				    user.getUsername()
+				    
+				};
+			int rowUpdate=_jdbcTemplate.update(sql,params);
+			System.out.println(sql);
 			return rowUpdate;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return 0;
+	}
+	public User findUserByUsername(String username) {
+		User user = new User();
+		try {
+			String sql="SELECT * FROM user WHERE username=?";
+			Object param= username;
+			user=(User) _jdbcTemplate.queryForObject(sql,new BeanPropertyRowMapper<>(User.class), param);
+			System.out.println(sql);
+			return user;
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
+		
 	}
 }
