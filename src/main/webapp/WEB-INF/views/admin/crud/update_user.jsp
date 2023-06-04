@@ -35,43 +35,41 @@ padding-right:150px;
 
 				<div class="col-sm-12">
 					<div class="text-center">
-						<h3>UPDATE USER</h3>
+						<h3 style="display: inline-block;">UPDATE USER</h3>
+ 						<a href="<c:url value="/admin/quan-ly-tai-khoan"/>"> <button style="display: inline-block;float:right;">Cancel</button></a>
+					</div>
+					<div class="mb-3">
+						<label for="username" class="form-label">User Name</label>
+						<form:input type="text" class="form-control" path="username" readonly="true"></form:input>
 					</div>
 				 	<div class="mb-3">
-						<label for="fullName" class="form-label">Full Name</label> <input
-							type="text" class="form-control" id="fullName"
-							name="fullName">
+						<label for="fullName" class="form-label">Full Name</label>
+						<form:input type="text" class="form-control" path="fullName"></form:input>
 					</div>
 					<div class="mb-3">
-						<label for="password" class="form-label">Password</label> <input
-							type="password" class="form-control" id="password"
-							name="password">
+						<label for="status" class="form-label">Status</label>
+						<select class="form-control"
+								id="status" name="status">
+									<option value="1" label="Hoạt động &#9660" ${user.status=='1' ? 'selected' : ''} />
+									<option value="0" label="Khóa &#9660" ${user.status=='0' ? 'selected' : ''}/>
+						</select>
 					</div>
 					<div class="mb-3">
-						<label for="dateofbirth" class="form-label">Date Of Birth</label> <input
-							type="date" class="form-control" id="dateofbirth"
-							name="dateofbirth">
+						<label for="dateofbirth" class="form-label">Date Of Birth</label>
+							<form:input type="date" class="form-control" path="dateOfBirth" readonly="true"/>
 					</div>
 					<div class="mb-3">
-						<label for="phonenumber" class="form-label">Phone Number</label> <input
-							type="text" class="form-control" id="phonenumber"
-							name="phonenumber">
+						<label for="phonenumber" class="form-label">Phone Number</label>
+							<form:input type="text" class="form-control" path="phoneNumber"/>
 					</div>
 					<div class="mb-3">
-						<label for="email" class="form-label">Email</label> <input
-							type="email" class="form-control" id="email"
-							name="email">
+						<label for="email" class="form-label">Email</label>
+							<form:input type="text" class="form-control" path="email"/>
 					</div>
 					<hr />
 					<div class="mb-3">
 						<label for="gender" class="form-label">Gender</label>
-						<select class="form-control" id="gender"
-							name="gender" >
-								<option value="Nam" label="Nam"/>
-								<option value="Nữ" label="Nữ"/>
-								<option value="Khác" label="Khác"/>
-					
-						</select>
+						<form:input type="text" class="form-control" path="gender" readonly="true"/>
 					</div>
 					<input class="btn btn-primary form-control" type="submit"
 						value="Cập nhật" name="submit" id="submit" />

@@ -355,7 +355,7 @@ nav.order-status a.active {
 					<div class="row">
 						<div class="col-sm-6">
 							<h2>
-								Manage <b>Order</b>
+								Quản lý <b>Đơn hàng</b>
 							</h2>
 						</div>
 						<div class="col-sm-6">
@@ -387,6 +387,7 @@ nav.order-status a.active {
 					</ul>
 				</nav>
 				<table class="table table-striped table-hover">
+				
 					<thead>
 						<tr>
 							<th><span class="custom-checkbox"> <input

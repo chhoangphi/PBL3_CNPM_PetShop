@@ -46,6 +46,10 @@ text-align: center;
   border-color: #E51F28;
   width:250px
 }
+.col-lg-4 {
+flex: 00 33.33333%;
+max-width: 30%;
+}
 </style>
 </head>
 <body>

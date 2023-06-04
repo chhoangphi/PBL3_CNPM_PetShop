@@ -3,6 +3,7 @@ package com.petshop.controller.Admin;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.petshop.controller.BaseController;
+import com.petshop.dao.UserDao;
 import com.petshop.dto.PaginatesDto;
 import com.petshop.entity.Activity;
 import com.petshop.entity.ItemType;
@@ -40,6 +42,7 @@ import com.petshop.service.ItemTypeServiceImpl;
 import com.petshop.service.OrderServiceImpl;
 import com.petshop.service.PaginatesServiceImpl;
 import com.petshop.service.ProductService;
+import com.petshop.service.RevenueStatisticsServiceImpl;
 import com.petshop.service.TypeOfCategoryServiceImpl;
 import com.petshop.service.UserServiceImpl;
 
@@ -63,8 +66,9 @@ public class AdminController extends BaseController {
 	private OrderServiceImpl orderService;
 	@Autowired
 	private UserServiceImpl userService;
-
-	@RequestMapping(value = "/admin/home", method = RequestMethod.GET)
+	@Autowired
+	private RevenueStatisticsServiceImpl  RevenueStatisticService;
+	@RequestMapping(value = {"/admin/home", "/admin/"}, method = RequestMethod.GET)
 	public ModelAndView Admin(HttpServletRequest request, HttpServletResponse response, HttpSession session,
 			Model model) {
 		boolean isLogined = session.getAttribute("LoginInfo") != null ? true : false;
@@ -72,7 +76,6 @@ public class AdminController extends BaseController {
 		// - trường hợp role yêu cầu của method = null bỏ qua interceptor này và
 		// chạy bình thường
 		// - khác null tức request này chỉ được thực hiên khi đã đăng nhập
-		
 
 		// chưa đăng nhập chuyển hướng sang trang login để đăng nhập
 		if (isLogined == false) {
@@ -94,6 +97,14 @@ public class AdminController extends BaseController {
 				mvShare.addObject("dataItemType", itemTypeService.GetDataItemType());
 				mvShare.addObject("typeOfCategory", typeOfCategoryServiceImpl.GetDataTypeOfCategory());
 				mvShare.addObject("dataProductCategory", categoryService.GetAllDataProductCategory());
+				 Calendar calendar = Calendar.getInstance();
+			        int currentMonth = calendar.get(Calendar.MONTH) + 1;
+			        int currentYear = calendar.get(Calendar.YEAR);
+			        mvShare.addObject("currentMonth",currentMonth);
+			        mvShare.addObject("currentYear",currentYear);
+			        mvShare.addObject("totalPriceInMonth",RevenueStatisticService.GetDataTotalPriceInMonthAndYear(currentMonth, currentYear));
+			        mvShare.addObject("totalOrderInMonth",RevenueStatisticService.GetDataTotalOrderInMonthAndYear(currentMonth, currentYear));
+			        mvShare.addObject("dataOrder",RevenueStatisticService.FindDataOrderInMonthAndYear());
 				mvShare.setViewName("admin/index");
 			}
 		}
@@ -101,34 +112,31 @@ public class AdminController extends BaseController {
 		return mvShare;
 	}
 
-	@RequestMapping(value = "/admin/danh-sach-san-pham/the-loai/{product_cate_id}/{currentPage}")
+	@RequestMapping(value = "/admin/danh-sach-san-pham/{product_cate_id}/{currentPage}")
 	public ModelAndView ProductByProductCateg(@ModelAttribute("product") Products product,
-			@PathVariable String product_cate_id, @PathVariable String currentPage) {
+			@PathVariable String product_cate_id, @PathVariable String currentPage
+			,@RequestParam(name="stt",defaultValue="all") String stt) {
 		mvShare.setViewName("admin/crud/list_products");
 		String productCategoryNameByCateID = categoryService.GetProductCategoryNameByProductCateg_ID(product_cate_id);
 		System.out.println("productCategoryNameByCateID = " + productCategoryNameByCateID);
 		mvShare.addObject("categoryName", productCategoryNameByCateID);
 		ProductCategory productCategory = new ProductCategory(homeservice.GetDataProductCategory(product_cate_id));
-		
-		int TotalData = productCategory.getProductList().size();
+		mvShare.addObject("productCateg", productCategory);
+		List<Products> productList=productService.findProductByProductCategory(productCategory.getProduct_categ_id(),stt);
+		int TotalData = productList.size();
 		System.out.println("here" + TotalData);
 		PaginatesDto pageinfo = paginateService.GetPatinates(TotalData, totalProductPage,
 				Integer.parseInt(currentPage));
 		mvShare.addObject("pageinfo", pageinfo);
-		mvShare.addObject("ProductPaginate", categoryService.GetDataProductByProductCategoryIDPaginate(product_cate_id,
+		mvShare.addObject("ProductPaginate", productService.findProductByProductCategoryIDPaginate(product_cate_id,stt,
 				pageinfo.getStart(), totalProductPage,"price-asc"));
 		return mvShare;
 	}
-
 	@RequestMapping(value = "/admin/chinh-sua-thong-tin-san-pham/{product_id}", method = RequestMethod.GET)
 	public ModelAndView UpdateProductGET(HttpServletRequest request, HttpServletResponse response, Model model,
-			@PathVariable String product_id,HttpSession session) {
-		// mv.setViewName("index")
+			@PathVariable String product_id, HttpSession session) {
 
 		mvShare.addObject("dataProducts", productService.GetDataProduct());
-		// mvShare.addObject("productCategoryName",
-		// categoryService.GetDataProductCategoryNameList());
-		// product_id = "d_pd001";
 		String productCategoryID = productService.getStringProductCategory(product_id);
 		String productCategoryNameByCateID = categoryService.GetProductCategoryNameByProductCateg_ID(productCategoryID);
 		mvShare.addObject("productCategoryName", productCategoryNameByCateID);
@@ -140,79 +148,82 @@ public class AdminController extends BaseController {
 
 	@RequestMapping(value = "/admin/cap-nhat-san-pham/{product_id}", method = RequestMethod.POST)
 	public String editsave(HttpServletRequest request, HttpServletResponse response,
-			@ModelAttribute("product") Products product, ModelMap model,HttpSession session,
+			@ModelAttribute("product") Products product, ModelMap model, HttpSession session,
 			@RequestParam(name = "product_categ_name", required = true) String product_categ_name) {
 		request.setAttribute("product_categ_name", product_categ_name);
-		String categoryID = categoriesServiceImpl.getStringProductCategoryIDByName(product_categ_name);
+		String categoryID = categoryService.getStringProductCategoryIDByName(product_categ_name);
 		product.setProduct_categ_id(categoryID);
-		productService.UpdateProduct(product);
-		activityHistory = "Cập nhật sản phẩm " + product.getProduct_id() ;
+		int x=productService.UpdateProduct(product);
+		System.out.println("x="+x);
+		activityHistory = "Cập nhật sản phẩm " + product.getProduct_id();
 		Random rd = new Random();
-		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
+		String activity_id = "activity_id_" + System.currentTimeMillis() + "";
 		String activityTime = System.currentTimeMillis() + "";
-		User admin=(User) session.getAttribute("LoginInfo");
-		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
+		User admin = (User) session.getAttribute("LoginInfo");
+		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(), admin.getUsername());
 		int add = activityServiceImpl.AddActivity(activity);
 		// mvShare.setViewName("redirect:/home/danh-sach-san-pham");
 
 		// return mvShare;
-		return "redirect:/admin/danh-sach-san-pham/the-loai/" + categoryID + "/1";
+		return "redirect:/admin/danh-sach-san-pham/" + categoryID + "/1?stt=all";
 	}
 
 	@RequestMapping(value = "/admin/xoa-san-pham/{product_id}", method = RequestMethod.GET)
-	public String DeleteProduct(HttpSession session,HttpServletRequest request, HttpServletResponse response,
+	public String DeleteProduct(HttpSession session, HttpServletRequest request, HttpServletResponse response,RedirectAttributes redirectAttributes,
 			@ModelAttribute("product") Products product, ModelMap model, @PathVariable String product_id) {
 		product.setProduct_id(product_id);
 		String categoryID = productService.getStringProductCategory(product_id);
 		productService.DeleteProduct(product);
-		activityHistory = "Xóa sản phẩm " + product.getProduct_id() ;
+		activityHistory = "Xóa sản phẩm " + product.getProduct_id();
 		Random rd = new Random();
-		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
+		String activity_id = "activity_id_" + System.currentTimeMillis() + "";
 		String activityTime = System.currentTimeMillis() + "";
-		
-		User admin=(User) session.getAttribute("LoginInfo");
-		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
-		int add = activityServiceImpl.AddActivity(activity);
 
-		return "redirect:/admin/danh-sach-san-pham/the-loai/" + categoryID + "/1";
+		User admin = (User) session.getAttribute("LoginInfo");
+		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(), admin.getUsername());
+		int add = activityServiceImpl.AddActivity(activity);
+		redirectAttributes.addFlashAttribute("abc", 1);
+		return "redirect:/admin/danh-sach-san-pham/" + categoryID + "/1?stt=all";
 	}
 
 	@RequestMapping(value = "/admin/them-san-pham", method = RequestMethod.GET)
-	public ModelAndView AddProduct(HttpSession session,HttpServletRequest request, HttpServletResponse response, Model model) {
+	public ModelAndView AddProduct(HttpSession session, HttpServletRequest request, HttpServletResponse response,
+			Model model) {
 		mvShare.addObject("productCategoryNameList", categoryService.GetDataProductCategoryNameList());
 		mvShare.setViewName("admin/crud/list_products");
 		return mvShare;
 	}
 
 	@RequestMapping(value = "/admin/them-san-pham", method = RequestMethod.POST)
-	public String CreateProduct(HttpSession session,HttpServletRequest request, HttpServletResponse response,
+	public String CreateProduct(HttpSession session, HttpServletRequest request, HttpServletResponse response,
 			@ModelAttribute("product") Products product, ModelMap model,
 			@RequestParam(name = "product_categ_name", required = true) String product_categ_name) {
 		request.setAttribute("product_categ_name", product_categ_name);
-		String categoryID = categoriesServiceImpl.getStringProductCategoryIDByName(product_categ_name);
+		String categoryID = categoryService.getStringProductCategoryIDByName(product_categ_name);
 		System.out.println("pdid = " + product.getProduct_id());
-		List<String> product_idList = productService.GetDataProductID(categoryID.substring(0,1));
+		List<String> product_idList = productService.GetDataProductID(categoryID.substring(0, 1));
 		System.out.println("size=" + product_idList.size());
 		int x = 0;
-		
+
 		String tmp1 = "";
-		if(categoryID.substring(0,1).equals("d"))
-			tmp1="d_pd";
-		else tmp1="c_pd";
+		if (categoryID.substring(0, 1).equals("d"))
+			tmp1 = "d_pd";
+		else
+			tmp1 = "c_pd";
 		int max = 0;
-		for (int i = 0; i < product_idList.size();i++) {
+		for (int i = 0; i < product_idList.size(); i++) {
 			System.out.println("elm = " + product_idList.get(i));
 		}
-		
+
 		// String tmp1 = id.substring(0, 4);
 		for (String string : product_idList) {
 			x = Integer.parseInt(string.substring(4));
 			System.out.println("x = " + x);
-			if(string.substring(4)==null)
+			if (string.substring(4) == null)
 				x = 0;
 			if (x > max)
 				max = x;
-			
+
 			System.out.println("max = " + max);
 
 		}
@@ -228,18 +239,18 @@ public class AdminController extends BaseController {
 		product_idList.add(tmpID);
 		System.out.println("id =" + tmpID);
 		product.setProduct_categ_id(categoryID);
-		product.setStatus(1);
+//		product.setStatus(1);
 		productService.AddProduct(product);
-		activityHistory = "Thêm sản phẩm " + product.getProduct_id() ;
+		activityHistory = "Thêm sản phẩm " + product.getProduct_id();
 		Random rd = new Random();
-		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
+		String activity_id = "activity_id_" + System.currentTimeMillis() + "";
 		String activityTime = System.currentTimeMillis() + "";
-		
-		User admin=(User) session.getAttribute("LoginInfo");
-		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
+
+		User admin = (User) session.getAttribute("LoginInfo");
+		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(), admin.getUsername());
 		int add = activityServiceImpl.AddActivity(activity);
-		
-		return "redirect:/admin/danh-sach-san-pham/the-loai/" + categoryID + "/1";
+
+		return "redirect:/admin/danh-sach-san-pham/" + categoryID + "/1?stt=all";
 	}
 
 	@RequestMapping(value = "/admin/*", method = RequestMethod.GET)
@@ -294,43 +305,45 @@ public class AdminController extends BaseController {
 
 		return mvShare;
 	}
+
 	@RequestMapping(value = "/admin/xoa-don-hang/{orderId}", method = RequestMethod.GET)
-	public String DeleteOrder(HttpSession session,@ModelAttribute("product") Products produc, HttpServletRequest request,
-			HttpServletResponse response, ModelMap model, @PathVariable String orderId) {
+	public String DeleteOrder(HttpSession session, @ModelAttribute("product") Products produc,
+			HttpServletRequest request, HttpServletResponse response, ModelMap model, @PathVariable String orderId) {
 		int x = orderService.DeleteOrder(orderId);
-		activityHistory = "Xóa đơn hàng " + orderId ;
+		activityHistory = "Xóa đơn hàng " + orderId;
 		Random rd = new Random();
-		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
+		String activity_id = "activity_id_" + System.currentTimeMillis() + "";
 		String activityTime = System.currentTimeMillis() + "";
-		
-		User admin=(User) session.getAttribute("LoginInfo");
-		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
+
+		User admin = (User) session.getAttribute("LoginInfo");
+		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(), admin.getUsername());
 		int add = activityServiceImpl.AddActivity(activity);
 		mvShare.setViewName("admin/crud/list_order");
 		return "redirect:/admin/quan-ly-don-hang/1";
 	}
+
 	@RequestMapping(value = "/admin/cap-nhat-don-hang/{orderId}", method = RequestMethod.GET)
-	public ModelAndView UpdateOrderGET(HttpSession session,HttpServletRequest request, HttpServletResponse response, Model model,
-			@PathVariable String orderId) {
+	public ModelAndView UpdateOrderGET(HttpSession session, HttpServletRequest request, HttpServletResponse response,
+			Model model, @PathVariable String orderId) {
 		mvShare.addObject("order", orderService.findOrder(orderId));
 		mvShare.setViewName("admin/crud/update_order");
 		return mvShare;
 	}
 
 	@RequestMapping(value = "/admin/cap-nhat-don-hang/{orderId}", method = RequestMethod.POST)
-	public String UpdateOrderPost(HttpSession session,HttpServletRequest request, HttpServletResponse response,@PathVariable String orderId,
-			@ModelAttribute("order") Order order, ModelMap model,
+	public String UpdateOrderPost(HttpSession session, HttpServletRequest request, HttpServletResponse response,
+			@PathVariable String orderId, @ModelAttribute("order") Order order, ModelMap model,
 			@RequestParam(name = "status", required = true) String status,
-			@RequestParam(name = "address", required = true) String address){
+			@RequestParam(name = "address", required = true) String address) {
 		request.setAttribute("status", status);
 		request.setAttribute("address", address);
-		if(status.equals("PENDING"))
-			order.setStatus(OrderStatus.PENDING);	
-		else if(status.equals("TO_SHIP"))
+		if (status.equals("PENDING"))
+			order.setStatus(OrderStatus.PENDING);
+		else if (status.equals("TO_SHIP"))
 			order.setStatus(OrderStatus.TO_SHIP);
-		else if(status.equals("TO_RECEIVE"))
+		else if (status.equals("TO_RECEIVE"))
 			order.setStatus(OrderStatus.TO_RECEIVE);
-		else if(status.equals("COMPLETED"))
+		else if (status.equals("COMPLETED"))
 			order.setStatus(OrderStatus.COMPLETED);
 		else if(status.equals("CANCELED")) 
 			order.setStatus(OrderStatus.CANCELED);
@@ -348,27 +361,30 @@ public class AdminController extends BaseController {
 		User admin=(User) session.getAttribute("LoginInfo");
 		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
 		int add = activityServiceImpl.AddActivity(activity);
-		mvShare.addObject("order",orderService.findOrder(orderId));
+		mvShare.addObject("order", orderService.findOrder(orderId));
 		mvShare.setViewName("admin/crud/upadate_order");
-		return "redirect:/admin/quan-ly-don-hang/1";	
+		return "redirect:/admin/quan-ly-don-hang/1";
 	}
-	@RequestMapping(value = "/admin/quan-ly-tai-khoan/{currentPage}", method = RequestMethod.GET)
-	public ModelAndView ManageUser(HttpSession session,@ModelAttribute("user") User user, HttpServletRequest request,
-			HttpServletResponse response, ModelMap model, @PathVariable String currentPage) {
-		//mvShare.addObject("dataUser", userService.GetDataUser());
-		int TotalData = userService.GetDataUser().size();
-		//int TotalData = 10;
-		System.out.println("here" + TotalData);
+
+	@RequestMapping(value = "/admin/quan-ly-tai-khoan", method = RequestMethod.GET)
+	public ModelAndView ManageUser(HttpServletRequest request,HttpServletResponse response
+			,@ModelAttribute("user") User user
+			,@RequestParam(name="code",defaultValue="user") String code
+			,@RequestParam(name="currentPage",defaultValue="1") String currentPage
+			,@RequestParam(name="stt",defaultValue="all") String stt) {
+		
+		int TotalData = userService.GetDataUser(code,stt).size();
+		System.out.println(TotalData);
 		PaginatesDto pageinfo = paginateService.GetPatinates(TotalData, totalProductPage,
 				Integer.parseInt(currentPage));
 		mvShare.addObject("pageinfo", pageinfo);
-		mvShare.addObject("userPaginate",
-				userService.GetDataUserPaginate(pageinfo.getStart(), totalProductPage));
+		mvShare.addObject("userPaginate", userService.GetDataUserPaginate(code,stt,pageinfo.getStart(), totalProductPage));
 		mvShare.setViewName("admin/crud/list_user");
 		
 
 		return mvShare;
 	}
+
 	@RequestMapping(value = "/admin/them-tai-khoan", method = RequestMethod.POST)
 	public String CreateAccount(RedirectAttributes redirectAttributes,HttpSession session,HttpServletRequest request, HttpServletResponse response,
 			@ModelAttribute("user") User user, ModelMap model,
@@ -376,7 +392,6 @@ public class AdminController extends BaseController {
 		request.setAttribute("gender", gender);
 		user.setGender(gender);
 		user.setStatus(1);
-		user.setRoleId(1);
 		User check = userService.GetUser(user);
 		if (check != null) {
 			//session.setAttribute("baoLoi", baoLoi);
@@ -388,80 +403,81 @@ public class AdminController extends BaseController {
 				mvShare.addObject("status", "Đăng ký tài khoản thành công");
 				activityHistory = "Đăng ký tài khoản " + user.getUsername();
 				Random rd = new Random();
-				String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
+				String activity_id = "activity_id_" + System.currentTimeMillis() + "";
 				String activityTime = System.currentTimeMillis() + "";
-				
-				User admin=(User) session.getAttribute("LoginInfo");
-				Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
+				User admin = (User) session.getAttribute("LoginInfo");
+				Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),
+						admin.getUsername());
 				int add = activityServiceImpl.AddActivity(activity);
-				
-				
+
 			} else {
 				mvShare.addObject("status", "Đăng ký tài khoản thất bại");
-				//mvShare.setViewName("customer/register");
+				// mvShare.setViewName("customer/register");
 			}
 			System.out.println("count = " + count);
 
 		}
-		
-		
-		
-		return "redirect:/admin/quan-ly-tai-khoan/1";
+		if (user.getRoleId()==0) {
+			return "redirect:/admin/quan-ly-tai-khoan?code=admin";
+		}
+		return "redirect:/admin/quan-ly-tai-khoan?code=user";
 	}
+
 	@RequestMapping(value = "/admin/xoa-tai-khoan/{username}", method = RequestMethod.GET)
-	public String DeleteUser(HttpSession session,@ModelAttribute("user") User user, HttpServletRequest request,
-			HttpServletResponse response, ModelMap model, @PathVariable String username) {
-		int x = userService.DeleteUser(user);
-		activityHistory = "Xóa tài khoản " + user.getUsername() ;
-		Random rd = new Random();
-		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
-		String activityTime = System.currentTimeMillis() + "";
-		
-		User admin=(User) session.getAttribute("LoginInfo");
-		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
-		int add = activityServiceImpl.AddActivity(activity);
-//		mvShare.setViewName("admin/crud/list_order");
-		return "redirect:/admin/quan-ly-tai-khoan/1";
-	}
-	@RequestMapping(value = "/admin/cap-nhat-tai-khoan/{username}", method = RequestMethod.GET)
-	public ModelAndView UpdateUserGET(HttpSession session,HttpServletRequest request, HttpServletResponse response, Model model,
+	public String DeleteUser(HttpSession session, RedirectAttributes redirectAttributes,
+			@ModelAttribute("user") User user, HttpServletRequest request, HttpServletResponse response, ModelMap model,
 			@PathVariable String username) {
+		User u=userService.findUserByUsername(username);
+		int x = userService.DeleteUser(user);
+		activityHistory = "Xóa tài khoản " + user.getUsername();
+		Random rd = new Random();
+		String activity_id = "activity_id_" + System.currentTimeMillis() + "";
+		String activityTime = System.currentTimeMillis() + "";
+
+		User admin = (User) session.getAttribute("LoginInfo");
+		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(), admin.getUsername());
+		int add = activityServiceImpl.AddActivity(activity);
+		redirectAttributes.addFlashAttribute("abc", 1);
+		if (u.getRoleId()==0) {
+			return "redirect:/admin/quan-ly-tai-khoan?code=admin&stt=all";
+		}
+		return "redirect:/admin/quan-ly-tai-khoan?code=user&stt=all";
+	}
+
+	@RequestMapping(value = "/admin/cap-nhat-tai-khoan/{username}", method = RequestMethod.GET)
+	public ModelAndView UpdateUserGET(HttpSession session, HttpServletRequest request, HttpServletResponse response,
+			Model model, @PathVariable String username) {
 		mvShare.setViewName("admin/crud/update_user");
+		User user = userService.findUserByUsername(username);
+		request.setAttribute("user", user);
 		return mvShare;
 	}
+
 	@RequestMapping(value = "/admin/cap-nhat-tai-khoan/{username}", method = RequestMethod.POST)
-	public String UpdateUser(HttpSession session,HttpServletRequest request, HttpServletResponse response,
-			@ModelAttribute("user") User user, ModelMap model,
-			@PathVariable String username,
-			@RequestParam(name = "password", required = true) String password,
-			@RequestParam(name = "fullName", required = true) String fullName,
-			@RequestParam(name = "email", required = true) String email,
-			@RequestParam(name = "dateofbirth", required = true) String dateOfBirth,
-			@RequestParam(name = "gender", required = true) String gender,
-			@RequestParam(name = "phonenumber", required = true) String phoneNumber) {
+	public String UpdateUser(RedirectAttributes redirectAttributes, HttpSession session, HttpServletRequest request,
+			HttpServletResponse response, @ModelAttribute("user") User user, ModelMap model,
+			@PathVariable String username) {
 		request.setAttribute("username", username);
-		request.setAttribute("password", password);
-		request.setAttribute("fullName", fullName);
-		request.setAttribute("email", email);
-		request.setAttribute("gender", gender);
-		request.setAttribute("dateofbirth", dateOfBirth);
-		request.setAttribute("phonenumber", phoneNumber);
-		System.out.println("Date of birth = " + dateOfBirth);
-		Role role = new Role();
-		role.setCode("USER");
-		role.setName("Người dùng");
-		user = new User(username, fullName,password, 1,1,role, gender,Date.valueOf(dateOfBirth),phoneNumber, email);
-		int x = userService.UpdateUser(user);
-		activityHistory = "Cập nhật tài khoản " + user.getUsername() ;
-		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
-		
-		User admin=(User) session.getAttribute("LoginInfo");
-		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
-		int add = activityServiceImpl.AddActivity(activity);
-		System.out.println(x);
-//		mvShare.setViewName("admin/crud/list_order");
-		return "redirect:/admin/quan-ly-tai-khoan/1";
+User u=userService.findUserByUsername(username);
+		if (userService.UpdateUser(user) > 0) {
+			System.out.println(1111);
+			activityHistory = "Cập nhật tài khoản " + user.getUsername();
+			Random rd = new Random();
+			String activity_id = "activity_id_" + System.currentTimeMillis() + "";
+			String activityTime = System.currentTimeMillis() + "";
+			redirectAttributes.addFlashAttribute("changeStatus", "Cập nhật tài khoản " + username + " thành công");
+			User admin = (User) session.getAttribute("LoginInfo");
+			Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(), admin.getUsername());
+			int add = activityServiceImpl.AddActivity(activity);
+		} else {
+			redirectAttributes.addFlashAttribute("changeStatus", "Cập nhật tài khoản " + username + " thất bại");
+		}
+		if (u.getRoleId()==0) {
+			return "redirect:/admin/quan-ly-tai-khoan?code=admin&stt=all";
+		}
+		return "redirect:/admin/quan-ly-tai-khoan?code=user&stt=all";
 	}
+
 	@RequestMapping(value = "/admin/them-loai-san-pham/{type_id}", method = RequestMethod.POST)
 	public String AddProductCategory(HttpSession session,HttpServletRequest request, HttpServletResponse response,@PathVariable String type_id,
 			 ModelMap model,
@@ -533,7 +549,4 @@ public class AdminController extends BaseController {
 	}
 	
 	
-	
-
-
 }

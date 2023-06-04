@@ -49,6 +49,7 @@ public class OrderDao extends BaseDao{
 		    int rowsInserted = _JdbcTemplate.update(sql, params);
 		        return rowsInserted;
 		    }
+		    
 		    catch(Exception e) {
 		    	System.out.println(e);
 		    	return 0;
@@ -179,6 +180,37 @@ public class OrderDao extends BaseDao{
 				System.out.println(e);
 				return 0;
 			}
+		}
+		
+		public List<String> FindMonthOrderInYear() {
+			try {
+				String sql="SELECT DISTINCT(MONTH(orderTime)) FROM order_customer WHERE  YEAR(OrderTime)=2023 ORDER BY MONTH(orderTime) ASC";
+				List<String> results = _JdbcTemplate.queryForList(sql, String.class);
+		        return results;
+				}catch(Exception e){
+					System.out.println(e);
+					return null;
+				}
+		}
+		public List<Long> FindTotalPriceInMonthAndYear() {
+			try {
+				String sql="SELECT SUM(totalPrice) FROM order_customer WHERE  YEAR(OrderTime)=2023 GROUP BY MONTH(orderTime) ORDER BY MONTH(orderTime) ASC";
+				List<Long> results = _JdbcTemplate.queryForList(sql, Long.class);
+		        return results;
+				}catch(Exception e){
+					System.out.println(e);
+					return null;
+				}
+		}
+		public List<Long> FindTotalOrderInMonthAndYear() {
+			try {
+				String sql="SELECT count(orderID) FROM order_customer WHERE  YEAR(OrderTime)=2023 GROUP BY MONTH(orderTime) ORDER BY MONTH(orderTime) ASC";
+				List<Long> results = _JdbcTemplate.queryForList(sql, Long.class);
+		        return results;
+				}catch(Exception e){
+					System.out.println(e);
+					return null;
+				}
 		}
 }
 

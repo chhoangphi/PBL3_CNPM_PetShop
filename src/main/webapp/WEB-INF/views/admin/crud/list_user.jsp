@@ -296,32 +296,41 @@ table.table .avatar {
 .red {
 	color: red;
 }
-</style>
-<script>
-	$(document).ready(function() {
-		// Activate tooltip
-		$('[data-toggle="tooltip"]').tooltip();
 
-		// Select/Deselect checkboxes
-		var checkbox = $('table tbody input[type="checkbox"]');
-		$("#selectAll").click(function() {
-			if (this.checked) {
-				checkbox.each(function() {
-					this.checked = true;
-				});
-			} else {
-				checkbox.each(function() {
-					this.checked = false;
-				});
-			}
-		});
-		checkbox.click(function() {
-			if (!this.checked) {
-				$("#selectAll").prop("checked", false);
-			}
-		});
-	});
-</script>
+nav.order-status li.active {
+	border-bottom: 2px solid #E51F28;
+	border-bottom-color: #E51F28;
+}
+nav.order-status {
+	padding: 10px;
+}
+
+nav.order-status ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+}
+
+nav.order-status li {
+	margin-right: 10px;
+}
+
+nav.order-status a {
+	display: block;
+	color: #333;
+	padding: 15px;
+	text-decoration: none;
+}
+
+nav.order-status a:hover {
+	background-color: #ddd;
+}
+
+nav.order-status a.active {
+	color: #E51F28;
+}
+</style>
 </head>
 <%
 String username = request.getAttribute("username") + "";
@@ -348,9 +357,16 @@ email = (email.equals("null")) ? "" : email;
 				<div class="table-title">
 					<div class="row">
 						<div class="col-sm-6">
+						<c:if test="${param.code=='user'}">
 							<h2>
-								Manage <b>User</b>
+								Quản lý tài khoản <b>Người dùng</b>
 							</h2>
+						</c:if>
+						<c:if test="${param.code=='admin'}">
+							<h2>
+								Quản lý tài khoản <b>Admin</b>
+							</h2>
+						</c:if>
 						</div>
 						<div class="col-sm-6">
 							<a href="#addEmployeeModal" class="btn btn-success"
@@ -362,6 +378,23 @@ email = (email.equals("null")) ? "" : email;
 				</div>
 				<div class="red" id="baoLoi">${registerStatus}
 					${registerStatus1}</div>
+									New User</span></a> 
+						</div>
+					</div>
+				</div>
+				<nav class="order-status">
+									<ul>
+										<li class="${param.stt=='all' ? 'active' : ''}"><a
+											href='<c:url value="/admin/quan-ly-tai-khoan?code=${param.code}&currentPage=1&stt=all"/>'
+											class="">Tất cả</a></li>
+										<li class="${param.stt=='active' ? 'active' : ''}"><a
+											href='<c:url value="/admin/quan-ly-tai-khoan?code=${param.code}&currentPage=1&stt=active"/>'
+											class="">Hoạt động</a></li>
+										<li class="${param.stt=='inactive' ? 'active' : ''}"><a
+											href='<c:url value="/admin/quan-ly-tai-khoan?code=${param.code}&currentPage=1&stt=inactive"/>'
+											class="">Bị khóa</a></li>
+									</ul>
+				</nav>
 				<table class="table table-striped table-hover">
 					<thead>
 						<tr>
@@ -379,8 +412,11 @@ email = (email.equals("null")) ? "" : email;
 
 						</tr>
 					</thead>
+					<c:if test="${abc==1}"> 
+  				<span id="notify" style="color: red">Xóa tài khoản thành công</span>
+  				 </c:if>
 					<tbody>
-						<c:forEach var="item" items="${userPaginate}">
+						 <c:forEach var="item" items="${userPaginate}">
 
 							<tr>
 								<td><span class="custom-checkbox"> <input
@@ -390,46 +426,30 @@ email = (email.equals("null")) ? "" : email;
 								<td>${item.username}</td>
 								<td>${item.fullName}</td>
 								<td>${item.gender}</td>
-								<td>${item.dateOfBirth}</td>
-								<td>${item.phoneNumber}</td>
-								<td>${item.email}</td>
-								<c:if test="${item.status == 1}">
-									<td style="color: green;">Active</td>
-								</c:if>
-								<c:if test="${item.status == 0}">
-									<td style="color: red;">Inactive</td>
-								</c:if>
-
-
-								<td><a
+ 								<td>${item.dateOfBirth}</td>
+ 								<td>${item.phoneNumber}</td>
+ 								<td> <a
 									href="<c:url value="/admin/cap-nhat-tai-khoan/${item.username }"/>"
 									class="edit" title="Edit" data-toggle="tooltip"><i
 										class="material-icons">&#xE254;</i></a> <a
-									href="<c:url value="/admin/xoa-tai-khoan/${item.username}"/>"
-									class="delete" title="Delete" data-toggle="tooltip"><i
+     									class="delete" title="Delete" data-toggle="tooltip" onclick="confirmCancel('${item.username}')"><i
 										class="material-icons">&#xE872;</i></a></td>
 							</tr>
 
 						</c:forEach>
 					</tbody>
 				</table>
+				
 				<div class="clearfix">
-					<div class="hint-text">
-						Showing <b>5</b> out of <b>25</b> entries
-					</div>
 					<ul class="pagination">
-						<c:forEach var="item" begin="1" end="${pageinfo.totalPage}"
-							varStatus="loop">
-							<c:if test="${loop.index==pageinfo.currentPage}">
-								<li class="page-item active"><a
-									href="<c:url value="/admin/quan-ly-tai-khoan/${loop.index}"/>"
-									class="page-link">${loop.index }</a></li>
-							</c:if>
-							<c:if test="${loop.index!=pageinfo.currentPage}">
-								<li class="page-item"><a
-									href="<c:url value="/admin/quan-ly-tai-khoan/${loop.index}"/>"
-									class="page-link">${loop.index }</a></li>
-							</c:if>
+
+					<c:forEach var="item" begin="1" end="${pageinfo.totalPage}" varStatus ="loop">
+					<c:if test="${loop.index==pageinfo.currentPage}">
+						<li class="page-item active"><a href="<c:url value="/admin/quan-ly-tai-khoan?code=${param.code}&currentPage=${loop.index}&stt=${param.stt}"/>" class="page-link">${loop.index }</a></li>
+						</c:if>
+						<c:if test="${loop.index!=pageinfo.currentPage}">
+						<li class="page-item"><a href="<c:url value="/admin/quan-ly-tai-khoan?code=${param.code}&currentPage=${loop.index}&stt=${param.stt}"/>" class="page-link">${loop.index }</a></li>
+						</c:if>
 						</c:forEach>
 					</ul>
 				</div>
@@ -456,6 +476,13 @@ email = (email.equals("null")) ? "" : email;
 								id="username" name="username" required="required"
 								value="<%=username%>" />
 
+						</div>
+						<div class="mb-3">
+							<label for="gender" class="form-label">Role</label> <select class="form-control"
+								id="roleId" name="roleId">
+									<option value="0" label="Admin &#9660;" ></option>
+									<option value="1" label="User &#9660;" />
+							</select>
 						</div>
 						<div class="form-group">
 							<form:label path="password">Password</form:label>
@@ -485,15 +512,14 @@ email = (email.equals("null")) ? "" : email;
 								value="<%=phonenumber%>" />
 						</div>
 						<div class="mb-3">
-							<label for="gender" class="form-label">Gender</label> <select
-								class="form-control" id="gender" name="gender">
-
-								<option value="Nam" label="Nam" />
-								<option value="Nữ" label="Nữ" />
-								<option value="Khác" label="Khác" />
-
+							<label for="gender" class="form-label">Gender</label> <select class="form-control"
+								id="gender" name="gender">
+									<option value="Nam" label="Nam &#9660;" />
+									<option value="Nữ" label="Nữ &#9660;" />
+									<option value="Khác" label="Khác &#9660;" />
 							</select>
 						</div>
+						
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal"
@@ -541,13 +567,11 @@ email = (email.equals("null")) ? "" : email;
 							<form:input type="text" class="form-control" path="phoneNumber" />
 						</div>
 						<div class="mb-3">
-							<label for="gender" class="form-label">Gender</label> <select
-								class="form-control" id="gender" name="gender">
-
-								<option value="Nam" label="Nam" />
-								<option value="Nữ" label="Nữ" />
-								<option value="Khác" label="Khác" />
-
+							<label for="gender" class="form-label">Gender</label> <select class="form-control"
+								id="gender" name="gender">
+									<option value="Nam" label="Nam" />
+									<option value="Nữ" label="Nữ" />
+									<option value="Khác" label="Khác" />
 							</select>
 						</div>
 					</div>
@@ -585,6 +609,7 @@ email = (email.equals("null")) ? "" : email;
 			</div>
 		</div>
 	</div>
+
 	<c:forEach var="itemTypeOfCategory" items="${typeOfCategory}">
 		<div id="addTypeOfCategory${itemTypeOfCategory.type_id }"
 			class="modal fade">
@@ -681,5 +706,36 @@ email = (email.equals("null")) ? "" : email;
 		</div>
 	</div>
 		
+	<script>
+	$(document).ready(function() {
+		// Activate tooltip
+		$('[data-toggle="tooltip"]').tooltip();
+
+		// Select/Deselect checkboxes
+		var checkbox = $('table tbody input[type="checkbox"]');
+		$("#selectAll").click(function() {
+			if (this.checked) {
+				checkbox.each(function() {
+					this.checked = true;
+				});
+			} else {
+				checkbox.each(function() {
+					this.checked = false;
+				});
+			}
+		});
+		checkbox.click(function() {
+			if (!this.checked) {
+				$("#selectAll").prop("checked", false);
+			}
+		});
+	});
+	   function confirmCancel(username){
+		   if (confirm("Xác nhận xóa tài khoản")){
+			    window.location.href = "/petshop-5/admin/xoa-tai-khoan/" + username;
+				document.getElementById("msg").innerHTML = "Xóa thành công";	 
+		   }
+	   }
+</script>
 </body>
 </html>

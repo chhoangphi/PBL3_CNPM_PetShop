@@ -65,15 +65,6 @@ public class ProductController extends BaseController {
 
 			List<OrderDetail> listOrderDetail = orderDetailServiceImpl.GetDataOrderDetailByIsReviewed(product_id,username, 0);
 			mvShare.addObject("listOrderDetail", listOrderDetail);
-//			if(listOrderDetail==null)System.out.println(1);
-//			else 
-//				System.out.println(listOrderDetail.size());
-//		if(listOrderDetail!=null) {
-//		System.out.println("orderID" + listOrderDetail.get(0).getOrderId());
-//		for(int i = 0 ; i < listOrderDetail.size(); i ++)
-//			System.out.println("id = " + listOrderDetail.get(i).getOrderId());
-//		
-//		}
 			List<Reviews> dataReviews = reviewsServiceImpl.GetDataReviewsByProductID(product_id);
 			mvShare.addObject("avgRating", avgRating);
 			mvShare.addObject("intAvgRating", avgRating.intValue());
