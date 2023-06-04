@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+
+	 pageEncoding="UTF-8"%>
     <%@include file="/common/taglib.jsp"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -81,6 +82,82 @@
                 </footer>
             </div>
         </div>
+  </c:forEach>
+	<c:forEach var="itemType" items="${dataItemType}">
+		<div id="addItemType${itemType.item_id }" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<form
+						action="/petshop-5/admin/them-dong-san-pham/${itemType.item_id}"
+						method="POST">
+
+						<div class="modal-header">
+							<h4 class="modal-title">Thêm dòng sản phẩm cho
+								${itemType.name}</h4>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">&times;</button>
+						</div>
+						<div class="modal-body">
+
+
+							<div class="form-group">
+								<label>Tên dòng sản phẩm <label> <input
+										type="text" class="form-control" id="typeOfCategoryName"
+										name="typeOfCategoryName" required="required" value="" />
+							</div>
+						</div>
+						<div class="modal-footer">
+							<input type="button" class="btn btn-default" data-dismiss="modal"
+								value="Cancel"> <input type="submit"
+								class="btn btn-success" value="Add">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</c:forEach>
+	<div id="addShop" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form action="/petshop-5/admin/them-shop" method="POST">
+
+					<div class="modal-header">
+						<h4 class="modal-title">Thêm shop mới</h4>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">
+
+
+						<div class="form-group">
+							<label>Tên shop <label> <input type="text"
+									class="form-control" id="shopName" name="shopName"
+									required="required" value="" />
+						</div>
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal"
+							value="Cancel"> <input type="submit"
+							class="btn btn-success" value="Add">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+		crossorigin="anonymous"></script>
+	<script src="js/scripts.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"
+		crossorigin="anonymous"></script>
+	<script src="assets/demo/chart-area-demo.js"></script>
+	<script src="assets/demo/chart-bar-demo.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+		crossorigin="anonymous"></script>
+	<script src="js/datatables-simple-demo.js"></script>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -89,5 +166,5 @@
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
     </body>
+
 </html>
-    

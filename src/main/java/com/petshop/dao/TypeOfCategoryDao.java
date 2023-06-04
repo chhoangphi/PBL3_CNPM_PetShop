@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.petshop.entity.MapperTypeOfCategory;
+import com.petshop.entity.ProductCategory;
 import com.petshop.entity.TypeOfCategory;
 
 @Repository
@@ -70,6 +71,20 @@ public class TypeOfCategoryDao extends BaseDao{
 			return null;
 		}
 
+	}
+	public int AddTypeOfCategory(TypeOfCategory typeOfCategory)
+	{
+		String sql="  INSERT INTO type_of_category VALUES(?,?,?)";
+		
+		Object[] param= {
+				typeOfCategory.getType_id(),
+				typeOfCategory.getType_name(),
+				typeOfCategory.getItem_id()
+				
+		};
+		System.out.println(sql);
+		int updatedRow=_JdbcTemplate.update(sql,param);
+		return updatedRow;
 	}
 	
 	

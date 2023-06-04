@@ -1,6 +1,8 @@
 package com.petshop.dao;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.petshop.entity.MapperOrder;
@@ -15,6 +18,7 @@ import com.petshop.entity.MapperOrderDetail;
 import com.petshop.entity.Order;
 import com.petshop.entity.OrderDetail;
 import com.petshop.entity.Order.OrderStatus;
+import com.mysql.cj.protocol.a.SqlTimestampValueEncoder;
 import com.petshop.dao.OrderDetailDao;
 @Repository
 public class OrderDao extends BaseDao{
@@ -107,10 +111,24 @@ public class OrderDao extends BaseDao{
 		{
 			try {
 				List<Order> orderList=new ArrayList<>();
-				String sql="SELECT * FROM order_customer";
+				String sql="SELECT * FROM order_customer ";
 				orderList=_JdbcTemplate.query(sql, new MapperOrder(orderDetailDao));
+				System.out.println(sql);
 				return orderList;
-			}catch(Exception e) {	
+			}catch(NullPointerException e) {	
+				System.out.println(e);
+				return null;
+			}
+		}
+		public List<Order> GetDataOrderByStatus( String status ) throws SQLException, NullPointerException
+		{
+			try {
+				List<Order> orderList=new ArrayList<>();
+				String sql="SELECT * FROM order_customer WHERE order_status ='" + status + "'";
+				orderList=_JdbcTemplate.query(sql, new MapperOrder(orderDetailDao));
+				System.out.println(sql);
+				return orderList;
+			}catch( DataAccessException e) {	
 				System.out.println(e);
 				return null;
 			}
@@ -127,10 +145,10 @@ public class OrderDao extends BaseDao{
 				return null;
 			}
 		}
-		public List<Order> GetDataOrderPaginate(int start, int end) {
+		public List<Order> GetDataOrderPaginate(int start, int end,String status) {
 			List<Order> listOrder = new ArrayList<>();
 			try {
-				String sql = SqlOrderPaginate(start, end).toString();
+				String sql = SqlOrderPaginate(start, end,status).toString();
 				System.out.println("SQL Query: " + sql);
 				listOrder = _JdbcTemplate.query(sql, new MapperOrder(orderDetailDao));
 				return listOrder;
@@ -139,18 +157,24 @@ public class OrderDao extends BaseDao{
 				return null;
 			}
 		}
-		public StringBuffer SqlOrderPaginate(int start, int totalPage) {
+		public StringBuffer SqlOrderPaginate(int start, int totalPage, String status) {
 			StringBuffer sql = new StringBuffer();
-			sql.append("SELECT * FROM order_customer ");
+			if(status.equals("all"))
+				sql.append("SELECT * FROM order_customer");
+			else
+				sql.append("SELECT * FROM order_customer WHERE order_status ='"+status+"'");
 			sql.append(" LIMIT ");
 			sql.append(start + ", " + totalPage);
 			return sql;
 		}
-		public int UpdateOrder(String status, String address,String orderID) {
+		public int UpdateOrder(Order order) {
 			try {
-			String sql="  UPDATE order_customer SET order_status='" + status + "', address='"+address+"' " + " WHERE orderID=?";
-			Object param=orderID;
-			int updatedRow=_JdbcTemplate.update(sql,param);
+				
+			
+			String sql="  UPDATE order_customer SET order_status='" + order.getStatus() + "', address='"+order.getAddress()+"', confirmtime = '"+ order.getConfirmTime()  + "' WHERE orderID='"+order.getOrderId()+"'";
+			//Object param=orderID;
+			System.out.println(sql);
+			int updatedRow=_JdbcTemplate.update(sql);
 			return updatedRow;
 			}catch(Exception e){
 				System.out.println(e);

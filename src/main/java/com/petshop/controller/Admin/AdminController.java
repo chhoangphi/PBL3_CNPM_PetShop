@@ -1,6 +1,7 @@
 package com.petshop.controller.Admin;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.List;
@@ -26,6 +27,7 @@ import com.petshop.controller.BaseController;
 import com.petshop.dao.UserDao;
 import com.petshop.dto.PaginatesDto;
 import com.petshop.entity.Activity;
+import com.petshop.entity.ItemType;
 import com.petshop.entity.Order;
 import com.petshop.entity.Order.OrderStatus;
 import com.petshop.entity.ProductCategory;
@@ -36,9 +38,7 @@ import com.petshop.entity.User;
 import com.petshop.service.ActivityServiceImpl;
 import com.petshop.service.CategoriesServiceImpl;
 import com.petshop.service.HomeServiceImpl;
-import com.petshop.service.IHomeService;
 import com.petshop.service.ItemTypeServiceImpl;
-import com.petshop.service.OrderDetailServiceImpl;
 import com.petshop.service.OrderServiceImpl;
 import com.petshop.service.PaginatesServiceImpl;
 import com.petshop.service.ProductService;
@@ -230,9 +230,9 @@ public class AdminController extends BaseController {
 		max++;
 		System.out.println("max = " + max);
 		String tmp = Integer.toString(max);
-		if (x < 10)
+		if (max < 10)
 			tmp = "00" + tmp;
-		else if (x < 100)
+		else if (max < 100)
 			tmp = "0" + tmp;
 		String tmpID = tmp1 + tmp;
 		product.setProduct_id(tmpID);
@@ -259,21 +259,48 @@ public class AdminController extends BaseController {
 		mvShare.addObject("dataItemType", itemTypeService.GetDataItemType());
 		mvShare.addObject("typeOfCategory", typeOfCategoryServiceImpl.GetDataTypeOfCategory());
 		mvShare.addObject("dataProductCategory", categoryService.GetAllDataProductCategory());
+		mvShare.addObject("listTypeID",categoryService.GetDataTypeID());
 		mvShare.setViewName("admin/index");
 		return mvShare;
 	}
+//	@RequestMapping(value = "/admin/quan-ly-don-hang/{currentPage}", method = RequestMethod.GET)
+//	public ModelAndView ManageOrder(@ModelAttribute("product") Products produc, HttpServletRequest request,
+//			HttpServletResponse response, ModelMap model, @PathVariable String currentPage) {
+//		mvShare.addObject("dataOrder", orderService.GetDataOrder());
+//		int TotalData = orderService.GetDataOrder().size();
+//		//int TotalData = 10;
+//		System.out.println("here" + TotalData);
+//		PaginatesDto pageinfo = paginateService.GetPatinates(TotalData, totalProductPage,
+//				Integer.parseInt(currentPage));
+//		mvShare.addObject("pageinfo", pageinfo);
+//		mvShare.addObject("OrderPaginate",
+//				orderService.GetDataOrderPaginate(pageinfo.getStart(), totalProductPage));
+//		mvShare.setViewName("admin/crud/list_order");
+//
+//		return mvShare;
+//	}
 
-	@RequestMapping(value = "/admin/quan-ly-don-hang/{currentPage}", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/quan-ly-don-hang/{orderStatus}/{currentPage}", method = RequestMethod.GET)
 	public ModelAndView ManageOrder(@ModelAttribute("product") Products produc, HttpServletRequest request,
-			HttpServletResponse response, ModelMap model, @PathVariable String currentPage) {
+			HttpServletResponse response, ModelMap model, @PathVariable String currentPage, @PathVariable String orderStatus) throws NullPointerException, SQLException {
 		mvShare.addObject("dataOrder", orderService.GetDataOrder());
-		int TotalData = orderService.GetDataOrder().size();
-		// int TotalData = 10;
+		mvShare.addObject("status", orderStatus);
+		int TotalData = 0;
+//		if(orderStatus.equals("all")) {
+//			TotalData = orderService.GetDataOrder().size();
+//			System.out.println("ordersize ============" + TotalData);
+//		}
+		
+		 TotalData = orderService.GetDataOrderByStatus(orderStatus).size();
+		
+		
+		//int TotalData = 10;
 		System.out.println("here" + TotalData);
 		PaginatesDto pageinfo = paginateService.GetPatinates(TotalData, totalProductPage,
 				Integer.parseInt(currentPage));
 		mvShare.addObject("pageinfo", pageinfo);
-		mvShare.addObject("OrderPaginate", orderService.GetDataOrderPaginate(pageinfo.getStart(), totalProductPage));
+		mvShare.addObject("OrderPaginate",
+				orderService.GetDataOrderPaginate(pageinfo.getStart(), totalProductPage,orderStatus));
 		mvShare.setViewName("admin/crud/list_order");
 
 		return mvShare;
@@ -318,16 +345,21 @@ public class AdminController extends BaseController {
 			order.setStatus(OrderStatus.TO_RECEIVE);
 		else if (status.equals("COMPLETED"))
 			order.setStatus(OrderStatus.COMPLETED);
-		else if (status.equals("CANCELED"))
+		else if(status.equals("CANCELED")) 
 			order.setStatus(OrderStatus.CANCELED);
-		orderService.UpdateOrder(status, address, orderId);
-		activityHistory = "Cập nhật đơn hàng " + order.getOrderId() + "(status= " + status + ",address= " + address;
-		Random rd = new Random();
-		String activity_id = "activity_id_" + System.currentTimeMillis() + "";
+		order.setOrderId(orderId);
+		order.setAddress(address);
+		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
 		String activityTime = System.currentTimeMillis() + "";
-
-		User admin = (User) session.getAttribute("LoginInfo");
-		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(), admin.getUsername());
+	
+		order.setConfirmTime(LocalDateTime.now());
+		orderService.UpdateOrder(order);
+		activityHistory = "Cập nhật đơn hàng " + order.getOrderId() + "(status= " + status+",address= "+address;
+		Random rd = new Random();
+		
+		
+		User admin=(User) session.getAttribute("LoginInfo");
+		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
 		int add = activityServiceImpl.AddActivity(activity);
 		mvShare.addObject("order", orderService.findOrder(orderId));
 		mvShare.setViewName("admin/crud/upadate_order");
@@ -348,28 +380,25 @@ public class AdminController extends BaseController {
 		mvShare.addObject("pageinfo", pageinfo);
 		mvShare.addObject("userPaginate", userService.GetDataUserPaginate(code,stt,pageinfo.getStart(), totalProductPage));
 		mvShare.setViewName("admin/crud/list_user");
+		
 
 		return mvShare;
 	}
 
 	@RequestMapping(value = "/admin/them-tai-khoan", method = RequestMethod.POST)
-	public String CreateAccount(HttpSession session, HttpServletRequest request, HttpServletResponse response,
+	public String CreateAccount(RedirectAttributes redirectAttributes,HttpSession session,HttpServletRequest request, HttpServletResponse response,
 			@ModelAttribute("user") User user, ModelMap model,
 			@RequestParam(name = "gender", required = true) String gender) {
 		request.setAttribute("gender", gender);
 		user.setGender(gender);
 		user.setStatus(1);
 		User check = userService.GetUser(user);
-		String baoLoi = "";
 		if (check != null) {
-			baoLoi = "Tên đăng nhập đã tồn tại, vui lòng chọn tên đăng nhập khác.<br/> ";
-			request.setAttribute("baoLoi", baoLoi);
-			mvShare.addObject("status", "Đăng ký tài khoản thất bại");
-			mvShare.setViewName("customer/register");
-
+			//session.setAttribute("baoLoi", baoLoi);
+			redirectAttributes.addFlashAttribute("registerStatus1","Tên đăng nhập " +user.getUsername()+ " đã tồn tại, vui lòng chọn tên đăng nhập khác.<br/> ");
+			
 		} else {
 			int count = userService.AddUser(user);
-
 			if (count > 0) {
 				mvShare.addObject("status", "Đăng ký tài khoản thành công");
 				activityHistory = "Đăng ký tài khoản " + user.getUsername();
@@ -429,7 +458,7 @@ public class AdminController extends BaseController {
 			HttpServletResponse response, @ModelAttribute("user") User user, ModelMap model,
 			@PathVariable String username) {
 		request.setAttribute("username", username);
-		User u=userService.findUserByUsername(username);
+User u=userService.findUserByUsername(username);
 		if (userService.UpdateUser(user) > 0) {
 			System.out.println(1111);
 			activityHistory = "Cập nhật tài khoản " + user.getUsername();
@@ -449,4 +478,75 @@ public class AdminController extends BaseController {
 		return "redirect:/admin/quan-ly-tai-khoan?code=user&stt=all";
 	}
 
+	@RequestMapping(value = "/admin/them-loai-san-pham/{type_id}", method = RequestMethod.POST)
+	public String AddProductCategory(HttpSession session,HttpServletRequest request, HttpServletResponse response,@PathVariable String type_id,
+			 ModelMap model,
+			@RequestParam(name = "productCategoryName", required = true) String productCategoryName){
+		String tmp = "";
+		request.setAttribute("productCategoryName", productCategoryName);
+		if(type_id.substring(0,1).equals("d")){
+			tmp = "d_pdc";
+		}
+		else tmp = "c_pdc";
+		tmp += categoryService.GetMaxProduct_cageID();
+		ProductCategory productCategory = new ProductCategory();
+		productCategory.setProduct_categ_id(tmp);
+		productCategory.setProduct_categ_name(productCategoryName);
+		productCategory.setType_id(type_id);
+		categoryService.AddProductCategory(productCategory);
+		User admin=(User) session.getAttribute("LoginInfo");
+		activityHistory = "Thêm loại sản phẩm " + productCategoryName ;
+		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
+		
+		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
+		int add = activityServiceImpl.AddActivity(activity);
+		return "redirect:/admin/home";
+		
+	}
+	@RequestMapping(value = "/admin/them-dong-san-pham/{item_id}", method = RequestMethod.POST)
+	public String AddTypeOfCategory(HttpSession session,HttpServletRequest request, HttpServletResponse response,@PathVariable String item_id,
+			 ModelMap model,
+			@RequestParam(name = "typeOfCategoryName", required = true) String typeOfCategoryName){
+		String tmp = "";
+		request.setAttribute("typeOfCategoryName", typeOfCategoryName);
+		if(item_id.substring(5,6).equals("1")){
+			tmp = "dtype";
+		}
+		else tmp = "ctype";
+		tmp += categoryService.GetMaxTypeID();
+		TypeOfCategory  typeOfCategory = new TypeOfCategory();
+		typeOfCategory.setType_id(tmp);
+		typeOfCategory.setType_name(typeOfCategoryName);
+		typeOfCategory.setItem_id(item_id);
+		typeOfCategoryServiceImpl.AddTypeOfCategory(typeOfCategory);
+		User admin=(User) session.getAttribute("LoginInfo");
+		activityHistory = "Thêm dòng sản phẩm " + typeOfCategoryName ;
+		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
+		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
+		int add = activityServiceImpl.AddActivity(activity);
+		return "redirect:/admin/home";
+		
+	}
+	@RequestMapping(value = "/admin/them-shop", method = RequestMethod.POST)
+	public String AddPet(HttpSession session,HttpServletRequest request, HttpServletResponse response,
+			 ModelMap model,
+			@RequestParam(name = "shopName", required = true) String shopName){
+		String tmp = "item";
+		request.setAttribute("shopName", shopName);
+		
+		tmp += categoryService.GetMaxTypeID();
+		ItemType  itemType = new ItemType();
+		itemType.setItem_id(tmp);
+		itemType.setName(shopName);
+		itemTypeService.AddItemType(itemType);
+		User admin=(User) session.getAttribute("LoginInfo");
+		activityHistory = "Thêm " + shopName ;
+		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
+		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
+		int add = activityServiceImpl.AddActivity(activity);
+		return "redirect:/admin/home";
+		
+	}
+	
+	
 }

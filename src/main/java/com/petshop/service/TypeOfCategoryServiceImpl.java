@@ -35,6 +35,12 @@ public class TypeOfCategoryServiceImpl implements ITypeOfCategoryService{
 		return typeOfCategoryDao.GetDataTypeOfCategory();
 	}
 
+	@Override
+	public int AddTypeOfCategory(TypeOfCategory typeOfCategory) {
+		// TODO Auto-generated method stub
+		return typeOfCategoryDao.AddTypeOfCategory(typeOfCategory);
+	}
+
 
 	
 	
