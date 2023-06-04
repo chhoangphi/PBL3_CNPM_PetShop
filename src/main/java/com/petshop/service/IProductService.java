@@ -23,7 +23,8 @@ public interface IProductService {
 	public List<Products> GetDataProductPaginateInSearchFeature(int start, int end, String productName);
 	public List<Products> GetDataProductLimit12(String item_id);
 	public List<Products> GetDataProductFilterByPrice(String item_id,long min,long max);
-	
+	public List<Products> findProductByProductCategory(String product_categ_id,String status);
+	public List<Products> findProductByProductCategoryIDPaginate(String product_categ_id,String status,int start, int totalPage,String sort);
 }
 
 

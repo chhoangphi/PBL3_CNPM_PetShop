@@ -15,9 +15,9 @@ public class UserServiceImpl implements IUserService {
 	private UserDao userDao;
 
 	@Override
-	public List<User> GetDataUser() {
+	public List<User> GetDataUser(String code,String status) {
 		// TODO Auto-generated method stub
-		return userDao.GetDataUser();
+		return userDao.GetDataUser(code,status);
 	}
 
 	@Override
@@ -87,9 +87,9 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public List<User> GetDataUserPaginate(int start, int end) {
+	public List<User> GetDataUserPaginate(String code,String status,int start, int end) {
 		// TODO Auto-generated method stub
-		return userDao.GetDataUserPaginate(start, end);
+		return userDao.GetDataUserPaginate(code,status,start, end);
 	}
 
 	@Override
@@ -102,6 +102,12 @@ public class UserServiceImpl implements IUserService {
 	public int UpdateUser(User user) {
 		// TODO Auto-generated method stub
 		return userDao.UpdateUser(user);
+	}
+
+	@Override
+	public User findUserByUsername(String username) {
+		// TODO Auto-generated method stub
+		return userDao.findUserByUsername(username);
 	}
 
 }

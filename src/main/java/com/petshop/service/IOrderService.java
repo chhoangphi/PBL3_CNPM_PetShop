@@ -22,4 +22,5 @@ public interface IOrderService {
 	public List<Order> GetDataOrderByUsername(String username);
 	public List<Order> GetDataOrderPaginate(int start, int end);
 	public int UpdateOrder(String status, String address,String orderID);
+	
 }

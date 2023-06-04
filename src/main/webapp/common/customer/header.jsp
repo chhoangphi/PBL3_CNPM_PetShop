@@ -79,7 +79,7 @@ username = (username.equals("null")) ? "" : username;
 								<c:if test="${not empty item.item_id}">
 									<div class="nav-item dropdown">
 
-										<a href='<c:url value="/gioi-thieu"/>'
+										<a href='<c:url value="/san-pham?shop=${item.item_id}"/>'
 											class="nav-link dropdown-toggle">${item.menu_name}  </a>
 
 										<div class="dropdown-menu rounded-0 m-0">

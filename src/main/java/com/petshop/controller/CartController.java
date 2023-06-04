@@ -137,6 +137,7 @@ public class CartController extends BaseController {
 			for(OrderDetail item: listDetail) {
 			orderService.saveOrderDetail(item);
 			session.setAttribute("orderID", orderID);
+			System.out.println("okkk");
 		}
 		}
 		session.removeAttribute("cart");

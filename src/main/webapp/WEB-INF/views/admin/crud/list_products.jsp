@@ -292,32 +292,41 @@ table.table .avatar {
 .modal form label {
 	font-weight: normal;
 }
-</style>
-<script>
-	$(document).ready(function() {
-		// Activate tooltip
-		$('[data-toggle="tooltip"]').tooltip();
+nav.order-status li.active {
+	border-bottom: 2px solid #E51F28;
+	border-bottom-color: #E51F28;
+}
+nav.order-status {
+	padding: 10px;
+}
 
-		// Select/Deselect checkboxes
-		var checkbox = $('table tbody input[type="checkbox"]');
-		$("#selectAll").click(function() {
-			if (this.checked) {
-				checkbox.each(function() {
-					this.checked = true;
-				});
-			} else {
-				checkbox.each(function() {
-					this.checked = false;
-				});
-			}
-		});
-		checkbox.click(function() {
-			if (!this.checked) {
-				$("#selectAll").prop("checked", false);
-			}
-		});
-	});
-</script>
+nav.order-status ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+}
+
+nav.order-status li {
+	margin-right: 10px;
+}
+
+nav.order-status a {
+	display: block;
+	color: #333;
+	padding: 15px;
+	text-decoration: none;
+}
+
+nav.order-status a:hover {
+	background-color: #ddd;
+}
+
+nav.order-status a.active {
+	color: #E51F28;
+}
+
+</style>
 </head>
 <body>
 	<div class="container-xl">
@@ -326,9 +335,9 @@ table.table .avatar {
 				<div class="table-title">
 					<div class="row">
 						<div class="col-sm-6">
-							<h2>
-								Manage <b>Products</b>
-							</h2>
+							  <h2>
+								${productCateg.product_categ_name}
+							</h2> 
 						</div>
 						<div class="col-sm-6">
 							<a href="#addEmployeeModal" class="btn btn-success"
@@ -352,9 +361,24 @@ table.table .avatar {
 							<th>Actions</th>
 						</tr>
 					</thead>
+					<nav class="order-status">
+									<ul>
+										<li class="${param.stt=='all' ? 'active' : ''}"><a
+											href='<c:url value="/admin/danh-sach-san-pham/${productCateg.product_categ_id}/1?stt=all"/>'
+											class="">Tất cả</a></li>
+										<li class="${param.stt=='active' ? 'active' : ''}"><a
+											href='<c:url value="/admin/danh-sach-san-pham/${productCateg.product_categ_id}/1?stt=active"/>'
+											class="">Kích hoạt</a></li>
+										<li class="${param.stt=='inactive' ? 'active' : ''}"><a
+											href='<c:url value="/admin/danh-sach-san-pham/${productCateg.product_categ_id}/1?stt=inactive"/>'
+											class="">Vô hiệu hóa</a></li>
+									</ul>
+				</nav>
+					<c:if test="${abc==1}"> 
+  				<span id="notify" style="color: red">Xóa tài sản phẩm thành công</span>
+  				 </c:if>
 					<tbody>
 						 <c:forEach var="products" items="${ProductPaginate}">
-						 <%-- <c:if test="${products.status == 0}"> --%>
 							<tr>
 								<td><span class="custom-checkbox"> <input
 										type="checkbox" id="checkbox1" name="options[]" value="1">
@@ -371,25 +395,20 @@ table.table .avatar {
 									href="<c:url value="/admin/chinh-sua-thong-tin-san-pham/${products.product_id}"/>"
 									class="edit" title="Edit" data-toggle="tooltip"><i
 										class="material-icons">&#xE254;</i></a> <a
-									href="<c:url value="/admin/xoa-san-pham/${products.product_id}"/>"
-									class="delete" title="Delete" data-toggle="tooltip"><i
+									onclick="confirmCancel('${products.product_id}')" class="delete" title="Delete" data-toggle="tooltip"><i
 										class="material-icons">&#xE872;</i></a></td>
 							</tr>
-<%-- 							</c:if>
- --%>						</c:forEach>
+						</c:forEach>
 					</tbody>
 				</table>
 				<div class="clearfix">
-					<div class="hint-text">
-						Showing <b>5</b> out of <b>25</b> entries
-					</div>
 					<ul class="pagination">
-					<c:forEach var="item" begin="1" end="${pageinfo.totalPage}" varStatus ="loop">
+					<c:forEach var="item"  begin="1" end="${pageinfo.totalPage}" varStatus ="loop">
 					<c:if test="${loop.index==pageinfo.currentPage}">
-						<li class="page-item active"><a href="<c:url value="/admin/danh-sach-san-pham/the-loai/${product_categ_id}/${loop.index}"/>" class="page-link">${loop.index }</a></li>
+						<li class="page-item active"><a href="<c:url value="/admin/danh-sach-san-pham/${product_categ_id}/${loop.index}"/>" class="page-link">${loop.index }</a></li>
 						</c:if>
 						<c:if test="${loop.index!=pageinfo.currentPage}">
-						<li class="page-item"><a href="<c:url value="/admin/danh-sach-san-pham/the-loai/${product_cate_id}/${loop.index}"/>" class="page-link">${loop.index }</a></li>
+						<li class="page-item"><a href="<c:url value="/admin/danh-sach-san-pham/${product_cate_id}/${loop.index}"/>" class="page-link">${loop.index }</a></li>
 						</c:if>
 						</c:forEach>
 					</ul>
@@ -409,13 +428,17 @@ table.table .avatar {
 							aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">
-						<%-- <div class="form-group">
-							<form:label path="product_id">Product ID</form:label>
-							<form:input type="text" class="form-control" path="product_id" />
-						</div> --%>
-						<div class="form-group">
+					<div class="form-group">
 							<form:label path="product_name">Product Name</form:label>
 							<form:input type="text" class="form-control" path="product_name" />
+						</div>
+						<div class="form-group">
+							<label for="status" class="form-label">Status</label>
+							<select class="form-control"
+								id="status" name="status">
+								<option value="1" label="Active &#9660;" />
+								<option value="0" label="Inactive &#9660;" />
+							</select>
 						</div>
 						<div class="form-group">
 							<form:label path="img">Product Image URL</form:label>
@@ -438,7 +461,7 @@ table.table .avatar {
 								<%-- </c:forEach> --%>
 							</select>
 						</div>
-					</div>
+						</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal"
 							value="Cancel"> <input type="submit"
@@ -510,5 +533,36 @@ table.table .avatar {
 			</div>
 		</div>
 	</div>
+	<script>
+	$(document).ready(function() {
+		// Activate tooltip
+		$('[data-toggle="tooltip"]').tooltip();
+
+		// Select/Deselect checkboxes
+		var checkbox = $('table tbody input[type="checkbox"]');
+		$("#selectAll").click(function() {
+			if (this.checked) {
+				checkbox.each(function() {
+					this.checked = true;
+				});
+			} else {
+				checkbox.each(function() {
+					this.checked = false;
+				});
+			}
+		});
+		checkbox.click(function() {
+			if (!this.checked) {
+				$("#selectAll").prop("checked", false);
+			}
+		});
+	});
+	function confirmCancel(product_id){
+		   if (confirm("Xác nhận xóa tài khoản")){
+			    window.location.href = "/petshop-5/admin/xoa-san-pham/" + product_id;
+				document.getElementById("msg").innerHTML = "Xóa thành công";	 
+		   }
+	   }
+</script>
 </body>
 </html>

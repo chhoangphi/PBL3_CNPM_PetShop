@@ -80,6 +80,17 @@ public class ProductService implements IProductService{
 		// TODO Auto-generated method stub
 		return productsDao.GetDataProductFilterByPrice(item_id, min, max);
 	}
+	@Override
+	public List<Products> findProductByProductCategory(String product_categ_id, String status) {
+		// TODO Auto-generated method stub
+		return productsDao.findProductByProductCategory(product_categ_id, status);
+	}
+	@Override
+	public List<Products> findProductByProductCategoryIDPaginate(String product_categ_id, String status, int start,
+			int totalPage, String sort) {
+		// TODO Auto-generated method stub
+		return productsDao.findProductByProductCategoryIDPaginate(product_categ_id, status, start, totalPage, sort);
+	}
 	
 
 }

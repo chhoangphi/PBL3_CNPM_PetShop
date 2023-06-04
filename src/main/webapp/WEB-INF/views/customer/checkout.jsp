@@ -8,6 +8,12 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
+<style>
+.col-lg-4 {
+flex: 00 33.33333%;
+max-width: 50%;
+}
+</style>
 <body>
 <!-- Checkout Start -->
     <div class="container-fluid pt-5">
