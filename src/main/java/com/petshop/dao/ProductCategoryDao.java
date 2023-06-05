@@ -141,7 +141,7 @@ public class ProductCategoryDao extends BaseDao {
 	{
 		
 		try {
-			String sql = "SELECT item_id FROM items_type";
+			String sql = "SELECT id FROM type_of_category";
 			List<String> data = _JdbcTemplate.queryForList(sql, String.class);
 			int x = 0;
 			

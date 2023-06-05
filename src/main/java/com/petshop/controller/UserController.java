@@ -92,7 +92,7 @@ public class UserController extends BaseController {
 				String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
 				String activityTime = System.currentTimeMillis() + "";
 				User admin=(User) session.getAttribute("LoginInfo");
-				Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
+				Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),"");
 				int add = activityServiceImpl.AddActivity(activity);
 				mvShare.setViewName("redirect:dang-nhap");
 				
