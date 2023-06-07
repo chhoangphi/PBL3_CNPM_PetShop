@@ -15,7 +15,9 @@ public class Order {
 	private LocalDateTime orderTime;
 	private LocalDateTime confirmTime;
 	private LocalDateTime shipTime;
+	private LocalDateTime receiveTime;
 	private LocalDateTime completedTime;
+	private LocalDateTime cancleTime;
 	private OrderStatus status;
 	private static final int shippingFee=20000;
 	private long totalPrice;
@@ -33,12 +35,32 @@ public class Order {
 		this.orderTime = order.orderTime;
 		this.confirmTime = order.confirmTime;
 		this.shipTime = order.shipTime;
+		this.receiveTime = order.receiveTime;
 		this.completedTime = order.completedTime;
+		this.cancleTime = order.cancleTime;
 		this.status = order.status;
 		this.totalPrice=order.totalPrice;
 		this.orderDetailList=new ArrayList<>(order.orderDetailList);
 	}
 
+	public LocalDateTime getReceiveTime() {
+		return receiveTime;
+	}
+	public void setReceiveTime(LocalDateTime receiveTime) {
+		this.receiveTime = receiveTime;
+	}
+	public LocalDateTime getCancleTime() {
+		return cancleTime;
+	}
+	public void setCancleTime(LocalDateTime cancleTime) {
+		this.cancleTime = cancleTime;
+	}
+	public static int getShippingfee() {
+		return shippingFee;
+	}
+	public void setTotalPrice(long totalPrice) {
+		this.totalPrice = totalPrice;
+	}
 	public Order(
 			String orderId, String customerId, String recipientName, String phoneNumber, String address,
 			LocalDateTime orderTime,LocalDateTime confirmTime, LocalDateTime shipTime, LocalDateTime completedTime, OrderStatus status,

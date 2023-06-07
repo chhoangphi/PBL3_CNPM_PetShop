@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.petshop.dao.OrderDao;
 import com.petshop.dao.OrderDetailDao;
-import com.petshop.entity.Order;
 import com.petshop.entity.OrderDetail;
 
 @Service

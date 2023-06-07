@@ -308,7 +308,7 @@ public class ProductsDao extends BaseDao {
 //		List<String> list =new ArrayList<>();
 //		list =_JdbcTemplate.execute(sql, list));
 //		//list=_JdbcTemplate.query(sql,new MapperProductCategory());
-		List data = _JdbcTemplate.queryForList(sql, String.class);
+		List<String> data = _JdbcTemplate.queryForList(sql, String.class);
 
 		return data;
 	}

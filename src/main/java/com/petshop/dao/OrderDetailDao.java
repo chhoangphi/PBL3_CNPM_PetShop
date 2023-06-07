@@ -5,15 +5,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.petshop.entity.MapperOrder;
 import com.petshop.entity.MapperOrderDetail;
-import com.petshop.entity.MapperProducts;
-import com.petshop.entity.Order;
 import com.petshop.entity.OrderDetail;
-import com.petshop.entity.Products;
 
 @Repository
 public class OrderDetailDao extends BaseDao {

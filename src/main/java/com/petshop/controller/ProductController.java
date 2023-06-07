@@ -1,8 +1,7 @@
 package com.petshop.controller;
 
 import java.sql.Date;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -126,7 +125,7 @@ public class ProductController extends BaseController {
 			int x = reviewsServiceImpl.Add(reviews);
 			
 			System.out.println(x);
-			int update = orderDetailServiceImpl.updateOrderDetail(listOrderDetail.get(0));
+			orderDetailServiceImpl.updateOrderDetail(listOrderDetail.get(0));
 			mvShare.addObject("productByCategory", productService.GetDataProductByProductCategoryID(product_categ_id));
 		} catch (Exception e) {
 			e.printStackTrace();

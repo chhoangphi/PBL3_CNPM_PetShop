@@ -320,6 +320,9 @@ nav.order-status a.active {
 .modal form label {
 	font-weight: normal;
 }
+.red{
+	color: red;
+}
 </style>
 <script>
 	$(document).ready(function() {
@@ -386,6 +389,8 @@ nav.order-status a.active {
 							class="${status=='canceled' ? 'active' : ''}">Đã hủy</a></li>
 					</ul>
 				</nav>
+				<div class="red" id="baoLoi">${statusUpdate}
+					</div>
 				<table class="table table-striped table-hover">
 				
 					<thead>

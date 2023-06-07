@@ -9,8 +9,6 @@ import com.petshop.dao.ProductCategoryDao;
 import com.petshop.dao.ProductsDao;
 import com.petshop.entity.ProductCategory;
 import com.petshop.entity.Products;
-import com.petshop.entity.TypeOfCategory;
-
 @Service
 public class CategoriesServiceImpl implements ICategoriesService {
 

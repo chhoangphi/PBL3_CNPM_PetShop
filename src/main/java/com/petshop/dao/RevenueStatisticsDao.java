@@ -7,7 +7,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.petshop.dto.RevenueStatistics;
-import com.petshop.entity.ProductCategory;
 
 @Repository
 public class RevenueStatisticsDao extends BaseDao {

@@ -22,6 +22,9 @@ margin: 70px;
 padding-left: 150px;
 padding-right:150px;
 }
+.red{
+	color:red;
+}
 </style>
 </head>
 <body>
@@ -35,6 +38,7 @@ padding-right:150px;
 
 				<div class="col-sm-12">
 					<div class="text-center">
+					
 						<h3>UPDATE ORDER</h3>
 					</div>
 					<!-- <div class="mb-3">

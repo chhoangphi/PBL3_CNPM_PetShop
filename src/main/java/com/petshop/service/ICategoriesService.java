@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.petshop.entity.ProductCategory;
 import com.petshop.entity.Products;
-import com.petshop.entity.TypeOfCategory;
 
 @Service
 public interface ICategoriesService {

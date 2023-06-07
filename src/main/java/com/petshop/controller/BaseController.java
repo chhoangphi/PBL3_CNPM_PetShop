@@ -11,7 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.petshop.entity.Menus;
 import com.petshop.service.CategoriesServiceImpl;
 import com.petshop.service.HomeServiceImpl;
-import com.petshop.service.ItemTypeServiceImpl;
 import com.petshop.service.ProductService;
 import com.petshop.service.TypeOfCategoryServiceImpl;
 @Controller

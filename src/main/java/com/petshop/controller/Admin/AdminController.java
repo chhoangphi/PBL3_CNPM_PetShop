@@ -1,11 +1,9 @@
 package com.petshop.controller.Admin;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,15 +22,14 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.petshop.controller.BaseController;
-import com.petshop.dao.UserDao;
 import com.petshop.dto.PaginatesDto;
 import com.petshop.entity.Activity;
 import com.petshop.entity.ItemType;
+import com.petshop.entity.Menus;
 import com.petshop.entity.Order;
 import com.petshop.entity.Order.OrderStatus;
 import com.petshop.entity.ProductCategory;
 import com.petshop.entity.Products;
-import com.petshop.entity.Role;
 import com.petshop.entity.TypeOfCategory;
 import com.petshop.entity.User;
 import com.petshop.service.ActivityServiceImpl;
@@ -156,12 +153,10 @@ public class AdminController extends BaseController {
 		int x=productService.UpdateProduct(product);
 		System.out.println("x="+x);
 		activityHistory = "Cập nhật sản phẩm " + product.getProduct_id();
-		Random rd = new Random();
 		String activity_id = "activity_id_" + System.currentTimeMillis() + "";
-		String activityTime = System.currentTimeMillis() + "";
 		User admin = (User) session.getAttribute("LoginInfo");
 		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(), admin.getUsername());
-		int add = activityServiceImpl.AddActivity(activity);
+		activityServiceImpl.AddActivity(activity);
 		// mvShare.setViewName("redirect:/home/danh-sach-san-pham");
 
 		// return mvShare;
@@ -175,13 +170,11 @@ public class AdminController extends BaseController {
 		String categoryID = productService.getStringProductCategory(product_id);
 		productService.DeleteProduct(product);
 		activityHistory = "Xóa sản phẩm " + product.getProduct_id();
-		Random rd = new Random();
 		String activity_id = "activity_id_" + System.currentTimeMillis() + "";
-		String activityTime = System.currentTimeMillis() + "";
 
 		User admin = (User) session.getAttribute("LoginInfo");
 		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(), admin.getUsername());
-		int add = activityServiceImpl.AddActivity(activity);
+		activityServiceImpl.AddActivity(activity);
 		redirectAttributes.addFlashAttribute("abc", 1);
 		return "redirect:/admin/danh-sach-san-pham/" + categoryID + "/1?stt=all";
 	}
@@ -242,13 +235,11 @@ public class AdminController extends BaseController {
 //		product.setStatus(1);
 		productService.AddProduct(product);
 		activityHistory = "Thêm sản phẩm " + product.getProduct_id();
-		Random rd = new Random();
 		String activity_id = "activity_id_" + System.currentTimeMillis() + "";
-		String activityTime = System.currentTimeMillis() + "";
 
 		User admin = (User) session.getAttribute("LoginInfo");
 		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(), admin.getUsername());
-		int add = activityServiceImpl.AddActivity(activity);
+		activityServiceImpl.AddActivity(activity);
 
 		return "redirect:/admin/danh-sach-san-pham/" + categoryID + "/1?stt=all";
 	}
@@ -263,22 +254,6 @@ public class AdminController extends BaseController {
 		mvShare.setViewName("admin/index");
 		return mvShare;
 	}
-//	@RequestMapping(value = "/admin/quan-ly-don-hang/{currentPage}", method = RequestMethod.GET)
-//	public ModelAndView ManageOrder(@ModelAttribute("product") Products produc, HttpServletRequest request,
-//			HttpServletResponse response, ModelMap model, @PathVariable String currentPage) {
-//		mvShare.addObject("dataOrder", orderService.GetDataOrder());
-//		int TotalData = orderService.GetDataOrder().size();
-//		//int TotalData = 10;
-//		System.out.println("here" + TotalData);
-//		PaginatesDto pageinfo = paginateService.GetPatinates(TotalData, totalProductPage,
-//				Integer.parseInt(currentPage));
-//		mvShare.addObject("pageinfo", pageinfo);
-//		mvShare.addObject("OrderPaginate",
-//				orderService.GetDataOrderPaginate(pageinfo.getStart(), totalProductPage));
-//		mvShare.setViewName("admin/crud/list_order");
-//
-//		return mvShare;
-//	}
 
 	@RequestMapping(value = "/admin/quan-ly-don-hang/{orderStatus}/{currentPage}", method = RequestMethod.GET)
 	public ModelAndView ManageOrder(@ModelAttribute("product") Products produc, HttpServletRequest request,
@@ -286,15 +261,10 @@ public class AdminController extends BaseController {
 		mvShare.addObject("dataOrder", orderService.GetDataOrder());
 		mvShare.addObject("status", orderStatus);
 		int TotalData = 0;
-//		if(orderStatus.equals("all")) {
-//			TotalData = orderService.GetDataOrder().size();
-//			System.out.println("ordersize ============" + TotalData);
-//		}
+
 		
-		 TotalData = orderService.GetDataOrderByStatus(orderStatus).size();
+		TotalData = orderService.GetDataOrderByStatus(orderStatus).size();
 		
-		
-		//int TotalData = 10;
 		System.out.println("here" + TotalData);
 		PaginatesDto pageinfo = paginateService.GetPatinates(TotalData, totalProductPage,
 				Integer.parseInt(currentPage));
@@ -309,15 +279,15 @@ public class AdminController extends BaseController {
 	@RequestMapping(value = "/admin/xoa-don-hang/{orderId}", method = RequestMethod.GET)
 	public String DeleteOrder(HttpSession session, @ModelAttribute("product") Products produc,
 			HttpServletRequest request, HttpServletResponse response, ModelMap model, @PathVariable String orderId) {
-		int x = orderService.DeleteOrder(orderId);
+		orderService.DeleteOrder(orderId);
 		activityHistory = "Xóa đơn hàng " + orderId;
-		Random rd = new Random();
+		
 		String activity_id = "activity_id_" + System.currentTimeMillis() + "";
-		String activityTime = System.currentTimeMillis() + "";
+		
 
 		User admin = (User) session.getAttribute("LoginInfo");
 		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(), admin.getUsername());
-		int add = activityServiceImpl.AddActivity(activity);
+		activityServiceImpl.AddActivity(activity);
 		mvShare.setViewName("admin/crud/list_order");
 		return "redirect:/admin/quan-ly-don-hang/1";
 	}
@@ -331,39 +301,50 @@ public class AdminController extends BaseController {
 	}
 
 	@RequestMapping(value = "/admin/cap-nhat-don-hang/{orderId}", method = RequestMethod.POST)
-	public String UpdateOrderPost(HttpSession session, HttpServletRequest request, HttpServletResponse response,
+	public String UpdateOrderPost(RedirectAttributes redirectAttributes,HttpSession session, HttpServletRequest request, HttpServletResponse response,
 			@PathVariable String orderId, @ModelAttribute("order") Order order, ModelMap model,
 			@RequestParam(name = "status", required = true) String status,
 			@RequestParam(name = "address", required = true) String address) {
 		request.setAttribute("status", status);
 		request.setAttribute("address", address);
+		order = orderService.findOrder(orderId);
 		if (status.equals("PENDING"))
 			order.setStatus(OrderStatus.PENDING);
-		else if (status.equals("TO_SHIP"))
+		else if (status.equals("TO_SHIP")) {
 			order.setStatus(OrderStatus.TO_SHIP);
-		else if (status.equals("TO_RECEIVE"))
+			order.setShipTime(LocalDateTime.now());
+		}
+		else if (status.equals("TO_RECEIVE")) {
 			order.setStatus(OrderStatus.TO_RECEIVE);
+			order.setReceiveTime(LocalDateTime.now());
+		}
 		else if (status.equals("COMPLETED"))
+		{
 			order.setStatus(OrderStatus.COMPLETED);
-		else if(status.equals("CANCELED")) 
+			order.setCompletedTime(LocalDateTime.now());
+		}
+		else if(status.equals("CANCELED")&& order.getShipTime() == null && order.getCompletedTime() == null && order.getReceiveTime() == null){
 			order.setStatus(OrderStatus.CANCELED);
+			order.setCancleTime(LocalDateTime.now());
+		}
+		else
+			redirectAttributes.addFlashAttribute("statusUpdate", "Không thể hủy đơn hàng");
+		
 		order.setOrderId(orderId);
 		order.setAddress(address);
 		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
-		String activityTime = System.currentTimeMillis() + "";
 	
 		order.setConfirmTime(LocalDateTime.now());
 		orderService.UpdateOrder(order);
 		activityHistory = "Cập nhật đơn hàng " + order.getOrderId() + "(status= " + status+",address= "+address;
-		Random rd = new Random();
 		
 		
 		User admin=(User) session.getAttribute("LoginInfo");
 		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
-		int add = activityServiceImpl.AddActivity(activity);
+		activityServiceImpl.AddActivity(activity);
 		mvShare.addObject("order", orderService.findOrder(orderId));
 		mvShare.setViewName("admin/crud/upadate_order");
-		return "redirect:/admin/quan-ly-don-hang/1";
+		return "redirect:/admin/quan-ly-don-hang/all/1";
 	}
 
 	@RequestMapping(value = "/admin/quan-ly-tai-khoan", method = RequestMethod.GET)
@@ -402,13 +383,11 @@ public class AdminController extends BaseController {
 			if (count > 0) {
 				mvShare.addObject("status", "Đăng ký tài khoản thành công");
 				activityHistory = "Đăng ký tài khoản " + user.getUsername();
-				Random rd = new Random();
 				String activity_id = "activity_id_" + System.currentTimeMillis() + "";
-				String activityTime = System.currentTimeMillis() + "";
 				User admin = (User) session.getAttribute("LoginInfo");
 				Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),
 						admin.getUsername());
-				int add = activityServiceImpl.AddActivity(activity);
+				activityServiceImpl.AddActivity(activity);
 
 			} else {
 				mvShare.addObject("status", "Đăng ký tài khoản thất bại");
@@ -428,15 +407,13 @@ public class AdminController extends BaseController {
 			@ModelAttribute("user") User user, HttpServletRequest request, HttpServletResponse response, ModelMap model,
 			@PathVariable String username) {
 		User u=userService.findUserByUsername(username);
-		int x = userService.DeleteUser(user);
+		userService.DeleteUser(user);
 		activityHistory = "Xóa tài khoản " + user.getUsername();
-		Random rd = new Random();
 		String activity_id = "activity_id_" + System.currentTimeMillis() + "";
-		String activityTime = System.currentTimeMillis() + "";
 
 		User admin = (User) session.getAttribute("LoginInfo");
 		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(), admin.getUsername());
-		int add = activityServiceImpl.AddActivity(activity);
+		activityServiceImpl.AddActivity(activity);
 		redirectAttributes.addFlashAttribute("abc", 1);
 		if (u.getRoleId()==0) {
 			return "redirect:/admin/quan-ly-tai-khoan?code=admin&stt=all";
@@ -462,13 +439,11 @@ User u=userService.findUserByUsername(username);
 		if (userService.UpdateUser(user) > 0) {
 			System.out.println(1111);
 			activityHistory = "Cập nhật tài khoản " + user.getUsername();
-			Random rd = new Random();
 			String activity_id = "activity_id_" + System.currentTimeMillis() + "";
-			String activityTime = System.currentTimeMillis() + "";
 			redirectAttributes.addFlashAttribute("changeStatus", "Cập nhật tài khoản " + username + " thành công");
 			User admin = (User) session.getAttribute("LoginInfo");
 			Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(), admin.getUsername());
-			int add = activityServiceImpl.AddActivity(activity);
+			activityServiceImpl.AddActivity(activity);
 		} else {
 			redirectAttributes.addFlashAttribute("changeStatus", "Cập nhật tài khoản " + username + " thất bại");
 		}
@@ -499,7 +474,7 @@ User u=userService.findUserByUsername(username);
 		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
 		
 		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
-		int add = activityServiceImpl.AddActivity(activity);
+		activityServiceImpl.AddActivity(activity);
 		return "redirect:/admin/home";
 		
 	}
@@ -523,7 +498,7 @@ User u=userService.findUserByUsername(username);
 		activityHistory = "Thêm dòng sản phẩm " + typeOfCategoryName ;
 		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
 		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
-		int add = activityServiceImpl.AddActivity(activity);
+		activityServiceImpl.AddActivity(activity);
 		return "redirect:/admin/home";
 		
 	}
@@ -534,16 +509,21 @@ User u=userService.findUserByUsername(username);
 		String tmp = "item";
 		request.setAttribute("shopName", shopName);
 		
-		tmp += categoryService.GetMaxTypeID();
+		tmp += itemTypeService.GetMaxItemID();
 		ItemType  itemType = new ItemType();
 		itemType.setItem_id(tmp);
 		itemType.setName(shopName);
+		Menus menu = new Menus();
+		menu.setMenu_id("menu"+homeservice.GetMaxMenuID());
+		menu.setMenu_name(shopName);
+		menu.setItem_id(tmp);
 		itemTypeService.AddItemType(itemType);
+		homeservice.AddMenu(menu);
 		User admin=(User) session.getAttribute("LoginInfo");
 		activityHistory = "Thêm " + shopName ;
 		String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
 		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
-		int add = activityServiceImpl.AddActivity(activity);
+		activityServiceImpl.AddActivity(activity);
 		return "redirect:/admin/home";
 		
 	}

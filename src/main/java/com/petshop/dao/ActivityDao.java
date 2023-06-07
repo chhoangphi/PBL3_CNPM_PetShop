@@ -4,12 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
-
-import com.petshop.entity.Menus;
-import com.petshop.entity.User;
 import com.petshop.entity.Activity;
 import com.petshop.entity.MapperActivity;
-import com.petshop.entity.MapperMenu;
 
 
 @Repository

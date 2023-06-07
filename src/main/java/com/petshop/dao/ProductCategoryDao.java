@@ -2,16 +2,13 @@ package com.petshop.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.petshop.entity.MapperProductCategory;
-import com.petshop.entity.MapperProducts;
 import com.petshop.entity.ProductCategory;
-import com.petshop.entity.Products;
 
 
 @Repository
@@ -61,7 +58,7 @@ public class ProductCategoryDao extends BaseDao {
 //		List<String> list =new ArrayList<>();
 //		list =_JdbcTemplate.execute(sql, list));
 //		//list=_JdbcTemplate.query(sql,new MapperProductCategory());
-		List data = _JdbcTemplate.queryForList(sql, String.class);
+		List<String> data = _JdbcTemplate.queryForList(sql, String.class);
 
 		return data;
 	}
