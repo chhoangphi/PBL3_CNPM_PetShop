@@ -12,5 +12,6 @@ public interface IOrderDetailService {
 	public List<OrderDetail> GetDataOrderDetailPaginate(int start,int end);
 	public List<OrderDetail> GetDataOrderDetailByIsReviewed(String product_id,String username,int isReviewed);
 	public int updateOrderDetail(OrderDetail orderDetail);
+	public int UpdateSoldQuantity(OrderDetail orderDetail);
 
 }

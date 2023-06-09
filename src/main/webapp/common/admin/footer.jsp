@@ -74,6 +74,11 @@
 							<i class="fas fa-chart-area"></i>
 						</div> Quản lý đơn hàng
 					</a>
+					<a class="nav-link" href="/petshop-5/admin/quan-ly-hoat-dong/1?year=2023&month=null">
+						<div class="sb-nav-link-icon">
+							<i class="fas fa-chart-area"></i>
+						</div> Quản lý hoạt động
+					</a>
 					 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
                                 Quản lý tài khoản

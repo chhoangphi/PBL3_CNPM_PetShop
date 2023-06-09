@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.petshop.entity.MapperOrder;
 import com.petshop.entity.Order;
 import com.petshop.entity.Order.OrderStatus;
+import com.petshop.entity.OrderDetail;
 
 @Repository
 public class OrderDao extends BaseDao {
@@ -107,7 +108,11 @@ public class OrderDao extends BaseDao {
 	public List<Order> GetDataOrderByStatus(String status) throws SQLException, NullPointerException {
 		try {
 			List<Order> orderList = new ArrayList<>();
-			String sql = "SELECT * FROM order_customer WHERE order_status ='" + status + "'";
+			String sql ="";
+			if(status != null)
+				 sql= "SELECT * FROM order_customer WHERE order_status ='" + status + "'";
+			else
+				sql= "SELECT * FROM order_customer ";
 			orderList = _JdbcTemplate.query(sql, new MapperOrder(orderDetailDao));
 			System.out.println(sql);
 			return orderList;
@@ -167,14 +172,12 @@ public class OrderDao extends BaseDao {
 				sql.append(", shiptime = '" + order.getShipTime()+"'");
 			if(order.getReceiveTime()!= null)
 				sql.append(", receivetime = '" + order.getReceiveTime()+"'");
-			if(order.getCompletedTime()!= null)
+			if(order.getCompletedTime()!= null) {
 				sql.append(", completedtime = '" + order.getCompletedTime()+"'");
+			}
 			if(order.getCancleTime()!= null)
 				sql.append(", cancletime = '" + order.getCancleTime()+"'");
-			sql.append( " WHERE orderID='"+ order.getOrderId()+"'");
-			
-					
-			// Object param=orderID;
+			sql.append( " WHERE orderID='"+ order.getOrderId()+"'");					
 			System.out.println(sql);
 			int updatedRow = _JdbcTemplate.update(sql.toString());
 			return updatedRow;
@@ -210,10 +213,23 @@ public class OrderDao extends BaseDao {
 		try {
 			String sql = "SELECT count(orderID) FROM order_customer WHERE  YEAR(OrderTime)=2023 GROUP BY MONTH(orderTime) ORDER BY MONTH(orderTime) ASC";
 			List<Long> results = _JdbcTemplate.queryForList(sql, Long.class);
+			System.out.println(sql);
 			return results;
 		} catch (Exception e) {
 			System.out.println(e);
 			return null;
 		}
+	}
+	public int UpdateSoldQuantity(OrderDetail orderDetail)
+	{
+		System.out.println("soldquantity= "+ orderDetail.getProduct().getSold_quantity());
+		System.out.println("quantity= "+ orderDetail.getQuantity());
+
+		int x = orderDetail.getProduct().getSold_quantity()+orderDetail.getQuantity();
+		String sql = "  UPDATE  products SET sold_quantity=  ? WHERE product_id=?" ;
+		Object[] param = { x, orderDetail.getProduct().getProduct_id() };
+		int updatedRow = _JdbcTemplate.update(sql,param);
+		System.out.println(sql);
+		return updatedRow;
 	}
 }

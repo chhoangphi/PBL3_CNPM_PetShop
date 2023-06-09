@@ -36,6 +36,7 @@ import com.petshop.service.ActivityServiceImpl;
 import com.petshop.service.CategoriesServiceImpl;
 import com.petshop.service.HomeServiceImpl;
 import com.petshop.service.ItemTypeServiceImpl;
+import com.petshop.service.OrderDetailServiceImpl;
 import com.petshop.service.OrderServiceImpl;
 import com.petshop.service.PaginatesServiceImpl;
 import com.petshop.service.ProductService;
@@ -65,6 +66,7 @@ public class AdminController extends BaseController {
 	private UserServiceImpl userService;
 	@Autowired
 	private RevenueStatisticsServiceImpl  RevenueStatisticService;
+	@Autowired OrderDetailServiceImpl orderDetailServiceImpl;
 	@RequestMapping(value = {"/admin/home", "/admin/"}, method = RequestMethod.GET)
 	public ModelAndView Admin(HttpServletRequest request, HttpServletResponse response, HttpSession session,
 			Model model) {
@@ -94,6 +96,8 @@ public class AdminController extends BaseController {
 				mvShare.addObject("dataItemType", itemTypeService.GetDataItemType());
 				mvShare.addObject("typeOfCategory", typeOfCategoryServiceImpl.GetDataTypeOfCategory());
 				mvShare.addObject("dataProductCategory", categoryService.GetAllDataProductCategory());
+		        mvShare.addObject("monthOfActivity",activityServiceImpl.FindDataActivityInMonthAndYear());
+
 				 Calendar calendar = Calendar.getInstance();
 			        int currentMonth = calendar.get(Calendar.MONTH) + 1;
 			        int currentYear = calendar.get(Calendar.YEAR);
@@ -251,6 +255,8 @@ public class AdminController extends BaseController {
 		mvShare.addObject("typeOfCategory", typeOfCategoryServiceImpl.GetDataTypeOfCategory());
 		mvShare.addObject("dataProductCategory", categoryService.GetAllDataProductCategory());
 		mvShare.addObject("listTypeID",categoryService.GetDataTypeID());
+        mvShare.addObject("monthOfActivity",activityServiceImpl.FindDataActivityInMonthAndYear());
+
 		mvShare.setViewName("admin/index");
 		return mvShare;
 	}
@@ -322,6 +328,11 @@ public class AdminController extends BaseController {
 		{
 			order.setStatus(OrderStatus.COMPLETED);
 			order.setCompletedTime(LocalDateTime.now());
+			for(int i = 0 ; i < order.getOrderDetailList().size();i++ )
+			{
+				orderDetailServiceImpl.UpdateSoldQuantity(order.getOrderDetailList().get(i));
+			}
+			
 		}
 		else if(status.equals("CANCELED")&& order.getShipTime() == null && order.getCompletedTime() == null && order.getReceiveTime() == null){
 			order.setStatus(OrderStatus.CANCELED);
@@ -527,6 +538,32 @@ User u=userService.findUserByUsername(username);
 		return "redirect:/admin/home";
 		
 	}
-	
+	@RequestMapping(value = "/admin/quan-ly-hoat-dong/{currentPage}", method = RequestMethod.GET)
+	public ModelAndView ManageOrder(@ModelAttribute("product") Products produc, HttpServletRequest request,
+			HttpSession session, HttpServletResponse response, ModelMap model, @PathVariable String currentPage
+			,@RequestParam(name = "month", defaultValue = "null") String month
+			,@RequestParam (name = "year", defaultValue = "2023") String year) throws NullPointerException, SQLException {
+		boolean isLogined = session.getAttribute("LoginInfo") != null ? true : false;
+		String loginRole = session.getAttribute("role") != null ? session.getAttribute("role") + "" : "";
+		if (isLogined == false) {
+			mvShare.setViewName("redirect:/dang-nhap");
+
+		} else {
+			if (!loginRole.equals("ADMIN")) {
+				mvShare.setViewName("redirect:/deny-access");
+			} else {
+				int TotalData = 0;
+				TotalData = activityServiceImpl.GetDataActivityByMonthAndYear(month,year).size();
+				System.out.println("total: "+TotalData);
+				PaginatesDto pageinfo = paginateService.GetPatinates(TotalData, totalProductPage,
+						Integer.parseInt(currentPage));
+				mvShare.addObject("pageinfo", pageinfo);
+				mvShare.addObject("activityPaginates",
+						activityServiceImpl.GetDataActivityPaginates(pageinfo.getStart(), totalProductPage,month,year));
+				mvShare.setViewName("admin/crud/list_activity");
+			}
+		}
+		return mvShare;
+	}
 	
 }

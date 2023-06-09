@@ -46,6 +46,7 @@ public class HomeController extends BaseController{
 		mvShare.addObject("featuredCategByItem02", categoriesServiceImpl.GetFeaturedCategoryByItemId(listItem.get(1).getItem_id()));
 		mvShare.addObject("productLimit12ByItem01", productService.GetDataProductLimit12(listItem.get(0).getItem_id()));
 		mvShare.addObject("productLimit12ByItem02", productService.GetDataProductLimit12(listItem.get(1).getItem_id()));
+		mvShare.addObject("menu", HomeService.GetDataMenu());
 		return mvShare;
 	}
 	@RequestMapping(value = { "/deny-access" })

@@ -405,10 +405,10 @@ nav.order-status a.active {
 					<ul class="pagination">
 					<c:forEach var="item"  begin="1" end="${pageinfo.totalPage}" varStatus ="loop">
 					<c:if test="${loop.index==pageinfo.currentPage}">
-						<li class="page-item active"><a href="<c:url value="/admin/danh-sach-san-pham/${product_categ_id}/${loop.index}"/>" class="page-link">${loop.index }</a></li>
+						<li class="page-item active"><a href="<c:url value="/admin/danh-sach-san-pham/${product_categ_id}/${loop.index}?stt=${param.stt}"/>" class="page-link">${loop.index }</a></li>
 						</c:if>
 						<c:if test="${loop.index!=pageinfo.currentPage}">
-						<li class="page-item"><a href="<c:url value="/admin/danh-sach-san-pham/${product_cate_id}/${loop.index}"/>" class="page-link">${loop.index }</a></li>
+						<li class="page-item"><a href="<c:url value="/admin/danh-sach-san-pham/${product_cate_id}/${loop.index}?stt=${param.stt}"/>" class="page-link">${loop.index }</a></li>
 						</c:if>
 						</c:forEach>
 					</ul>

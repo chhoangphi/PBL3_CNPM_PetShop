@@ -8,6 +8,8 @@ public class Products {
 	private String description;
 	private String product_categ_id;
 	private int status;
+	private int sold_quantity;
+	private int amountOfProducts;
 	
 	public Products() {
 		super();
@@ -21,9 +23,12 @@ public class Products {
 		this.description = product.description;
 		this.product_categ_id = product.product_categ_id;
 		this.status = 1;
+		this.sold_quantity = product.sold_quantity;
+		this.amountOfProducts = product.amountOfProducts;
+
 	}
 	public Products(String product_id, String product_name, String img, long price, String description,
-			String product_categ_id,int status) {
+			String product_categ_id,int status,int sold_quantity,int amountOfProducts) {
 		super();
 		this.product_id = product_id;
 		this.product_name = product_name;
@@ -32,9 +37,23 @@ public class Products {
 		this.description = description;
 		this.product_categ_id = product_categ_id;
 		this.status = 1;
+		this.sold_quantity = sold_quantity;
+		this.amountOfProducts = amountOfProducts;
 		
 	}
 
+	public int getAmountOfProducts() {
+		return amountOfProducts;
+	}
+	public void setAmountOfProducts(int amountOfProducts) {
+		this.amountOfProducts = amountOfProducts;
+	}
+	public int getSold_quantity() {
+		return sold_quantity;
+	}
+	public void setSold_quantity(int sold_quantity) {
+		this.sold_quantity = sold_quantity;
+	}
 	public String getProduct_id() {
 		return product_id;
 	}

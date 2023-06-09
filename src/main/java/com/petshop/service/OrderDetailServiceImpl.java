@@ -44,5 +44,12 @@ public class OrderDetailServiceImpl implements IOrderDetailService{
 		// TODO Auto-generated method stub
 		return orderDetailDao.updateOrderDetail(orderDetail);
 	}
+
+
+	@Override
+	public int UpdateSoldQuantity(OrderDetail orderDetail) {
+		// TODO Auto-generated method stub
+		return orderDao.UpdateSoldQuantity(orderDetail);
+	}
 	
 }

@@ -66,6 +66,29 @@
                                 </table>
                             </div>
                         </div>
+                        <div class="card mb-4">
+					<div class="card-header">
+							<i class="fas fa-table me-1"></i> Lịch sử hoạt động trong năm 2023
+						</div>
+						<table class="table">
+							<thead>
+								<tr>
+									<th scope="col">Tháng</th>
+									<th scope="col"></th>
+								</tr>
+							</thead>
+							<tbody>
+							<c:forEach var="item" items="${monthOfActivity}">
+								<tr>
+									<td>${item}/2023</td>
+									<td><a class="v-detail"
+												href="<c:url value="/admin/quan-ly-hoat-dong/1?year=2023&month=${item}"/>">
+													Xem chi tiết</a></td>
+								</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
