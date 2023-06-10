@@ -9,9 +9,10 @@
 <title>Insert title here</title>
 </head>
 <style>
+@media (min-width: 992px)
 .col-lg-4 {
-flex: 00 33.33333%;
-max-width: 50%;
+    flex: 0 0 33.33333%;
+    max-width: 30;
 }
 </style>
 <body>

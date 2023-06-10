@@ -3,6 +3,7 @@ package com.petshop.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
 import com.petshop.entity.*;
@@ -10,124 +11,55 @@ import com.petshop.entity.*;
 @Repository
 public class ProductsDao extends BaseDao {
 
-	public StringBuffer SqlProductByTypeID(String type_id,String sort) {
-		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT");
-		sql.append(" pd.*");
-		sql.append(" FROM");
-		sql.append(" product_categories AS pc");
-		sql.append(" INNER JOIN");
-		sql.append(" type_of_category AS tc");
-		sql.append(" ON");
-		sql.append(" pc.type_id=tc.id");
-		sql.append(" INNER JOIN");
-		sql.append(" products AS pd");
-		sql.append(" ON");
-		sql.append(" pd.product_categ_id=pc.product_categ_id");
-		sql.append(" WHERE status=1 AND tc.id=");
-		sql.append("'" + type_id + "'");
-		String []s=sort.split("-");
-		sql.append(" ORDER BY "+s[0]+" "+s[1]);
-		return sql;
-	}
-
-	public StringBuffer SqlProductByTypeIDLimit8(String type_id,String sort) {
-		StringBuffer sql = SqlProductByTypeID(type_id,sort);
-		sql.append(" LIMIT 8");
-		return sql;
-	}
-
-	public List<Products> GetDataProductPaginate(int start, int end) {
-		List<Products> listproduct = new ArrayList<>();
-		try {
-			String sql = SqlProductPaginate(start, end).toString();
-			System.out.println("SQL Query: " + sql);
-			listproduct = _JdbcTemplate.query(sql, new MapperProducts());
-			return listproduct;
-		} catch (Exception e) {
-			System.out.println(e);
-			return null;
-		}
-	}
-
-	public StringBuffer SqlProductPaginate(int start, int totalPage) {
-		StringBuffer sql = SqlProduct();
-		sql.append(" LIMIT ");
-		sql.append(start + ", " + totalPage);
-		return sql;
-	}
-
-	public StringBuffer SqlProductByTypeIDPaginate(String type_id, int start, int totalPage,String sort) {
-		StringBuffer sql = SqlProductByTypeID(type_id,sort);
-		sql.append(" LIMIT ");
-		sql.append(start + ", " + totalPage);
-		return sql;
-	}
-
-	public StringBuffer SqlProduct() {
-		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT");
-		sql.append(" *");
-		sql.append(" FROM");
-		sql.append(" products");
-		return sql;
-	}
-
-	public StringBuffer SqlProductByProductID(String product_id) {
-		StringBuffer sql = SqlProduct();
-		sql.append(" WHERE");
-		sql.append(" product_id=");
-		sql.append("'" + product_id + "'");
-		return sql;
-	}
-
-	public StringBuffer SqlProductByProductCategoryID(String product_categ_id) {
-		StringBuffer sql = SqlProduct();
-		sql.append(" WHERE");
-		sql.append(" product_categ_id=");
-		sql.append("'" + product_categ_id + "'");
-		return sql;
-	}
-
-	public StringBuffer SqlProductByCategID(String product_categ_id) {
-		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT");
-		sql.append(" pd.*");
-		sql.append(" FROM");
-		sql.append(" product_categories AS pc");
-		sql.append(" INNER JOIN");
-		sql.append(" type_of_category AS tc");
-		sql.append(" ON");
-		sql.append(" pc.type_id=tc.id");
-		sql.append(" INNER JOIN");
-		sql.append(" products AS pd");
-		sql.append(" ON");
-		sql.append(" pd.product_categ_id=pc.product_categ_id");
-		sql.append(" WHERE pd.product_categ_id=");
-		sql.append("'" + product_categ_id + "'");
-		sql.append(" ORDER BY pd.sold_quantity DESC");
-		return sql;
-	}
-
 	public List<Products> GetDataProductByTypeIDLimit8(String type_id,String sort) {
-		List<Products> listproduct = new ArrayList<>();
 		try {
-			String sql = SqlProductByTypeIDLimit8(type_id,sort).toString();
-			System.out.println("SQL Query: " + sql);
-			listproduct = _JdbcTemplate.query(sql, new MapperProducts());
+			StringBuffer sql = new StringBuffer();
+			sql.append("SELECT pd.* ");
+			sql.append("FROM product_categories AS pc ");
+			sql.append("INNER JOIN type_of_category AS tc ON pc.type_id = tc.id ");
+			sql.append("INNER JOIN products AS pd ON pd.product_categ_id = pc.product_categ_id ");
+			sql.append("WHERE status = 1 AND tc.id = ? ");
+			
+			String[] s = sort.split("-");
+			sql.append("ORDER BY " + s[0] + " " + s[1] + " LIMIT 8");
+			
+			Object[] param = { type_id };
+			List<Products> listproduct = _JdbcTemplate.query(sql.toString(), param, new MapperProducts());
 			return listproduct;
 		} catch (Exception e) {
 			System.out.println(e);
 			return null;
 		}
 	}
+	public List<Products> GetDataProductPaginate(int start, int end) {
+	    List<Products> listproduct = new ArrayList<>();
+	    try {
+	        StringBuffer sql = new StringBuffer();
+	        sql.append("SELECT * FROM products");
+	        sql.append(" LIMIT ");
+	        sql.append(start).append(", ").append(end);
 
+	        listproduct = _JdbcTemplate.query(sql.toString(), new MapperProducts());
+	        return listproduct;
+	    } catch (Exception e) {
+	        System.out.println(e);
+	        return null;
+	    }
+	}
 	public List<Products> GetDataProductByTypeID(String type_id,String sort) {
-		List<Products> listproduct = new ArrayList<>();
 		try {
-			String sql = SqlProductByTypeID(type_id,sort).toString();
-			System.out.println("SQL Query: " + sql);
-			listproduct = _JdbcTemplate.query(sql, new MapperProducts());
+			StringBuffer sql = new StringBuffer();
+			sql.append("SELECT pd.* ");
+			sql.append("FROM product_categories AS pc ");
+			sql.append("INNER JOIN type_of_category AS tc ON pc.type_id = tc.id ");
+			sql.append("INNER JOIN products AS pd ON pd.product_categ_id = pc.product_categ_id ");
+			sql.append("WHERE status = 1 AND tc.id = ? ");
+			
+			String[] s = sort.split("-");
+			sql.append("ORDER BY " + s[0] + " " + s[1]);
+			
+			Object[] param = { type_id };
+			List<Products> listproduct = _JdbcTemplate.query(sql.toString(), new MapperProducts(), param);
 			return listproduct;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -137,77 +69,89 @@ public class ProductsDao extends BaseDao {
 
 	public List<Products> GetDataProductByTypeIDPaginate(String type_id, int start, int end,String sort) {
 		List<Products> listproduct = new ArrayList<>();
-		try {
-			StringBuffer sql = SqlProductByTypeIDPaginate(type_id, start, end,sort);
-			listproduct = _JdbcTemplate.query(sql.toString(), new MapperProducts());
-			return listproduct;
-		} catch (Exception e) {
-			System.out.println(e);
-			return null;
-		}
-	}
+	    try {
+	        StringBuffer sql = new StringBuffer();
+	        sql.append("SELECT pd.* FROM product_categories AS pc ");
+	        sql.append("INNER JOIN type_of_category AS tc ON pc.type_id = tc.id ");
+	        sql.append("INNER JOIN products AS pd ON pd.product_categ_id = pc.product_categ_id ");
+	        sql.append("WHERE status = 1 AND tc.id = '").append(type_id).append("' ");
+	        String[] s = sort.split("-");
+	        sql.append("ORDER BY ").append(s[0]).append(" ").append(s[1]).append(" ");
+	        sql.append("LIMIT ").append(start).append(", ").append(end);
 
-	public StringBuffer SqlProductByCategIDPaginate(String product_categ_id, int start, int totalPage) {
-		StringBuffer sql = SqlProductByCategID(product_categ_id);
-		sql.append(" LIMIT ");
-		sql.append(start + ", " + totalPage);
-		return sql;
+	        listproduct = _JdbcTemplate.query(sql.toString(), new MapperProducts());
+	        return listproduct;
+	    } catch (Exception e) {
+	        System.out.println(e);
+	        return null;
+	    }
 	}
 
 	public List<Products> GetDataProductByCategIDPaginate(String product_categ_id, int start, int end) {
-		List<Products> listproduct = new ArrayList<>();
 		try {
-			String sql = SqlProductByCategIDPaginate(product_categ_id, start, end).toString();
-			listproduct = _JdbcTemplate.query(sql, new MapperProducts());
-			return listproduct;
-		} catch (Exception e) {
-			System.out.println(e);
-			return null;
-		}
+	        String sql = "SELECT pd.* " +
+	                     "FROM product_categories AS pc " +
+	                     "INNER JOIN type_of_category AS tc ON pc.type_id = tc.id " +
+	                     "INNER JOIN products AS pd ON pd.product_categ_id = pc.product_categ_id " +
+	                     "WHERE pd.product_categ_id = ? " +
+	                     "ORDER BY pd.sold_quantity DESC " +
+	                     "LIMIT ?, ?";
+
+	        Object[] param = {
+	                product_categ_id,
+	                start,
+	                end
+	        };
+
+	        List<Products> listproduct = _JdbcTemplate.query(sql, param, new MapperProducts());
+	        return listproduct;
+	    } catch (Exception e) {
+	        System.out.println(e);
+	        return null;
+	    }
 	}
 
 	public Products GetDataProductByProductID(String product_id) {
-		Products product = new Products();
-		try {
-			String sql = SqlProductByProductID(product_id).toString();
-			System.out.println("SQL Query:1 " + sql);
-			product = _JdbcTemplate.queryForObject(sql, new MapperProducts());
-			return product;
-		} catch (Exception e) {
-			System.out.println(e);
-			return null;
-		}
+		 try {
+		        String sql = "SELECT * FROM products WHERE product_id = ?";
+		        Object[] param = {product_id};
+
+		        Products product = _JdbcTemplate.queryForObject(sql, param, new MapperProducts());
+		        return product;
+		    } catch (Exception e) {
+		        System.out.println(e);
+		        return null;
+		    }
 	}
 
 	public List<Products> GetDataProductByProductCategoryIDPaginate(String product_categ_id, int start,
 			int totalProductpage,String sort) {
 		List<Products> listproduct = new ArrayList<>();
-		String []s=sort.split("-");
-		try {
-			StringBuffer sql = SqlProductByProductCategoryID(product_categ_id);
-			sql.append(" ORDER BY "+s[0]+" "+s[1]);
-			sql.append(" LIMIT ");
-			sql.append(start + ", " + totalProductpage);
-			listproduct = _JdbcTemplate.query(sql.toString(), new MapperProducts());
-			return listproduct;
-		} catch (Exception e) {
-			System.out.println(e);
-			return null;
-		}
+	    String[] s = sort.split("-");
+	    try {
+	        String sql = "SELECT * FROM products WHERE product_categ_id = ? ORDER BY " + s[0] + " " + s[1] + " LIMIT ?, ?";
+	        Object[] param = {product_categ_id, start, totalProductpage};
+
+	        listproduct = _JdbcTemplate.query(sql, param, new MapperProducts());
+	        return listproduct;
+	    } catch (Exception e) {
+	        System.out.println(e);
+	        return null;
+	    }
 	}
 
 	public List<Products> GetDataProductByProductCategoryID(String product_categ_id) {
-		List<Products> listproduct = new ArrayList<>();
-		try {
-			StringBuffer sql = SqlProductByProductCategoryID(product_categ_id);
-			listproduct = _JdbcTemplate.query(sql.toString(), new MapperProducts());
-			System.out.println("SQL Query: " + sql);
+		 List<Products> listproduct = new ArrayList<>();
+		    try {
+		        String sql = "SELECT * FROM products WHERE product_categ_id = ?";
+		        Object[] param = {product_categ_id};
 
-			return listproduct;
-		} catch (Exception e) {
-			System.out.println(e);
-			return null;
-		}
+		        listproduct = _JdbcTemplate.query(sql, param, new MapperProducts());
+		        return listproduct;
+		    } catch (Exception e) {
+		        System.out.println(e);
+		        return null;
+		    }
 	}
 
 	public String getStringProductCategory(String product_id) {
@@ -215,7 +159,6 @@ public class ProductsDao extends BaseDao {
 		try {
 			String sql = "SELECT * FROM products WHERE product_id=" + "'" + product_id + "'";
 			product = _JdbcTemplate.queryForObject(sql, new MapperProducts());
-			System.out.println("SQL Query: " + sql);
 			return product.getProduct_categ_id();
 		} catch (Exception e) {
 			System.out.println(e);
@@ -256,45 +199,35 @@ public class ProductsDao extends BaseDao {
 		sql.append("UPDATE  ");
 		sql.append("products SET status = 0");
 		sql.append("  WHERE product_id ='" + products.getProduct_id() + "';");
-		System.out.println(sql.toString());
 		int insert = _JdbcTemplate.update(sql.toString());
 		return insert;
 	}
 
 	public int AddProduct(Products products) {
-		StringBuffer sql = new StringBuffer();
-		sql.append("INSERT INTO ");
-		sql.append("products ");
-		sql.append("( ");
-		sql.append("    product_id, ");
-		sql.append("    product_name, ");
-		sql.append("    status, ");
-		sql.append("    img, ");
-		sql.append("    price, ");
-		sql.append("    product_categ_id, ");
-		sql.append("    description");
-		sql.append(") ");
-		sql.append("VALUES ");
-		sql.append("(");
-		sql.append("'" + products.getProduct_id() + "',");
-		sql.append("'" + products.getProduct_name() + "',");
-		sql.append("'" + products.getStatus() + "',");
-		sql.append("'" + products.getImg() + "',");
-		sql.append("" + products.getPrice() + ",");
-		sql.append("'" + products.getProduct_categ_id() + "',");
-		sql.append("'" + products.getDescription() + "'");
-		sql.append(")");
-		int insert = _JdbcTemplate.update(sql.toString());
-		System.out.println("sql query:" + sql.toString());
-		return insert;
+		try {
+			String sql = "INSERT INTO products (product_id, product_name, status, img, price, product_categ_id, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
+			Object[] param = {
+				products.getProduct_id(),
+				products.getProduct_name(),
+				products.getStatus(),
+				products.getImg(),
+				products.getPrice(),
+				products.getProduct_categ_id(),
+				products.getDescription()
+			};
+			int insert = _JdbcTemplate.update(sql, param);
+			return insert;
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			return 0;
+		}
+
 	}
 	public String getStringProductNameByProductID(String product_id) {
 		Products product = new Products();
 		try {
 			String sql = "SELECT * FROM products WHERE product_id=" + "'" + product_id + "'";
 			product = _JdbcTemplate.queryForObject(sql, new MapperProducts());
-			System.out.println("SQL Query: " + sql);
-
 			return product.getProduct_name();
 		} catch (Exception e) {
 			System.out.println(e);
@@ -302,12 +235,7 @@ public class ProductsDao extends BaseDao {
 		}
 	}
 	public List<String> GetDataProductID(String product_categ_id) {
-		// TODO Auto-generated method stub
 		String sql = "SELECT product_id from products WHERE product_categ_id LIKE '"+product_categ_id+"%'";
-		System.out.println("sql = " +sql);
-//		List<String> list =new ArrayList<>();
-//		list =_JdbcTemplate.execute(sql, list));
-//		//list=_JdbcTemplate.query(sql,new MapperProductCategory());
 		List data = _JdbcTemplate.queryForList(sql, String.class);
 
 		return data;
@@ -318,7 +246,6 @@ public class ProductsDao extends BaseDao {
 		try {
 			String sql = "SELECT * FROM products where product_name like '%"+productName+"%'";
 			listproduct = _JdbcTemplate.query(sql, new MapperProducts());
-			System.out.println("sql = " +sql);
 			return listproduct;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -333,7 +260,6 @@ public class ProductsDao extends BaseDao {
 			sql.append("  WHERE product_name LIKE '%"+productName+ "%'");
 			sql.append(" LIMIT " + start + "," + end);
 			String sqlQuery =sql.toString();
-			System.out.println("SQL Query: " + sqlQuery);
 			listproduct = _JdbcTemplate.query(sqlQuery, new MapperProducts());
 			return listproduct;
 		} catch (Exception e) {
@@ -386,11 +312,7 @@ public class ProductsDao extends BaseDao {
 			}
 			}
 			sql.append(" ORDER BY products.price ASC ");
-			
-			
-			System.out.println(sql);
 			listproduct = _JdbcTemplate.query(sql.toString(), new MapperProducts(),params);
-			System.out.println(sql);
 			return listproduct;
 		} catch (Exception e) {
 			System.out.println(e);

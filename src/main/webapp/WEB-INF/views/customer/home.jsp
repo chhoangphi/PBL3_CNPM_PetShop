@@ -12,13 +12,13 @@ max-width: 100%;
 height: 130px;
 }
 .title-product-list-2 {
-    background: url(https://www.petcity.vn/media/lib/shopcho.png);
+    background-color: #dc6435;
         position: relative;
     padding: 19px 0;
     text-align: center;
     text-transform: uppercase;
     margin: 0 0 20px;
-    color: #fff;
+    color: #ececec;
     font-size: 30px;
     font-weight: 400;
     text-transform: uppercase;
@@ -34,6 +34,7 @@ height: 130px;
   color: #fff; 
   border: 2px solid #f44336;
 }
+
 </style>
 <link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet">
 </head>
@@ -198,7 +199,7 @@ height: 130px;
 							
 						</form>
 					</c:forEach> 
-					<img border="0" src="https://www.petcity.vn/media/banner/20_Maya16f779002f7bc582b44b7de773be4e2.jpg" width="271" height="363">
+					<img border="0" src="https://bizweb.dktcdn.net/100/346/633/themes/710500/assets/banner_1_fashion.png?1679482122764" width="271" height="363">
 					</c:if>
 					<c:if test="${itemtype.item_id=='item02'}">
 					<c:forEach var="item" items="${featuredCategByItem02}">
@@ -212,7 +213,7 @@ height: 130px;
 							</div>
 						</form>
 					</c:forEach> 
-					<img border="0" src="https://www.petcity.vn/media/banner/20_May3d39ea8769def8185db999a14b7aa354.jpg" width="271" height="363">
+					<img border="0" src="https://bizweb.dktcdn.net/100/346/633/themes/710500/assets/banner_1_electronic.png?1679482122764" width="271" height="363">
 					</c:if>
 					
 				</div>
@@ -259,7 +260,7 @@ height: 130px;
 					</div>
 				
 			</div>
-			<img border="0" src="https://www.petcity.vn/media/banner/05_Mayb79bb0ccfcdb92f81a8b801322cf0abd.jpg" width="1300" height="113">
+			<img border="0" src="https://bizweb.dktcdn.net/100/448/728/themes/852257/assets/section_hot_banner.png?1686199049736" width="1300" height="113">
 			</c:if>
 			
 			 <c:if test="${itemtype.item_id=='item02'}">

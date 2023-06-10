@@ -10,5 +10,7 @@ import com.petshop.entity.ItemType;
 @Service
 public interface IItemTypeService {
 	public List<ItemType> GetDataItemType(); 
+	public String GetMaxItemID();
+	public int AddItemType(ItemType itemType);
 	
 }

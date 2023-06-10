@@ -13,9 +13,9 @@
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <link rel="stylesheet"
-	href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet"
+	href="https://fonts.googleapis.com/icon?family=Material+Icons"><link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
@@ -36,11 +36,11 @@ body {
 .table-wrapper {
 	background: #fff;
 	padding: 20px 25px;
-	margin:30px;
+	margin: 30px;
 	border-radius: 3px;
 	min-width: 1000px;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
-	padding-left:150px;
+	padding-left: 150px;
 }
 
 .table-title {
@@ -292,6 +292,11 @@ table.table .avatar {
 .modal form label {
 	font-weight: normal;
 }
+
+.red {
+	color: red;
+}
+
 nav.order-status li.active {
 	border-bottom: 2px solid #E51F28;
 	border-bottom-color: #E51F28;
@@ -327,6 +332,24 @@ nav.order-status a.active {
 }
 </style>
 </head>
+<%
+String username = request.getAttribute("username") + "";
+username = (username.equals("null")) ? "" : username;
+String fullName = request.getAttribute("fullName") + "";
+fullName = (fullName.equals("null")) ? "" : fullName;
+
+String gender = request.getAttribute("gender") + "";
+gender = (gender.equals("null")) ? "" : gender;
+
+String dateofbirth = request.getAttribute("dateofbirth") + "";
+dateofbirth = (dateofbirth.equals("null")) ? "" : dateofbirth;
+
+String phonenumber = request.getAttribute("phonenumber") + "";
+phonenumber = (phonenumber.equals("null")) ? "" : phonenumber;
+
+String email = request.getAttribute("email") + "";
+email = (email.equals("null")) ? "" : email;
+%>
 <body>
 	<div class="container-xl">
 		<div class="table-responsive">
@@ -383,6 +406,12 @@ nav.order-status a.active {
 					<c:if test="${abc==1}"> 
   				<span id="notify" style="color: red">Xóa tài khoản thành công</span>
   				 </c:if>
+  				 <c:if test="${update==1}"> 
+  				<span id="notify" style="color: red">Cập nhật tài khoản thành công</span>
+  				 </c:if>
+  				 <c:if test="${addaccount!=null}"> 
+  				<span id="notify" style="color: red">${addaccount}</span>
+  				 </c:if>
 					<tbody>
 						 <c:forEach var="item" items="${userPaginate}">
 							<tr>
@@ -425,7 +454,7 @@ nav.order-status a.active {
 	<div id="addEmployeeModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				 <form:form action="/petshop-5/admin/them-tai-khoan" method="POST"
+				<form:form action="/petshop-5/admin/them-tai-khoan" method="POST"
 					modelAttribute="user">
 					<div class="modal-header">
 						<h4 class="modal-title">Add User</h4>
@@ -433,9 +462,14 @@ nav.order-status a.active {
 							aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">
+
+
 						<div class="form-group">
 							<form:label path="username">Username</form:label>
-							<form:input type="text" class="form-control" path="username" />
+							<form:input type="text" class="form-control" path="username"
+								id="username" name="username" required="required"
+								value="<%=username%>" />
+
 						</div>
 						<div class="mb-3">
 							<label for="gender" class="form-label">Role</label> <select class="form-control"
@@ -450,19 +484,26 @@ nav.order-status a.active {
 						</div>
 						<div class="form-group">
 							<form:label path="fullName">Fullname</form:label>
-							<form:input type="text" class="form-control" path="fullName" />
+							<form:input type="text" class="form-control" path="fullName"
+								id="fullName" name="fullName" required="required"
+								value="<%=fullName%>" />
 						</div>
 						<div class="form-group">
 							<form:label path="email">Email</form:label>
-							<form:input type="text" class="form-control" path="email" />
+							<form:input type="text" class="form-control" path="email"
+								id="email" name="email" required="required" value="<%=email%>" />
 						</div>
 						<div class="form-group">
 							<form:label path="dateOfBirth">Date Of Birth</form:label>
-							<form:input type="date" class="form-control" path="dateOfBirth" />
+							<form:input type="date" class="form-control" path="dateOfBirth"
+								id="dateOfBirth" name="dateOfBirth" required="required"
+								value="<%=dateofbirth%>" />
 						</div>
 						<div class="form-group">
 							<form:label path="phoneNumber">Phone Number</form:label>
-							<form:input type="text" class="form-control" path="phoneNumber" />
+							<form:input type="text" class="form-control" path="phoneNumber"
+								id="phonenumber" name="phonenumber" required="required"
+								value="<%=phonenumber%>" />
 						</div>
 						<div class="mb-3">
 							<label for="gender" class="form-label">Gender</label> <select class="form-control"
@@ -470,7 +511,6 @@ nav.order-status a.active {
 									<option value="Nam" label="Nam &#9660;" />
 									<option value="Nữ" label="Nữ &#9660;" />
 									<option value="Khác" label="Khác &#9660;" />
-								
 							</select>
 						</div>
 						
@@ -480,16 +520,16 @@ nav.order-status a.active {
 							value="Cancel"> <input type="submit"
 							class="btn btn-success" value="Add">
 					</div>
-				</form:form> 
+				</form:form>
 			</div>
 		</div>
-	</div> 
+	</div>
 	<!-- Edit Modal HTML -->
 	<div id="editEmployeeModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				 <form:form action="/petshop-5/admin/chinh-sua-tai-khoan" method="POST"
-					modelAttribute="user">
+				<form:form action="/petshop-5/admin/chinh-sua-tai-khoan"
+					method="POST" modelAttribute="user">
 					<div class="modal-header">
 						<h4 class="modal-title">Edit User</h4>
 						<button type="button" class="close" data-dismiss="modal"
@@ -526,7 +566,6 @@ nav.order-status a.active {
 									<option value="Nam" label="Nam" />
 									<option value="Nữ" label="Nữ" />
 									<option value="Khác" label="Khác" />
-								
 							</select>
 						</div>
 					</div>
@@ -535,7 +574,7 @@ nav.order-status a.active {
 							value="Cancel"> <input type="submit"
 							class="btn btn-success" value="Update">
 					</div>
-				</form:form> 
+				</form:form>
 			</div>
 		</div>
 	</div>
@@ -564,6 +603,103 @@ nav.order-status a.active {
 			</div>
 		</div>
 	</div>
+
+	<c:forEach var="itemTypeOfCategory" items="${typeOfCategory}">
+		<div id="addTypeOfCategory${itemTypeOfCategory.type_id }"
+			class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<form
+						action="/petshop-5/admin/them-loai-san-pham/${itemTypeOfCategory.type_id }"
+						method="POST">
+
+						<div class="modal-header">
+							<h4 class="modal-title">Thêm ${itemTypeOfCategory.type_name }</h4>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">&times;</button>
+						</div>
+						<div class="modal-body">
+
+
+							<div class="form-group">
+								<label>Tên loại sản phẩm <label> <input
+										type="text" class="form-control" id="productCategoryName"
+										name="productCategoryName" required="required" value="" />
+							</div>
+
+						</div>
+						<div class="modal-footer">
+							<input type="button" class="btn btn-default" data-dismiss="modal"
+								value="Cancel"> <input type="submit"
+								class="btn btn-success" value="Add">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</c:forEach>
+	<c:forEach var="itemType" items="${dataItemType}">
+		<div id="addItemType${itemType.item_id }" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<form
+						action="/petshop-5/admin/them-dong-san-pham/${itemType.item_id}"
+						method="POST">
+
+						<div class="modal-header">
+							<h4 class="modal-title">Thêm dòng sản phẩm cho
+								${itemType.name}</h4>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">&times;</button>
+						</div>
+						<div class="modal-body">
+
+
+							<div class="form-group">
+								<label>Tên dòng sản phẩm <label> <input
+										type="text" class="form-control" id="typeOfCategoryName"
+										name="typeOfCategoryName" required="required" value="" />
+							</div>
+						</div>
+						<div class="modal-footer">
+							<input type="button" class="btn btn-default" data-dismiss="modal"
+								value="Cancel"> <input type="submit"
+								class="btn btn-success" value="Add">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</c:forEach>
+	<div id="addShop" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form action="/petshop-5/admin/them-shop" method="POST">
+
+					<div class="modal-header">
+						<h4 class="modal-title">Thêm shop mới</h4>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">
+
+
+						<div class="form-group">
+							<label>Tên shop <label> <input type="text"
+									class="form-control" id="shopName" name="shopName"
+									required="required" value="" />
+						</div>
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal"
+							value="Cancel"> <input type="submit"
+							class="btn btn-success" value="Add">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+		
 	<script>
 	$(document).ready(function() {
 		// Activate tooltip

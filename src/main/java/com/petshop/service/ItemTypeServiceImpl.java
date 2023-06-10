@@ -21,6 +21,18 @@ public class ItemTypeServiceImpl implements IItemTypeService{
 		// TODO Auto-generated method stub
 		return itemTypeDao.GetDataItemType();
 	}
+
+	@Override
+	public String GetMaxItemID() {
+		// TODO Auto-generated method stub
+		return itemTypeDao.GetMaxItemID();
+	}
+
+	@Override
+	public int AddItemType(ItemType itemType) {
+		// TODO Auto-generated method stub
+		return itemTypeDao.AddItemType(itemType);
+	}
 	
 	
 	

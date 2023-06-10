@@ -10,8 +10,6 @@
 .dropdown-menu {
   display: none;
 }
-
-
 </style>
 	<!-- Google Web Fonts -->
 	<link rel="preconnect" href="https://fonts.gstatic.com">
@@ -24,6 +22,8 @@
 	<link href="<c:url value="/template/customer/lib/owlcarousel/assets/owl.carousel.min.css"/>" rel="stylesheet">
 	<!-- Customized Bootstrap Stylesheet -->
 	<link href="<c:url value="/template/customer/css/style.css"/>" rel="stylesheet">
+	<link rel = "icon" href = "https://i.imgur.com/9BNxn4W.jpg" 
+        type = "image/x-icon">
    <dec:head></dec:head>
 </head>
 <body>

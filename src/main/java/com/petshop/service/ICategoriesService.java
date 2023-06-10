@@ -23,4 +23,12 @@ public interface ICategoriesService {
 	public List<Products> GetDataProductByProductCategoryIDPaginate(String product_categ_id,int start,int totalProductpage,String sort);
 	public List<ProductCategory> GetFeaturedCategory();
 	public List<ProductCategory> GetFeaturedCategoryByItemId(String item_id);
+	public String GetMaxProduct_cageID();
+	public String GetMaxTypeID();
+	public List<String> GetDataTypeID();
+	public int AddProductCategory(ProductCategory productCategory);
+
+	
+
+	
 }
