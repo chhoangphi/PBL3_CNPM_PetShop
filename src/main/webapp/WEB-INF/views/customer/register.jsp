@@ -13,6 +13,11 @@
 .red {
 	color: red;
 }
+.form-check-input {
+    position: absolute;
+    margin-top: 0.3rem;
+    margin-left: 0.2rem;
+}
 </style>
 </head>
 <body>

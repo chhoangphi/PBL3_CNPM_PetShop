@@ -16,35 +16,22 @@ public class ProductCategoryDao extends BaseDao {
 	@Autowired
 	private ProductsDao productsDao;
 	
-	public String Sql(String type_id)
-	{
-		StringBuffer sql=new StringBuffer();
-		sql.append("SELECT");
-		sql.append(" pdr.*");
-		sql.append(" FROM");
-		sql.append("  product_categories AS pdr");
-		sql.append(" WHERE");
-		sql.append(" pdr.type_id=");
-		sql.append("'"+type_id+"'");
-		return sql.toString();
-	}
 	public List<ProductCategory> GetDataProductCategoryList(String type_id) {
 		List<ProductCategory> list =new ArrayList<>();
 		try {
-		      String sql=Sql(type_id);
-        	  System.out.println("SQL Query: "+sql);
-        	  list=_JdbcTemplate.query(sql.toString(),new MapperProductCategory(productsDao));
-      		return list;
-        	}catch (Exception e) {
-    			  System.out.println(e);
-    			  return null; 
-    			}
+			String sql = "SELECT * FROM product_categories WHERE type_id = ?";
+			Object[] param = { type_id };
+			list = _JdbcTemplate.query(sql, new MapperProductCategory(productsDao), param);
+			return list;
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
 	}
 	public ProductCategory GetDataProductCategory(String product_categ_id) {
 		ProductCategory productCategory =new ProductCategory();
 		try {
 		      String sql=" SELECT * FROM product_categories WHERE product_categ_id="+"'"+product_categ_id+"'";
-        	  System.out.println("SQL Query: "+sql);
         	  productCategory=_JdbcTemplate.queryForObject(sql,new MapperProductCategory(productsDao));
       		return productCategory;
         	}catch (Exception e) {
@@ -53,54 +40,59 @@ public class ProductCategoryDao extends BaseDao {
     			}
 	}
 	public List<String> GetDataProductCategoryNameList() {
-		// TODO Auto-generated method stub
+		try {
 		String sql = "SELECT product_categ_name from product_categories";
-//		List<String> list =new ArrayList<>();
-//		list =_JdbcTemplate.execute(sql, list));
-//		//list=_JdbcTemplate.query(sql,new MapperProductCategory());
-		List<String> data = _JdbcTemplate.queryForList(sql, String.class);
-
+		List data = _JdbcTemplate.queryForList(sql, String.class);
 		return data;
+	}catch (Exception e) {
+		  System.out.println(e);
+		  return null; 
+		}
 	}
 	public String GetProductCategoryNameByProductCateg_ID(String product_categ_id) {
-		// TODO Auto-generated method stub
 		ProductCategory productCategory = new ProductCategory();
+		try {
 		String sql = "SELECT * from product_categories where product_categ_id ='"+product_categ_id+"'";
-//		List<String> list =new ArrayList<>();
-//		list =_JdbcTemplate.execute(sql, list));
-//		//list=_JdbcTemplate.query(sql,new MapperProductCategory());
 		productCategory = _JdbcTemplate.queryForObject(sql, new MapperProductCategory(productsDao));
-
 		return productCategory.getProduct_categ_name();
+		}catch (Exception e) {
+			  System.out.println(e);
+			  return null; 
+			}
 	}
 
 	public String getStringProductCategoryIDByName(String product_categ_name) {
+		try {
 		ProductCategory productCategory = new ProductCategory();
 		String sql = "SELECT * FROM product_categories WHERE product_categ_name=" + "'"
 				+ product_categ_name + "'";
-		System.out.println("SQL Query: " + sql);
 		productCategory = _JdbcTemplate.queryForObject(sql, new MapperProductCategory(productsDao));
-
 		return productCategory.getProduct_categ_id();
+		}catch (Exception e) {
+			  System.out.println(e);
+			  return null; 
+			}
 
 	}
 
 	public int UpdateProductCategoryID(String product_categ_id) {
-		// TODO Auto-generated method stub
-		StringBuffer sql = new StringBuffer();
-		sql.append("UPDATE ");
-		sql.append("product_categories ");
-		sql.append("SET ");
-		sql.append("product_categ_id='" + product_categ_id);
-		sql.append("'");
-		int insert = _JdbcTemplate.update(sql.toString());
-		return insert;
+		try {
+			String sql = "UPDATE product_categories SET product_categ_id = ? WHERE product_categ_id = ?";
+			Object[] param = {
+				product_categ_id,
+				product_categ_id
+			};
+			int update = _JdbcTemplate.update(sql, param);
+			return update;
+		} catch (Exception e) {
+			System.out.println(e);
+			return 0;
+		}
 	}
 	public List<ProductCategory> GetAllDataProductCategory() {
 		List<ProductCategory> list = new ArrayList<>();
 		try {
 			String sql = "SELECT * FROM  product_categories ";
-			System.out.println("SQL Query: " + sql);
 			list = _JdbcTemplate.query(sql, new MapperProductCategory(productsDao));
 			return list;
 		} catch (Exception e) {
@@ -112,7 +104,6 @@ public class ProductCategoryDao extends BaseDao {
 		try {
 	        String sql = "SELECT pdc.* FROM product_categories AS pdc INNER JOIN products AS pd\n"
 	                + "ON pd.product_categ_id=pdc.product_categ_id GROUP BY pdc.product_categ_id ORDER BY SUM(pd.sold_quantity) DESC LIMIT 0,6";
-	        System.out.println("SQL Query: " + sql);
 	        List<ProductCategory> list = _JdbcTemplate.query(sql, new BeanPropertyRowMapper<>(ProductCategory.class));
 	        return list;
 	    } catch (Exception e) {
@@ -147,14 +138,12 @@ public class ProductCategoryDao extends BaseDao {
 			// String tmp1 = id.substring(0, 4);
 			for (String string : data) {
 				x = Integer.parseInt(string.substring(5));
-				System.out.println("x = " + x);
 				if(string.substring(5)==null)
 					x = 0;
 				if (x > max)
 					max = x;
 			}
 			max++;
-			System.out.println("max = " + max);
 			String tmp = Integer.toString(max);
 			if (max < 10)
 				tmp = "0" + tmp;
@@ -177,14 +166,12 @@ public class ProductCategoryDao extends BaseDao {
 			// String tmp1 = id.substring(0, 4);
 			for (String string : data) {
 				x = Integer.parseInt(string.substring(5));
-				System.out.println("x = " + x);
 				if(string.substring(5)==null)
 					x = 0;
 				if (x > max)
 					max = x;
 			}
 			max++;
-			System.out.println("max = " + max);
 			String tmp = Integer.toString(max);
 			if (max < 10)
 				tmp = "00" + tmp;
@@ -221,7 +208,6 @@ public class ProductCategoryDao extends BaseDao {
 				productCategory.getType_id()
 				,null
 		};
-		System.out.println(sql);
 		int updatedRow=_JdbcTemplate.update(sql,param);
 		return updatedRow;
 	}

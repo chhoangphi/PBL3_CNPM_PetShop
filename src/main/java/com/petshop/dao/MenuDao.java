@@ -17,7 +17,6 @@ public class MenuDao extends BaseDao {
 			try {
 				String sql="SELECT * FROM menus";
 				list=_JdbcTemplate.query(sql,new MapperMenu());
-				System.out.println("QUERY: "+sql);
 				return list;
 
 	        	}catch (Exception e) {

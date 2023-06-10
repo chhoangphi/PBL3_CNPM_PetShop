@@ -81,9 +81,7 @@ username = (username.equals("null")) ? "" : username;
 
 										<a href='<c:url value="/san-pham?shop=${item.item_id}"/>'
 											class="nav-link dropdown-toggle">${item.menu_name}  </a>
-
 										<div class="dropdown-menu rounded-0 m-0">
-
 										</div>
 									</div>
 									<c:set var="count" value="${count+1}"></c:set>
@@ -108,10 +106,6 @@ username = (username.equals("null")) ? "" : username;
 									href='<c:url value="/thong-tin-ca-nhan"/>' role="button"
 									data-toggle="none" aria-haspopup="true" aria-expanded="false">
 									${LoginInfo.username}</a>
-								<!-- <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-									<a class="dropdown-item" href="/abcd">Thông tin tài khoản</a> <a
-										class="dropdown-item" href="/xyz">Đăng xuất</a>
-								</div> -->
 							</div>
 							<a href='<c:url value="/dang-xuat"/>' class="nav-item nav-link">Đăng
 								xuất</a>

@@ -21,7 +21,8 @@ public interface IOrderService {
 	public List<Order> findOrderByStatus(String status,String customerID);
 	public List<Order> GetDataOrder();
 	public List<Order> GetDataOrderByUsername(String username);
-	public List<Order> GetDataOrderPaginate(int start, int end,String status);
+	public List<Order> GetDataOrderPaginate(int start, int end,String status,String month,String year);
 	public int UpdateOrder(Order order);
-	public List<Order> GetDataOrderByStatus(String status) throws NullPointerException, SQLException;
+	public List<Order> GetDataOrderByStatus(String status,String month,String year) throws NullPointerException, SQLException;
+	public int UpdateSoldQuantity(OrderDetail orderDetail);
 }

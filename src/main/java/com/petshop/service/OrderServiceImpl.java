@@ -72,9 +72,9 @@ public class OrderServiceImpl implements IOrderService{
 		return orderDao.GetDataOrder();
 	}
 	@Override
-	public List<Order> GetDataOrderPaginate(int start, int end, String status) {
+	public List<Order> GetDataOrderPaginate(int start, int end, String status,String month,String year) {
 		// TODO Auto-generated method stb
-		return orderDao.GetDataOrderPaginate(start, end,status);
+		return orderDao.GetDataOrderPaginate(start, end,status, month, year);
 	}
 	@Override
 	public List<Order> GetDataOrderByUsername(String username) {
@@ -88,9 +88,13 @@ public class OrderServiceImpl implements IOrderService{
 		return orderDao.UpdateOrder(order);
 	}
 	@Override
-	public List<Order> GetDataOrderByStatus(String status) throws NullPointerException, SQLException {
+	public List<Order> GetDataOrderByStatus(String status,String month,String year) throws NullPointerException, SQLException {
 		// TODO Auto-generated method stub
-		return orderDao.GetDataOrderByStatus(status);
+		return orderDao.GetDataOrderByStatus(status, month, year);
 	}
-
+	@Override
+	public int UpdateSoldQuantity(OrderDetail orderDetail) {
+		// TODO Auto-generated method stub
+		return orderDao.UpdateSoldQuantity(orderDetail);
+	}
 }

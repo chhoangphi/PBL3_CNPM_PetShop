@@ -69,7 +69,7 @@
 					</c:forEach>
 					<a data-toggle="modal" href="#addShop" type="button" class="btn btn-success"><span class="bi bi-plus"></span>Thêm shop mới</a>
 					<div class="sb-sidenav-menu-heading">Addons</div>
-					<a class="nav-link" href="/petshop-5/admin/quan-ly-don-hang/all/1">
+					<a class="nav-link" href="/petshop-5/admin/quan-ly-don-hang/all/1?year=2023&month=null">
 						<div class="sb-nav-link-icon">
 							<i class="fas fa-chart-area"></i>
 						</div> Quản lý đơn hàng
@@ -92,7 +92,7 @@
                             </div>
 				</div>
 			</div>
-			<%-- <c:if test="${not empty LoginInfo}">
+			 <c:if test="${not empty LoginInfo}">
 			 <div class="sb-sidenav-footer">
 				<div class="small">Logged in as:</div>
 				${LoginInfo.username}
@@ -103,7 +103,7 @@
 				<div class="small">Not logged in</div>
 				
 			</div> 
-			</c:if> --%>
+			</c:if>
 			
 		
 		</nav>

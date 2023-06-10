@@ -27,21 +27,24 @@ public class ActivityDao extends BaseDao {
 			System.out.println(e);
 			return null; // hoặc trả về danh sách rỗng tùy thuộc vào yêu cầu
 		}
-
-	}
-
-	public int AddActivity(Activity activity) {
-		try {
-			String sql = "INSERT INTO activities_history (activity_id, activity, activity_time, modifiedBy) VALUES (?, ?, ?, ?)";
-
-			Object[] param = { activity.getActivity_id(), activity.getActivity(), activity.getActivityTime(),
-					activity.getModifiedBy() };
-
-			int insert = _JdbcTemplate.update(sql, param);
-			return insert;
-		} catch (Exception e) {
-			System.out.println(e);
-			return 0; // or return an empty list depending on the requirement
+		public int AddActivity(Activity activity)
+		{
+			try {
+				String sql = "INSERT INTO activities_history (activity_id, activity, activity_time, modifiedBy) VALUES (?, ?, ?, ?)";
+				
+				Object[] param = {
+					activity.getActivity_id(),
+					activity.getActivity(),
+					activity.getActivityTime(),
+					activity.getModifiedBy()
+				};
+				
+				int insert = _JdbcTemplate.update(sql, param);
+				return insert;
+			} catch (Exception e) {
+				System.out.println(e);
+				return 0; // or return an empty list depending on the requirement
+			}
 		}
 	}
 

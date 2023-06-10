@@ -360,6 +360,16 @@ nav.order-status a.active {
 							<h2>
 								Quản lý <b>Đơn hàng</b>
 							</h2>
+							<c:if test="${param.month=='null'}">
+							<h3>
+								Năm <b>${param.year}</b>
+							</h3>
+							</c:if>
+							<c:if test="${param.month!='null'}">
+							<h3>
+								Tháng <b>${param.month}/${param.year}</b>
+							</h3>
+							</c:if>
 						</div>
 						<div class="col-sm-6">
 							<a href="#deleteEmployeeModal" class="btn btn-danger"
@@ -370,27 +380,27 @@ nav.order-status a.active {
 				<nav class="order-status">
 					<ul>
 						<li class="${status=='all' ? 'active' : ''}"><a
-							href='<c:url value="/admin/quan-ly-don-hang/all/1"/>'
+							href='<c:url value="/admin/quan-ly-don-hang/all/1?year=${param.year}&month=${param.month}"/>'
 							class="${status=='all' ? 'active' : ''}">Tất cả</a></li>
 						<li class="${status=='pending' ? 'active' : ''}"><a
-							href='<c:url value="/admin/quan-ly-don-hang/pending/1"/>'
+							href='<c:url value="/admin/quan-ly-don-hang/pending/1?year=${param.year}&month=${param.month}"/>'
 							class="${status=='pending' ? 'active' : ''}">Chờ xác nhận</a></li>
 						<li class="${status=='to_ship' ? 'active' : ''}"><a
-							href='<c:url value="/admin/quan-ly-don-hang/to_ship/1"/>'
+							href='<c:url value="/admin/quan-ly-don-hang/to_ship/1?year=${param.year}&month=${param.month}"/>'
 							class="${status=='to_ship' ? 'active' : ''}">Chờ lấy hàng</a></li>
 						<li class="${status=='to_receive' ? 'active' : ''}"><a
-							href='<c:url value="/admin/quan-ly-don-hang/to_receive/1"/>'
+							href='<c:url value="/admin/quan-ly-don-hang/to_receive/1?year=${param.year}&month=${param.month}"/>'
 							class="${status=='to_receive' ? 'active' : ''}">Đang giao</a></li>
 						<li class="${status=='completed' ? 'active' : ''}"><a
-							href='<c:url value="/admin/quan-ly-don-hang/completed/1"/>'
+							href='<c:url value="/admin/quan-ly-don-hang/completed/1?year=${param.year}&month=${param.month}"/>'
 							class="${status=='completed' ? 'active' : ''}">Đã giao</a></li>
 						<li class="${status=='canceled' ? 'active' : ''}"><a
-							href='<c:url value="/admin/quan-ly-don-hang/canceled/1"/>'
+							href='<c:url value="/admin/quan-ly-don-hang/canceled/1?year=${param.year}&month=${param.month}"/>'
 							class="${status=='canceled' ? 'active' : ''}">Đã hủy</a></li>
 					</ul>
 				</nav>
 				<div class="red" id="baoLoi">${statusUpdate}
-					</div>
+				</div>
 				<table class="table table-striped table-hover">
 				
 					<thead>
@@ -406,6 +416,12 @@ nav.order-status a.active {
 							<th>Actions</th>
 						</tr>
 					</thead>
+					<c:if test="${abc==1}"> 
+  				<span id="notify" style="color: red">Xóa đơn hàng thành công</span>
+  				 </c:if>
+  				 <c:if test="${update==1}"> 
+  				<span id="notify" style="color: red">Cập nhật đơn hàng thành công</span>
+  				 </c:if>
 					<tbody>
 						<c:forEach var="item" items="${OrderPaginate}">
 							<tr>
@@ -417,7 +433,12 @@ nav.order-status a.active {
 								<td>${item.recipientName}</td>
 								<td>${item.phoneNumber}</td>
 								<td>${item.address}</td>
-								<td>${item.status}</td>
+								<c:if test="${status=='all'}">
+									<td>${item.status}</td>
+								</c:if>
+								<c:if test="${status!='all'}">
+									<td class="stt" style="text-transform: uppercase;">${status}</td>
+								</c:if>
 								<td><a
 									href="<c:url value="/chi-tiet-don-hang/${item.orderId}"/>"
 									class="view" title="View" data-toggle="tooltip"><i
@@ -425,7 +446,7 @@ nav.order-status a.active {
 									href="<c:url value="/admin/cap-nhat-don-hang/${item.orderId}"/>"
 									class="edit" title="Edit" data-toggle="tooltip"><i
 										class="material-icons">&#xE254;</i></a> <a
-									href="<c:url value="/admin/xoa-don-hang/${item.orderId}"/>"
+										onclick="confirmCancel('${item.orderId}')"
 									class="delete" title="Delete" data-toggle="tooltip"><i
 										class="material-icons">&#xE872;</i></a></td>
 							</tr>
@@ -441,12 +462,12 @@ nav.order-status a.active {
 							varStatus="loop">
 							<c:if test="${loop.index==pageinfo.currentPage}">
 								<li class="page-item active"><a
-									href="<c:url value="/admin/quan-ly-don-hang/${status}/${loop.index}"/>"
+									href="<c:url value="/admin/quan-ly-don-hang/${status}/${loop.index}?year=${param.year}&month=${param.month}"/>"
 									class="page-link">${loop.index }</a></li>
 							</c:if>
 							<c:if test="${loop.index!=pageinfo.currentPage}">
 								<li class="page-item"><a
-									href="<c:url value="/admin/quan-ly-don-hang/${status}/${loop.index}"/>"
+									href="<c:url value="/admin/quan-ly-don-hang/${status}/${loop.index}?year=${param.year}&month=${param.month}"/>"
 									class="page-link">${loop.index }</a></li>
 							</c:if>
 						</c:forEach>
@@ -614,5 +635,13 @@ nav.order-status a.active {
 			</div>
 		</div>
 	</div>
+	<script>
+	function confirmCancel(orderId){
+		   if (confirm("Xác nhận xóa tài khoản")){
+			    window.location.href = "/petshop-5/admin/xoa-don-hang/" + orderId;
+				document.getElementById("msg").innerHTML = "Xóa thành công";	 
+		   }
+	   }
+	</script>
 </body>
 </html>

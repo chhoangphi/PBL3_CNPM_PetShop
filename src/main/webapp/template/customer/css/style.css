@@ -7570,6 +7570,7 @@ button.bg-dark:focus {
 .py-4 {
   padding-bottom: 1.5rem !important;
   background-color: #fafafa;
+  width:267px
 }
 
 .pl-4,

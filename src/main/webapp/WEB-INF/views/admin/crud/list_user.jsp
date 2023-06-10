@@ -13,9 +13,9 @@
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <link rel="stylesheet"
-	href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet"
+	href="https://fonts.googleapis.com/icon?family=Material+Icons"><link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
@@ -414,6 +414,12 @@ email = (email.equals("null")) ? "" : email;
 					</thead>
 					<c:if test="${abc==1}"> 
   				<span id="notify" style="color: red">Xóa tài khoản thành công</span>
+  				 </c:if>
+  				 <c:if test="${update==1}"> 
+  				<span id="notify" style="color: red">Cập nhật tài khoản thành công</span>
+  				 </c:if>
+  				 <c:if test="${addaccount!=null}"> 
+  				<span id="notify" style="color: red">${addaccount}</span>
   				 </c:if>
 					<tbody>
 						 <c:forEach var="item" items="${userPaginate}">

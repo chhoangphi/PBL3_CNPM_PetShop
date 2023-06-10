@@ -377,6 +377,12 @@ nav.order-status a.active {
 					<c:if test="${abc==1}"> 
   				<span id="notify" style="color: red">Xóa tài sản phẩm thành công</span>
   				 </c:if>
+  				 <c:if test="${update==1}"> 
+  				<span id="notify" style="color: red">Cập nhật thông tin sản phẩm thành công</span>
+  				 </c:if>
+  				 <c:if test="${addproduct==1}"> 
+  				<span id="notify" style="color: red">Thêm sản phẩm thành công</span>
+  				 </c:if>
 					<tbody>
 						 <c:forEach var="products" items="${ProductPaginate}">
 							<tr>

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.petshop.entity.MapperItemType;
+import com.petshop.entity.TypeOfCategory;
 import com.petshop.entity.ItemType;
 
 @Repository
@@ -35,18 +36,14 @@ public class ItemTypeDao extends BaseDao {
 				int max = 0;
 				
 				// String tmp1 = id.substring(0, 4);
-				System.out.println("size = " + data.size());
 				for (String string : data) {
 					x = Integer.parseInt(string.substring(4));
-					System.out.println("x = " + x);
 					if(string.substring(4)==null)
 						x = 0;
 					if (x > max)
 						max = x;
 				}
-				
 				max++;
-				System.out.println("max = " + max);
 				String tmp = Integer.toString(max);
 				if (max < 10)
 					tmp = "0" + tmp;
@@ -67,7 +64,6 @@ public class ItemTypeDao extends BaseDao {
 					
 					
 			};
-			System.out.println(sql);
 			int updatedRow=_JdbcTemplate.update(sql,param);
 			return updatedRow;
 		}

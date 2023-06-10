@@ -50,14 +50,7 @@ public class RevenueStatisticsDao extends BaseDao {
 			String sql="SELECT  DISTINCT(MONTH(orderTime)) AS monthOfOrder,SUM(totalPrice) AS totalPriceOfMonth ,count(orderID) AS totalOrderOfMonth FROM order_customer WHERE  YEAR(OrderTime)=2023\r\n"
 					+ "	 GROUP BY MONTH(orderTime)\r\n"
 					+ "	 ORDER BY MONTH(orderTime) ASC";
-			System.out.println(sql);
-			 list = _JdbcTemplate.query(sql, new BeanPropertyRowMapper<>(RevenueStatisticsDto.class));
-			 System.out.println(list.size());
-			 for (RevenueStatistics i:list) {
-				 System.out.println(i.getMonthOfOrder());
-				 System.out.println(i.getTotalOrderOfMonth());
-				 System.out.println(i.getTotalPriceOfMonth());
-			 }
+			 list = _JdbcTemplate.query(sql, new BeanPropertyRowMapper<>(RevenueStatistics.class));
 	        return list;
 			}catch(Exception e){
 				System.out.println(e);

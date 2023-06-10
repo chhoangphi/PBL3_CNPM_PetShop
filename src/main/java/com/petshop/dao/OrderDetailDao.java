@@ -16,40 +16,18 @@ public class OrderDetailDao extends BaseDao {
 	private ProductsDao productsDao;
 
 	public int saveOrderDetail(OrderDetail orderdetail) {
-//		String sql = "INSERT INTO order_detail VALUES (?, ?, ?, ?, ?)";
-//		Object[] params = { orderdetail.getOrderId(), orderdetail.getProduct().getProduct_id(),
-//				orderdetail.getProduct_name(), orderdetail.getQuantity(), orderdetail.getPrice() };
-//		try {
-//			int rowsInserted = _JdbcTemplate.update(sql, params);
-//			return rowsInserted;
-//		} catch (Exception e) {
-//			System.out.println(e);
-//			return 0;
-//		}
 		try {
-			StringBuffer  sql = new StringBuffer();
-			sql.append("INSERT INTO ");
-			sql.append("order_detail ");
-			sql.append("( ");
-			sql.append("    orderID, ");
-			sql.append("    product_id, ");
-			sql.append("    product_name, ");
-			sql.append("    quantity, ");
-			sql.append("    price ");
-			sql.append(") ");
-			sql.append("VALUES ");
-			sql.append("(");
-			sql.append("'"+orderdetail.getOrderId()+"',");
-			sql.append("'"+orderdetail.getProduct().getProduct_id()+"',");
-			sql.append("'"+orderdetail.getProduct_name()+"',");
-			sql.append(""+orderdetail.getQuantity()+",");
-			sql.append(""+orderdetail.getPrice()+"");
-			sql.append(")");
-			int insert = _JdbcTemplate.update(sql.toString());
-			System.out.println("sql query:" + sql);
+			String sql = "INSERT INTO order_detail (orderID, product_id, product_name, quantity, price) VALUES (?, ?, ?, ?, ?)";
+			Object[] param = {
+				orderdetail.getOrderId(),
+				orderdetail.getProduct().getProduct_id(),
+				orderdetail.getProduct_name(),
+				orderdetail.getQuantity(),
+				orderdetail.getPrice()
+			};
+			int insert = _JdbcTemplate.update(sql, param);
 			return insert;
 		} catch (DataAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return 0;
 		}
@@ -59,7 +37,6 @@ public class OrderDetailDao extends BaseDao {
 		List<OrderDetail> detailList = new ArrayList<>();
 		try {
 			String sql = " SELECT * FROM order_detail WHERE orderID='" + OrderID + "'";
-			System.out.println(sql);
 			detailList = _JdbcTemplate.query(sql, new MapperOrderDetail(productsDao));
 			return detailList;
 
@@ -80,7 +57,6 @@ public class OrderDetailDao extends BaseDao {
 		List<OrderDetail> orderList=new ArrayList<>();
 		try {
 			String sql=" SELECT * FROM order_detail ";
-			System.out.println(sql);
 			orderList=_JdbcTemplate.query(sql, new MapperOrderDetail(productsDao));
 			return orderList;
 			
@@ -89,32 +65,17 @@ public class OrderDetailDao extends BaseDao {
 			return null;
 		}
 	}
-	public List<OrderDetail> GetDataOrderDetailPaginate(int start, int end) {
+	public List<OrderDetail> GetDataOrderDetailPaginate(int start, int totalPage) {
 		List<OrderDetail> listproduct = new ArrayList<>();
 		try {
-			String sql = SqlOrderDetailPaginate(start, end).toString();
-			System.out.println("SQL Query: " + sql);
-			listproduct = _JdbcTemplate.query(sql, new MapperOrderDetail(productsDao));
+			String sql ="SELECT * FROM order_detail LIMIT ?,?";
+			Object []params={start,totalPage};
+			listproduct = _JdbcTemplate.query(sql, new MapperOrderDetail(productsDao),params);
 			return listproduct;
 		} catch (Exception e) {
 			System.out.println(e);
 			return null;
 		}
-	}
-	public StringBuffer SqlOrderDetailPaginate(int start, int totalPage) {
-		StringBuffer sql = SqlOrderDetail();
-		sql.append(" LIMIT ");
-		sql.append(start + ", " + totalPage);
-		return sql;
-	}
-	public StringBuffer SqlOrderDetail() {
-		StringBuffer sql = new StringBuffer();
-		sql.append("SELECT");
-		sql.append(" *");
-		sql.append(" FROM"); 
-		sql.append(" order_detail");
-		System.out.println(sql.toString());
-		return sql;
 	}
 	public List<OrderDetail> GetDataOrderDetailByIsReviewed (String product_id,String username,int isReviewed)
 	{
@@ -125,7 +86,6 @@ public class OrderDetailDao extends BaseDao {
 					+ " AND oc.customerID = '"+username + "'"
 					+ " AND od.product_id='" + product_id+"'";
 			listOrderDetail = _JdbcTemplate.query(sql, new MapperOrderDetail(productsDao));
-			System.out.println(sql);
 			return listOrderDetail;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -138,13 +98,9 @@ public class OrderDetailDao extends BaseDao {
 		sql.append("UPDATE ");
 		sql.append("order_detail ");
 		sql.append("SET ");
-//		sql.append("    product_id = ");
-//		sql.append("'"+products.getProduct_id()+"',");
 		sql.append("    isreviewed = ");
 		sql.append("1");
 		sql.append("  WHERE orderID ='" + orderDetail.getOrderId() + "';");
-		System.out.println(sql.toString());
-
 		int insert = _JdbcTemplate.update(sql.toString());
 		return insert;
 	}
