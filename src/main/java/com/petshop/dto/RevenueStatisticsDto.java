@@ -1,6 +1,6 @@
 package com.petshop.dto;
 
-public class RevenueStatistics {
+public class RevenueStatisticsDto {
 		private String monthOfOrder;
 		private long totalPriceOfMonth;
 		private String totalOrderOfMonth;
