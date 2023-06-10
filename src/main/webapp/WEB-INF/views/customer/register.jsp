@@ -13,11 +13,6 @@
 .red {
 	color: red;
 }
-.form-check-input {
-    position: absolute;
-    margin-top: 0.3rem;
-    margin-left: 0.2rem;
-}
 </style>
 </head>
 <body>
@@ -55,7 +50,6 @@
 
 					<div class="red" id="baoLoi">
 						<%=baoLoi%>
-						
 					</div>
 					<div class="mb-3">
 						<label for="username" class="form-label">Tên đăng nhập<span
