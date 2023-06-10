@@ -226,8 +226,8 @@ public class OrderDao extends BaseDao {
 		System.out.println("quantity= "+ orderDetail.getQuantity());
 
 		int x = orderDetail.getProduct().getSold_quantity()+orderDetail.getQuantity();
-		String sql = "  UPDATE  products SET sold_quantity=  ? WHERE product_id=?" ;
-		Object[] param = { x, orderDetail.getProduct().getProduct_id() };
+		String sql = "  UPDATE  products SET sold_quantity=  ?,amountOfProducts = ? WHERE product_id=?" ;
+		Object[] param = { x, orderDetail.getProduct().getAmountOfProducts()-orderDetail.getQuantity(),orderDetail.getProduct().getProduct_id() };
 		int updatedRow = _JdbcTemplate.update(sql,param);
 		System.out.println(sql);
 		return updatedRow;
