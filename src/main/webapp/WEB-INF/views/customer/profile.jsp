@@ -1,68 +1,75 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    <%@include file="/common/taglib.jsp"%>
+	pageEncoding="UTF-8"%>
+<%@include file="/common/taglib.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
-body{
-    margin-top:20px;
-    color: #1a202c;
-    text-align: left;  
+body {
+	margin-top: 20px;
+	color: #1a202c;
+	text-align: left;
 }
+
 .main-body {
-    padding: 15px;
+	padding: 15px;
 }
 
 .nav-link {
-    color: #4a5568;
+	color: #4a5568;
 }
+
 h6 {
-padding: 6px;
-}
-.card {
-    box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+	padding: 6px;
 }
 
 .card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 0 solid rgba(0,0,0,.125);
-    border-radius: .25rem;
+	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0
+		rgba(0, 0, 0, .06);
+}
+
+.card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	word-wrap: break-word;
+	background-color: #fff;
+	background-clip: border-box;
+	border: 0 solid rgba(0, 0, 0, .125);
+	border-radius: .25rem;
 }
 
 .card-body {
-    flex: 1 1 auto;
-    min-height: 1px;
-    padding: 1rem;
+	flex: 1 1 auto;
+	min-height: 1px;
+	padding: 1rem;
 }
 
 .gutters-sm {
-    margin-right: -8px;
-    margin-left: -8px;
+	margin-right: -8px;
+	margin-left: -8px;
 }
 
 .gutters-sm>.col, .gutters-sm>[class*=col-] {
-    padding-right: 8px;
-    padding-left: 8px;
+	padding-right: 8px;
+	padding-left: 8px;
 }
+
 .mb-3, .my-3 {
-    margin-bottom: 1rem!important;
+	margin-bottom: 1rem !important;
 }
 
 .bg-gray-300 {
-    background-color: #e2e8f0;
+	background-color: #e2e8f0;
 }
+
 .h-100 {
-    height: 100%!important;
+	height: 100% !important;
 }
+
 .shadow-none {
 	box-shadow: none !important;
 }
@@ -79,80 +86,84 @@ input {
 }
 
 nav.order-status {
-  padding: 10px;
+	padding: 10px;
 }
 
 nav.order-status ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
 }
 
 nav.order-status li {
-  margin-right: 10px;
+	margin-right: 10px;
 }
 
 nav.order-status a {
-  display: block;
-  color: #333;
-  padding: 15px;
-  text-decoration: none;
+	display: block;
+	color: #333;
+	padding: 15px;
+	text-decoration: none;
 }
 
 nav.order-status a:hover {
-  background-color: #ddd;
+	background-color: #ddd;
 }
 
 nav.order-status a.active {
-  color: #E51F28;
- 
-}
-.btn-view-order {
-  background-color: #E51F28;
-  border: none;
-  margin-bottom: 10px;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  float: right;
-  margin-top: 10px;
-}
-.btn-view-order:hover{
-background-color: #c94b50
-}
-nav.order-status li.active {
-  border-bottom: 2px solid #E51F28;
-  border-bottom-color: #E51F28;
-}
-.hKbGrP {
-    margin: 20px 0 0;
-    font-size: 18px;
-    line-height: 1.4;
-    color: rgba(0,0,0,.8);
-}
-.form-group .edit-link {
-    display: inline-block;
-    float: right;
-    margin-left: 10px; /* tùy chỉnh khoảng cách giữa input và a */
+	color: #E51F28;
 }
 
+.btn-view-order {
+	background-color: #E51F28;
+	border: none;
+	margin-bottom: 10px;
+	color: white;
+	padding: 10px 20px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	float: right;
+	margin-top: 10px;
+}
+
+.btn-view-order:hover {
+	background-color: #c94b50
+}
+
+nav.order-status li.active {
+	border-bottom: 2px solid #E51F28;
+	border-bottom-color: #E51F28;
+}
+
+.hKbGrP {
+	margin: 20px 0 0;
+	font-size: 18px;
+	line-height: 1.4;
+	color: rgba(0, 0, 0, .8);
+}
+
+.form-group .edit-link {
+	display: inline-block;
+	float: right;
+	margin-left: 10px; /* tùy chỉnh khoảng cách giữa input và a */
+}
 </style>
 </head>
 <body>
-<div class="container">
+	<div class="container">
 
-      <!-- Breadcrumb -->
-      <nav aria-label="breadcrumb" class="main-breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Chỉnh sửa tài khoản</li>
-        </ol>
-      </nav>
-      <!-- /Breadcrumb -->
+		<!-- Breadcrumb -->
+		<nav aria-label="breadcrumb" class="main-breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Chỉnh
+					sửa tài khoản</li>
+			</ol>
+		</nav>
+		<!-- /Breadcrumb -->
 
 		<div class="row gutters-sm">
 			<div class="col-md-4 d-none d-md-block">
@@ -197,31 +208,28 @@ nav.order-status li.active {
 							<div class="tab-pane active" id="profile">
 								<h6>Thông tin cá nhân</h6>
 								<hr>
-
+								<span class="red">${changeStatus}</span>
 								<form:form action="thong-tin-ca-nhan" method="post"
 									modelAttribute="personalInfo">
 									<div class="form-group">
 										<label for="fullName">Họ và tên</label>
-										<form:input type="text" class="form-control"
-											path="tenKhachHang" disabled="true"></form:input>
-											<button id="edit-btn" class="btn btn-primary" style="display:inline-block; float:right">Sửa</button>
-                                        <button id="save-btn" class="btn btn-success" style="display:none">Lưu</button>
-                                        <button id="cancel-btn" class="btn btn-danger" style="display:none">Trở lại</button>
+										<form:input type="text" class="form-control" path="fullName"
+											required="required"></form:input>
 
 									</div>
 									<div class="form-group">
 										<label for="email">Địa chỉ Email</label>
-										<form:input type="text" class="form-control" path="email" disabled="true"></form:input>
-										
+										<form:input type="text" class="form-control" path="email"
+											required="required"></form:input>
+
 									</div>
 									<div class="form-group">
 										<label for="phoneNumber">Số điện thoại</label>
 										<form:input type="text" class="form-control"
-											path="soDienThoai" disabled="true"></form:input>
-											<a href="#" class="edit-link">Sửa</a>
+											path="phoneNumber" required="required"></form:input>
 									</div>
-									<button type="button" class="btn btn-primary">Cập nhật
-										thay đổi</button>
+									<input class="btn btn-primary form-control" type="submit"
+										value="Lưu thay đổi" name="submit" id="submit" />
 								</form:form>
 							</div>
 						</c:if>
@@ -233,19 +241,26 @@ nav.order-status li.active {
 									<div class="form-group">
 										<label for="username">Tên đăng nhập</label> <input type="text"
 											class="form-control" id="username"
-											value="${account.tenDangNhap}" readonly>
+											value="${account.username}" readonly>
 									</div>
 									<hr>
 
 
 									<div class="form-group">
 										<label class="d-block">Thay đổi mật khẩu</label> <span
-											class="red">${changeStatus}</span> 
-										<input id="oldPassword" placeholder="Nhập mật khẩu cũ" class="form-control"  type="password" name="oldPassword" required="required" autocomplete="new-password"> 
-										<input id="newPassword" placeholder="Nhập mật khẩu mới" class="form-control" type="password" name="newPassword" onkeyup="kiemTraMatKhau()" required="required">
-										<input id="confirmPassword" placeholder="Xác nhận mật khẩu cũ" class="form-control" type="password" onkeyup="kiemTraMatKhau()" required="required"> <span id="msg" class="red"></span>
+											class="red">${changeStatus}</span> <input id="oldPassword"
+											placeholder="Nhập mật khẩu cũ" class="form-control"
+											type="password" name="oldPassword" required="required"
+											autocomplete="new-password"> <input id="newPassword"
+											placeholder="Nhập mật khẩu mới" class="form-control"
+											type="password" name="newPassword" onkeyup="kiemTraMatKhau()"
+											required="required"> <input id="confirmPassword"
+											placeholder="Xác nhận mật khẩu cũ" class="form-control"
+											type="password" onkeyup="kiemTraMatKhau()"
+											required="required"> <span id="msg" class="red"></span>
 									</div>
-									<input class="btn btn-primary form-control" type="submit" value="Lưu mật khẩu" name="submit" id="submit" />
+									<input class="btn btn-primary form-control" type="submit"
+										value="Lưu mật khẩu" name="submit" id="submit" />
 									<hr>
 
 								</form>
@@ -256,59 +271,139 @@ nav.order-status li.active {
 								<h6>Quản lý đơn hàng</h6>
 								<nav class="order-status">
 									<ul>
-										<li class="${status=='pending' ? 'active' : ''}"><a href='<c:url value="/don-hang/pending"/>' class="${status=='pending' ? 'active' : ''}">Chờ xác nhận</a></li>
-										<li class="${status=='to_ship' ? 'active' : ''}"><a href='<c:url value="/don-hang/to_ship"/>' class="${status=='to_ship' ? 'active' : ''}">Chờ lấy hàng</a></li>
-										<li class="${status=='to_receive' ? 'active' : ''}"><a href='<c:url value="/don-hang/to_receive"/>' class="${status=='to_receive' ? 'active' : ''}">Đang giao</a></li>
-										<li class="${status=='completed' ? 'active' : ''}"><a href='<c:url value="/don-hang/completed"/>' class="${status=='completed' ? 'active' : ''}">Đã giao</a></li>
-										<li class="${status=='canceled' ? 'active' : ''}"><a href='<c:url value="/don-hang/canceled"/>' class="${status=='canceled' ? 'active' : ''}">Đã hủy</a></li>
+										<li class="${status=='all' ? 'active' : ''}"><a
+											href='<c:url value="/don-hang/all"/>'
+											class="${status=='all' ? 'active' : ''}">Tất cả</a></li>
+										<li class="${status=='pending' ? 'active' : ''}"><a
+											href='<c:url value="/don-hang/pending"/>'
+											class="${status=='pending' ? 'active' : ''}">Chờ xác nhận</a></li>
+										<li class="${status=='to_ship' ? 'active' : ''}"><a
+											href='<c:url value="/don-hang/to_ship"/>'
+											class="${status=='to_ship' ? 'active' : ''}">Chờ lấy hàng</a></li>
+										<li class="${status=='to_receive' ? 'active' : ''}"><a
+											href='<c:url value="/don-hang/to_receive"/>'
+											class="${status=='to_receive' ? 'active' : ''}">Đang giao</a></li>
+										<li class="${status=='completed' ? 'active' : ''}"><a
+											href='<c:url value="/don-hang/completed"/>'
+											class="${status=='completed' ? 'active' : ''}">Đã giao</a></li>
+										<li class="${status=='canceled' ? 'active' : ''}"><a
+											href='<c:url value="/don-hang/canceled"/>'
+											class="${status=='canceled' ? 'active' : ''}">Đã hủy</a></li>
 									</ul>
 								</nav>
 								<hr>
 								<form>
 									<div class="form-group">
-		<c:if test="${ empty Order}">
-		<div class="hKbGrP">Chưa có đơn hàng</div>
-		</c:if>
-		<c:if test="${not empty Order}">
-		<c:forEach var="order" items="${Order}">
-											<div class="card mb-4">
-        <div class="card-body">
-          <div class="mb-3 d-flex justify-content-between">
-            <div>
-              <span class="me-3">Trạng thái</span>
-              <span class="badge rounded-pill bg-info">${status=='pending' ? 'Chờ xác nhận' : ((status=='to_ship') ? 'Chờ lấy hàng ' : (status=='to_receive')  ?  'Đang giao hàng' : (status=='completed') ? 'Đã giao' : 'Đã hủy')}</span>
-            </div>
-          </div>
-          <table class="table table-borderless">
-            <tbody>
-              <c:forEach var="item" items="${order.orderDetailList}">
-              <tr>
-                <td>
-                  <div class="d-flex mb-2">
-                    <div class="flex-shrink-0">
-                      <img src="${item.product.img}" alt="" width="35" class="img-fluid">
-                    </div>
-                    <div class="flex-lg-grow-1 ms-3">
-                      <h6 class="small mb-0"><a href="#" class="text-reset">${item.product_name}</a></h6>
-                      <span class="small">Số lượng: ${item.quantity}</span>
-                    </div>
-                  </div>
-                </td>
-                <td></td>
-                <td class="text-end">${item.price}đ</td>
-              </tr>
-              </c:forEach>
-            </tbody>
-            <tfoot>
+										<c:if test="${empty dataOrder}">
+											<div class="hKbGrP">Chưa có đơn hàng</div>
+										</c:if>
+										<c:if test="${not empty Order && status != 'all'}">
+											<c:forEach var="order" items="${Order}">
+												<div class="card mb-4">
 
-              <tr class="fw-bold">
-                <td colspan="2">Thành tiền</td>
-                <td class="text-end">${order.totalPrice}đ</td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-      </div>
+													<div class="card-body">
+														<div class="mb-3 d-flex justify-content-between">
+															<div>
+																<span class="me-3">Trạng thái</span> <span
+																	class="badge rounded-pill bg-info">${status=='pending' ? 'Chờ xác nhận' : ((status=='to_ship') ? 'Chờ lấy hàng ' : (status=='to_receive')  ?  'Đang giao hàng' : (status=='completed') ? 'Đã giao' : 'Đã hủy')}</span>
+															</div>
+														</div>
+														<table class="table table-borderless">
+															<tbody>
+																<c:forEach var="item" items="${order.orderDetailList}">
+																	<tr>
+																		<td>
+																			<div class="d-flex mb-2">
+																				<div class="flex-shrink-0">
+																					<img src="${item.product.img}" alt="" width="35"
+																						class="img-fluid">
+																				</div>
+																				<div class="flex-lg-grow-1 ms-3">
+																					<h6 class="small mb-0">
+																						<a href="#" class="text-reset">${item.product_name}</a>
+																					</h6>
+																					<span class="small">Số lượng:
+																						${item.quantity}</span>
+																				</div>
+																			</div>
+																		</td>
+																		<td></td>
+																		<td class="text-end">${item.price}đ</td>
+																	</tr>
+																</c:forEach>
+															</tbody>
+															<tfoot>
+
+																<tr class="fw-bold">
+																	<td colspan="2">Thành tiền</td>
+																	<td class="text-end">${order.totalPrice}đ</td>
+																</tr>
+															</tfoot>
+														</table>
+
+
+													</div>
+													<a
+														href='<c:url value="/chi-tiet-don-hang/${order.orderId}"/>'><span
+														class="btn-view-order">Xem chi tiết</span></a>
+												</div>
+											</c:forEach>
+										</c:if>
+										<c:if test="${not empty dataOrder && status == 'all'}">
+											<c:forEach var="order" items="${dataOrder}">
+												<div class="card mb-4">													
+														<div class="card-body">
+														<div class="mb-3 d-flex justify-content-between">
+															<div>
+																<span class="me-3">Trạng thái</span> <span
+																	class="badge rounded-pill bg-info">${order.status}</span>
+															</div>
+														</div>
+															<table class="table table-borderless">
+																<tbody>
+																	<c:forEach var="item"
+																		items="${order.orderDetailList}">
+																		<tr>
+																			<td>
+																				<div class="d-flex mb-2">
+																					<div class="flex-shrink-0">
+																						<img src="${item.product.img}" alt="" width="35"
+																							class="img-fluid">
+																					</div>
+																					<div class="flex-lg-grow-1 ms-3">
+																						<h6 class="small mb-0">
+																							<a href="#" class="text-reset">${item.product_name}</a>
+																						</h6>
+																						<span class="small">Số lượng:
+																							${item.quantity}</span>
+																					</div>
+																				</div>
+																			</td>
+																			<td></td>
+																			<td class="text-end">${item.price}đ</td>
+																		</tr>
+																	</c:forEach>
+																</tbody>
+																<tfoot>
+
+																	<tr class="fw-bold">
+																		<td colspan="2">Thành tiền</td>
+																		<td class="text-end">${order.totalPrice}đ</td>
+																	</tr>
+																</tfoot>
+															</table>
+
+
+														</div>
+
+													
+													<a
+														href='<c:url value="/chi-tiet-don-hang/${order.orderId}"/>'><span
+														class="btn-view-order">Xem chi tiết</span></a>
+												</div>
+											</c:forEach>
+										</c:if>
+									</div>
 
 								</form>
 							</div>
@@ -318,58 +413,5 @@ nav.order-status li.active {
 			</div>
 		</div>
 	</div>
-	<content tag="script"> <script>
-		function kiemTraMatKhau() {
-			var newPassword = document.getElementById("newPassword").value;
-			var confirmPassword = document.getElementById("confirmPassword").value;
-			var oldPassword = document.getElementById("oldPassword").value;
-			if (newPassword != confirmPassword) {
-				document.getElementById("msg").innerHTML = "Mật khẩu nhập lại không khớp!";
-				return false;
-			} else {
-				document.getElementById("msg").innerHTML = "";
-				return true;
-			}
-		}
-		document.getElementById('submit')
-				.addEventListener(
-						'click',
-						function(event) {
-							var newPassword = document
-									.getElementById("newPassword").value;
-							var confirmPassword = document
-									.getElementById("confirmPassword").value;
-							if (newPassword != confirmPassword) {
-								event.preventDefault();
-							}
-						});
-		const editBtn = document.getElementById('edit-btn');
-		  const saveBtn = document.getElementById('save-btn');
-		  const cancelBtn = document.getElementById('cancel-btn');
-		  const inputField = document.querySelector('form input');
-
-		  editBtn.addEventListener('click',  => {
-		    inputField.disabled = false;
-		    editBtn.style.display = 'none';
-		    saveBtn.style.display = 'block';
-		    cancelBtn.style.display = 'block';
-		  });
-
-		  cancelBtn.addEventListener('click', () => {
-		    inputField.disabled = true;
-		    editBtn.style.display = 'block';
-		    saveBtn.style.display = 'none';
-		    cancelBtn.style.display = 'none';
-		  });
-
-		  saveBtn.addEventListener('click', () => {
-		    // Thực hiện lưu thông tin
-		    inputField.disabled = true;
-		    editBtn.style.display = 'block';
-		    saveBtn.style.display = 'none';
-		    cancelBtn.style.display = 'none';
-		  });
-	</script>
-	 </content>
 </body>
 </html>
