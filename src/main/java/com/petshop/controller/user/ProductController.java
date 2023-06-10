@@ -1,4 +1,4 @@
-package com.petshop.controller;
+package com.petshop.controller.user;
 
 import java.sql.Date;
 import java.time.LocalDate;

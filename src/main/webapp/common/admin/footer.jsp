@@ -10,7 +10,7 @@
 			<div class="sb-sidenav-menu">
 				<div class="nav">
 					<div class="sb-sidenav-menu-heading">Core</div>
-					<a class="nav-link" href="/petshop-5/admin/home">
+					<a class="nav-link" href="/petshop-5/trang-chu">
 						<div class="sb-nav-link-icon">
 							<i class="fas fa-tachometer-alt"></i>
 						</div> Trang chủ
@@ -52,7 +52,7 @@
 													<c:if
 														test="${itemCategory.type_id==itemTypeOfCategory.type_id}">
 														<a class="nav-link"
-															href="<c:url value="/admin/danh-sach-san-pham/${itemCategory.product_categ_id}/1?stt=all"/>">${itemCategory.product_categ_name}</a>
+															href="<c:url value="/admin/danh-sach-san-pham/the-loai/${itemCategory.product_categ_id}/1"/>">${itemCategory.product_categ_name}</a>
 													</c:if>
 												</c:forEach>
 											</nav>
@@ -70,32 +70,13 @@
 							<i class="fas fa-chart-area"></i>
 						</div> Quản lý đơn hàng
 					</a>
-					 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Quản lý tài khoản
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="<c:url value="/admin/quan-ly-tai-khoan?code=user&currentPage=1&stt=all"/>">Tài khoản người dùng</a>
-                                    <a class="nav-link" href="<c:url value="/admin/quan-ly-tai-khoan?code=admin&currentPage=1&stt=all"/>">Tài khoản admin</a>
-                                </nav>
-                            </div>
-			
+
 				</div>
 			</div>
-			<c:if test="${not empty LoginInfo}">
-			 <div class="sb-sidenav-footer">
+			<div class="sb-sidenav-footer">
 				<div class="small">Logged in as:</div>
-				${LoginInfo.username}
-			</div> 
-			</c:if>
-			<c:if test="${empty LoginInfo}">
-			 <div class="sb-sidenav-footer">
-				<div class="small">Not logged in</div>
-				
-			</div> 
-			</c:if>
+				${LoginInfo.userName}
+			</div>
 		</nav>
 	</div>
 </div>

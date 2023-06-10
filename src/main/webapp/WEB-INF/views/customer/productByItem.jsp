@@ -39,7 +39,7 @@
 	<div class="container-fluid bg-secondary mb-5">
 		<div 
 			class="d-flex flex-column align-items-center justify-content-center"
-			style="background-image: url('https://www.petcity.vn/media/banner/banner_839ab468.png'); background-repeat: no-repeat; min-height: 300px; background-size: 100%">
+			style="background-image: url('https://scontent.fdad3-4.fna.fbcdn.net/v/t1.15752-9/348378228_272886985146896_4538280699377459573_n.png?_nc_cat=107&ccb=1-7&_nc_sid=ae9488&_nc_ohc=rDKqPnitzA4AX_GLPbP&_nc_ht=scontent.fdad3-4.fna&oh=03_AdRE20ASOy-6CrLhYsPmWE_0Rd-HiOCj5MssGS0z0yQlwA&oe=64AB6909'); background-repeat: no-repeat; min-height: 300px; background-size: 100%">
 			</div>
 		</div>
 		

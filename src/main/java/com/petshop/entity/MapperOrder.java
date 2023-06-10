@@ -35,7 +35,7 @@ public class MapperOrder implements  RowMapper<Order>{
 		LocalDateTime orderTime = rs.getTimestamp("orderTime").toLocalDateTime();
 		order.setOrderTime(orderTime);
 		LocalDateTime confirmTime = rs.getTimestamp("confirmTime") != null ? rs.getTimestamp(
-				"confirm_time").toLocalDateTime() : null;
+				"confirmTime").toLocalDateTime() : null;
 		order.setConfirmTime(confirmTime);
 		LocalDateTime shipTime = rs.getTimestamp("shipTime") != null ? rs.getTimestamp(
 				"ship_time").toLocalDateTime() : null;

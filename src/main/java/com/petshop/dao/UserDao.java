@@ -38,40 +38,31 @@ public class UserDao {
 			};
 		}
 		list = _jdbcTemplate.query(sql.toString(), new MapperUser(),params);
-		System.out.println(sql);
 		return list;
 	}
 	public int AddUser(User user)
 	{
-		StringBuffer  sql = new StringBuffer();
-		sql.append("INSERT INTO ");
-		sql.append("user ");
-		sql.append("( ");
-		sql.append("    username, ");
-		sql.append("    password, ");
-		sql.append("    fullName, ");
-		sql.append("    phonenumber, ");
-		sql.append("    gender, ");
-		sql.append("    dateofbirth, ");
-		sql.append("    roleid, ");
-		sql.append("    status, ");
-		sql.append("    email ");
-		sql.append(") ");
-		sql.append("VALUES ");
-		sql.append("(");
-		sql.append("'"+user.getUsername()+"',");
-		sql.append("'"+user.getPassword()+"',");
-		sql.append("'"+user.getFullName()+"',");
-		sql.append("'"+user.getPhoneNumber()+"',");
-		sql.append("'"+user.getGender()+"',");
-		sql.append("'"+user.getDateOfBirth()+"',");
-		sql.append("'"+user.getRoleId()+"',");
-		sql.append("'"+user.getStatus()+"',");
-		sql.append("'"+user.getEmail()+"'");
-		sql.append(")");
-		int insert = _jdbcTemplate.update(sql.toString());
-		System.out.println("sql query:" + sql);
-		return insert;
+		 try {
+		        String sql = "INSERT INTO user (username, password, fullName, phonenumber, gender, dateofbirth, roleid, status, email) " +
+		                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		        Object[] param = {
+		                user.getUsername(),
+		                user.getPassword(),
+		                user.getFullName(),
+		                user.getPhoneNumber(),
+		                user.getGender(),
+		                user.getDateOfBirth(),
+		                user.getRoleId(),
+		                user.getStatus(),
+		                user.getEmail()
+		        };
+
+		        int insert = _jdbcTemplate.update(sql, param);
+		        return insert;
+		    } catch (Exception e) {
+		        System.out.println(e);
+		        return 0;
+		    }
 	}
 	public User GetUser(User user)
 	{
@@ -196,7 +187,6 @@ public class UserDao {
 				    
 				};
 			int rowUpdate=_jdbcTemplate.update(sql,params);
-			System.out.println(sql);
 			return rowUpdate;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -210,7 +200,6 @@ public class UserDao {
 			String sql="SELECT * FROM user WHERE username=?";
 			Object param= username;
 			user=(User) _jdbcTemplate.queryForObject(sql,new BeanPropertyRowMapper<>(User.class), param);
-			System.out.println(sql);
 			return user;
 		} catch (Exception e) {
 			System.out.println(e);

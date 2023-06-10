@@ -377,6 +377,12 @@ nav.order-status a.active {
 					<c:if test="${abc==1}"> 
   				<span id="notify" style="color: red">Xóa tài sản phẩm thành công</span>
   				 </c:if>
+  				 <c:if test="${update==1}"> 
+  				<span id="notify" style="color: red">Cập nhật thông tin sản phẩm thành công</span>
+  				 </c:if>
+  				 <c:if test="${addproduct==1}"> 
+  				<span id="notify" style="color: red">Thêm sản phẩm thành công</span>
+  				 </c:if>
 					<tbody>
 						 <c:forEach var="products" items="${ProductPaginate}">
 							<tr>
@@ -528,6 +534,102 @@ nav.order-status a.active {
 						<input type="button" class="btn btn-default" data-dismiss="modal"
 							value="Cancel"> <input type="submit"
 							class="btn btn-danger" value="Delete">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<c:forEach var="itemTypeOfCategory" items="${typeOfCategory}">
+		<div id="addTypeOfCategory${itemTypeOfCategory.type_id }"
+			class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<form
+						action="/petshop-5/admin/them-loai-san-pham/${itemTypeOfCategory.type_id }"
+						method="POST">
+
+						<div class="modal-header">
+							<h4 class="modal-title">Thêm ${itemTypeOfCategory.type_name }</h4>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">&times;</button>
+						</div>
+						<div class="modal-body">
+
+
+							<div class="form-group">
+								<label>Tên loại sản phẩm <label> <input
+										type="text" class="form-control" id="productCategoryName"
+										name="productCategoryName" required="required" value="" />
+							</div>
+
+						</div>
+						<div class="modal-footer">
+							<input type="button" class="btn btn-default" data-dismiss="modal"
+								value="Cancel"> <input type="submit"
+								class="btn btn-success" value="Add">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</c:forEach>
+	<c:forEach var="itemType" items="${dataItemType}">
+		<div id="addItemType${itemType.item_id }" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<form
+						action="/petshop-5/admin/them-dong-san-pham/${itemType.item_id}"
+						method="POST">
+
+						<div class="modal-header">
+							<h4 class="modal-title">Thêm dòng sản phẩm cho
+								${itemType.name}</h4>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">&times;</button>
+						</div>
+						<div class="modal-body">
+
+
+							<div class="form-group">
+								<label>Tên dòng sản phẩm <label> <input
+										type="text" class="form-control" id="typeOfCategoryName"
+										name="typeOfCategoryName" required="required" value="" />
+							</div>
+						</div>
+						<div class="modal-footer">
+							<input type="button" class="btn btn-default" data-dismiss="modal"
+								value="Cancel"> <input type="submit"
+								class="btn btn-success" value="Add">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</c:forEach>
+	<div id="addShop" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form action="/petshop-5/admin/them-shop" method="POST">
+
+					<div class="modal-header">
+						<h4 class="modal-title">Thêm shop mới</h4>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">
+
+
+						<div class="form-group">
+							<label>Tên shop <label> <input type="text"
+									class="form-control" id="shopName" name="shopName"
+									required="required" value="" />
+						</div>
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal"
+							value="Cancel"> <input type="submit"
+							class="btn btn-success" value="Add">
 					</div>
 				</form>
 			</div>

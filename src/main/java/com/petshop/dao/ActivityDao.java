@@ -20,7 +20,6 @@ public class ActivityDao extends BaseDao {
 			try {
 				String sql="SELECT * FROM activities_history ";
 				list=_JdbcTemplate.query(sql,new MapperActivity());
-				System.out.println("QUERY: "+sql);
 				return list;
 
 	        	}catch (Exception e) {
@@ -31,25 +30,22 @@ public class ActivityDao extends BaseDao {
 		}
 		public int AddActivity(Activity activity)
 		{
-			StringBuffer  sql = new StringBuffer();
-			sql.append("INSERT INTO ");
-			sql.append("activities_history ");
-			sql.append("( ");
-			sql.append("    activity_id, ");
-			sql.append("    activity, ");
-			sql.append("    activity_time ,");	
-			sql.append("    modifiedBy ");
-			sql.append(") ");
-			sql.append("VALUES ");
-			sql.append("(");
-			sql.append("'"+activity.getActivity_id()+"',");
-			sql.append("'"+activity.getActivity()+"',");
-			sql.append("'"+activity.getActivityTime()+"',");
-			sql.append("'"+activity.getModifiedBy()+"'");
-			sql.append(")");
-			int insert = _JdbcTemplate.update(sql.toString());
-			System.out.println("sql query:" + sql);
-			return insert;
+			try {
+				String sql = "INSERT INTO activities_history (activity_id, activity, activity_time, modifiedBy) VALUES (?, ?, ?, ?)";
+				
+				Object[] param = {
+					activity.getActivity_id(),
+					activity.getActivity(),
+					activity.getActivityTime(),
+					activity.getModifiedBy()
+				};
+				
+				int insert = _JdbcTemplate.update(sql, param);
+				return insert;
+			} catch (Exception e) {
+				System.out.println(e);
+				return 0; // or return an empty list depending on the requirement
+			}
 		}
 		
 }

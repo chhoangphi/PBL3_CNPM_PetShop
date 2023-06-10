@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Về chúng tôi</title>
 <style>
 /* body {
     font-family: 'Roboto';font-size: 16px;

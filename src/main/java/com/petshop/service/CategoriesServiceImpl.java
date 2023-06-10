@@ -84,6 +84,29 @@ public class CategoriesServiceImpl implements ICategoriesService {
 		return categoryDao.GetFeaturedCategoryByItemId(item_id);
 	}
 
+	@Override 
+	public String GetMaxProduct_cageID() {
+		// TODO Auto-generated method stub
+		return categoryDao.GetMaxProduct_cageID();
+	}
+
+	@Override
+	public String GetMaxTypeID() {
+		// TODO Auto-generated method stub
+		return categoryDao.GetMaxTypeID();
+	}
+	@Override
+	public List<String> GetDataTypeID() {
+		// TODO Auto-generated method stub
+		return categoryDao.GetDataTypeID();
+	}
+
+	@Override
+	public int AddProductCategory(ProductCategory productCategory) {
+		// TODO Auto-generated method stub
+		return categoryDao.AddProductCategory(productCategory);
+	}
+
 	
 
 }

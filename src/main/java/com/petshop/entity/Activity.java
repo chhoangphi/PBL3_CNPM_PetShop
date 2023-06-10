@@ -1,8 +1,7 @@
 package com.petshop.entity;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class Activity {
 		private String activity_id;

@@ -1,5 +1,7 @@
 package com.petshop.service;
 
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,9 +73,9 @@ public class OrderServiceImpl implements IOrderService{
 		return orderDao.GetDataOrder();
 	}
 	@Override
-	public List<Order> GetDataOrderPaginate(int start, int end) {
-		// TODO Auto-generated method stub
-		return orderDao.GetDataOrderPaginate(start, end);
+	public List<Order> GetDataOrderPaginate(int start, int end, String status,String month,String year) {
+		// TODO Auto-generated method stb
+		return orderDao.GetDataOrderPaginate(start, end,status, month, year);
 	}
 	@Override
 	public List<Order> GetDataOrderByUsername(String username) {
@@ -82,9 +84,14 @@ public class OrderServiceImpl implements IOrderService{
 	}
 
 	@Override
-	public int UpdateOrder(String status, String address, String orderID) {
+	public int UpdateOrder(Order order) {
 		// TODO Auto-generated method stub
-		return orderDao.UpdateOrder(status, address, orderID);
+		return orderDao.UpdateOrder(order);
+	}
+	@Override
+	public List<Order> GetDataOrderByStatus(String status,String month,String year) throws NullPointerException, SQLException {
+		// TODO Auto-generated method stub
+		return orderDao.GetDataOrderByStatus(status, month, year);
 	}
 
 }

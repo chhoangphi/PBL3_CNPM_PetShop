@@ -14,4 +14,5 @@ public interface ITypeOfCategoryService {
 	public List<TypeOfCategory> GetDataTypeOfCategoryList(String item_id);
 	public List<TypeOfCategory> GetDataTypeOfCategory();	
 	public List<TypeOfCategory> GetDataTypeOfCategory(String item_id);
+	public int AddTypeOfCategory(TypeOfCategory typeOfCategory);
 }
