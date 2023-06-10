@@ -1,7 +1,6 @@
-package com.petshop.controller.admin;
+package com.petshop.controller.Admin;
 
 import java.time.LocalDateTime;
-import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import com.petshop.controller.user.BaseController;
 import com.petshop.dto.PaginatesDto;
 import com.petshop.entity.Activity;
 import com.petshop.entity.User;
@@ -90,13 +87,11 @@ public class ManageAccountController extends AdminBaseController {
 					if (count > 0) {
 						mvShare.addObject("status", "Đăng ký tài khoản thành công");
 						activityHistory = "Đăng ký tài khoản " + user.getUsername();
-						Random rd = new Random();
 						String activity_id = "activity_id_" + System.currentTimeMillis() + "";
-						String activityTime = System.currentTimeMillis() + "";
 						User admin = (User) session.getAttribute("LoginInfo");
 						Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),
 								admin.getUsername());
-						int add = activityServiceImpl.AddActivity(activity);
+						activityServiceImpl.AddActivity(activity);
 						redirectAttributes.addFlashAttribute("addaccount", "Thêm tài khoản thành công");
 					} else {
 						mvShare.addObject("addaccount", "Đăng ký tài khoản thất bại");
@@ -127,16 +122,14 @@ public class ManageAccountController extends AdminBaseController {
 				mvShare.setViewName("redirect:/deny-access");
 			} else {
 				User u = userService.findUserByUsername(username);
-				int x = userService.DeleteUser(user);
+				userService.DeleteUser(user);
 				activityHistory = "Xóa tài khoản " + user.getUsername();
-				Random rd = new Random();
 				String activity_id = "activity_id_" + System.currentTimeMillis() + "";
-				String activityTime = System.currentTimeMillis() + "";
 
 				User admin = (User) session.getAttribute("LoginInfo");
 				Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),
 						admin.getUsername());
-				int add = activityServiceImpl.AddActivity(activity);
+				activityServiceImpl.AddActivity(activity);
 				redirectAttributes.addFlashAttribute("abc", 1);
 				if (u.getRoleId() == 0) {
 					return "redirect:/admin/quan-ly-tai-khoan?code=admin&stt=all";
@@ -176,13 +169,11 @@ public class ManageAccountController extends AdminBaseController {
 		if (userService.UpdateUser(user) > 0) {
 			System.out.println(1111);
 			activityHistory = "Cập nhật tài khoản " + user.getUsername();
-			Random rd = new Random();
 			String activity_id = "activity_id_" + System.currentTimeMillis() + "";
-			String activityTime = System.currentTimeMillis() + "";
 			redirectAttributes.addFlashAttribute("update", 1);
 			User admin = (User) session.getAttribute("LoginInfo");
 			Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(), admin.getUsername());
-			int add = activityServiceImpl.AddActivity(activity);
+			activityServiceImpl.AddActivity(activity);
 		} else {
 			redirectAttributes.addFlashAttribute("changeStatus", "Cập nhật tài khoản " + username + " thất bại");
 		}

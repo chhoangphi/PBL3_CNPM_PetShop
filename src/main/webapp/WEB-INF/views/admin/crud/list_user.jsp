@@ -371,13 +371,6 @@ email = (email.equals("null")) ? "" : email;
 						<div class="col-sm-6">
 							<a href="#addEmployeeModal" class="btn btn-success"
 								data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add
-									New User</span></a> <a href="#deleteEmployeeModal" class="btn btn-danger"
-								data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
-						</div>
-					</div>
-				</div>
-				<div class="red" id="baoLoi">${registerStatus}
-					${registerStatus1}</div>
 									New User</span></a> 
 						</div>
 					</div>
@@ -406,10 +399,8 @@ email = (email.equals("null")) ? "" : email;
 							<th>Gender</th>
 							<th>Date Of Birth</th>
 							<th>Phone Number</th>
-							<th>Email</th>
-							<th>Status</th>
 							<th>Action</th>
-
+							
 						</tr>
 					</thead>
 					<c:if test="${abc==1}"> 
@@ -423,7 +414,6 @@ email = (email.equals("null")) ? "" : email;
   				 </c:if>
 					<tbody>
 						 <c:forEach var="item" items="${userPaginate}">
-
 							<tr>
 								<td><span class="custom-checkbox"> <input
 										type="checkbox" id="checkbox1" name="options[]" value="1">
@@ -441,14 +431,12 @@ email = (email.equals("null")) ? "" : email;
      									class="delete" title="Delete" data-toggle="tooltip" onclick="confirmCancel('${item.username}')"><i
 										class="material-icons">&#xE872;</i></a></td>
 							</tr>
-
 						</c:forEach>
 					</tbody>
 				</table>
 				
 				<div class="clearfix">
 					<ul class="pagination">
-
 					<c:forEach var="item" begin="1" end="${pageinfo.totalPage}" varStatus ="loop">
 					<c:if test="${loop.index==pageinfo.currentPage}">
 						<li class="page-item active"><a href="<c:url value="/admin/quan-ly-tai-khoan?code=${param.code}&currentPage=${loop.index}&stt=${param.stt}"/>" class="page-link">${loop.index }</a></li>

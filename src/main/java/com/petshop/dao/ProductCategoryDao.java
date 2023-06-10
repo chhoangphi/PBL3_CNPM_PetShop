@@ -42,7 +42,7 @@ public class ProductCategoryDao extends BaseDao {
 	public List<String> GetDataProductCategoryNameList() {
 		try {
 		String sql = "SELECT product_categ_name from product_categories";
-		List data = _JdbcTemplate.queryForList(sql, String.class);
+		List<String> data = _JdbcTemplate.queryForList(sql, String.class);
 		return data;
 	}catch (Exception e) {
 		  System.out.println(e);

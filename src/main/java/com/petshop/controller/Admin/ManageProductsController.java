@@ -1,9 +1,7 @@
-package com.petshop.controller.admin;
+package com.petshop.controller.Admin;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Random;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -19,9 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import com.petshop.controller.user.BaseController;
-import com.petshop.dao.BaseDao;
 import com.petshop.dto.PaginatesDto;
 import com.petshop.entity.Activity;
 import com.petshop.entity.ProductCategory;
@@ -30,13 +25,8 @@ import com.petshop.entity.User;
 import com.petshop.service.ActivityServiceImpl;
 import com.petshop.service.CategoriesServiceImpl;
 import com.petshop.service.HomeServiceImpl;
-import com.petshop.service.ItemTypeServiceImpl;
-import com.petshop.service.OrderServiceImpl;
 import com.petshop.service.PaginatesServiceImpl;
 import com.petshop.service.ProductService;
-import com.petshop.service.RevenueStatisticsServiceImpl;
-import com.petshop.service.TypeOfCategoryServiceImpl;
-import com.petshop.service.UserServiceImpl;
 
 @Controller
 public class ManageProductsController extends AdminBaseController{
@@ -113,15 +103,13 @@ public class ManageProductsController extends AdminBaseController{
 		request.setAttribute("product_categ_name", product_categ_name);
 		String categoryID = categoryService.getStringProductCategoryIDByName(product_categ_name);
 		product.setProduct_categ_id(categoryID);
-		int x=productService.UpdateProduct(product);
+		productService.UpdateProduct(product);
 		redirectAttributes.addFlashAttribute("update", 1);
 		activityHistory = "Cập nhật sản phẩm " + product.getProduct_id();
-		Random rd = new Random();
 		String activity_id = "activity_id_" + System.currentTimeMillis() + "";
-		String activityTime = System.currentTimeMillis() + "";
 		User admin = (User) session.getAttribute("LoginInfo");
 		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(), admin.getUsername());
-		int add = activityServiceImpl.AddActivity(activity);
+		activityServiceImpl.AddActivity(activity);
 		// mvShare.setViewName("redirect:/home/danh-sach-san-pham");
 
 		// return mvShare;
@@ -143,13 +131,11 @@ public class ManageProductsController extends AdminBaseController{
 		product.setProduct_id(product_id);
 		productService.DeleteProduct(product);
 		activityHistory = "Xóa sản phẩm " + product.getProduct_id();
-		Random rd = new Random();
 		String activity_id = "activity_id_" + System.currentTimeMillis() + "";
-		String activityTime = System.currentTimeMillis() + "";
 
 		User admin = (User) session.getAttribute("LoginInfo");
 		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(), admin.getUsername());
-		int add = activityServiceImpl.AddActivity(activity);
+		activityServiceImpl.AddActivity(activity);
 		redirectAttributes.addFlashAttribute("abc", 1);
 			}
 		}
@@ -227,13 +213,11 @@ public class ManageProductsController extends AdminBaseController{
 //		product.setStatus(1);
 		productService.AddProduct(product);
 		activityHistory = "Thêm sản phẩm " + product.getProduct_id();
-		Random rd = new Random();
 		String activity_id = "activity_id_" + System.currentTimeMillis() + "";
-		String activityTime = System.currentTimeMillis() + "";
 
 		User admin = (User) session.getAttribute("LoginInfo");
 		Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(), admin.getUsername());
-		int add = activityServiceImpl.AddActivity(activity);
+		activityServiceImpl.AddActivity(activity);
 		
 		return "redirect:/admin/danh-sach-san-pham/" + categoryID + "/1?stt=all";
 	}

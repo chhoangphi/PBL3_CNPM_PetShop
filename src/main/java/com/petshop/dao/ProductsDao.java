@@ -236,7 +236,7 @@ public class ProductsDao extends BaseDao {
 	}
 	public List<String> GetDataProductID(String product_categ_id) {
 		String sql = "SELECT product_id from products WHERE product_categ_id LIKE '"+product_categ_id+"%'";
-		List data = _JdbcTemplate.queryForList(sql, String.class);
+		List<String> data = _JdbcTemplate.queryForList(sql, String.class);
 
 		return data;
 	}

@@ -4,14 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
-
-import com.petshop.entity.Menus;
-import com.petshop.entity.Order;
-import com.petshop.entity.User;
 import com.petshop.entity.Activity;
 import com.petshop.entity.MapperActivity;
-import com.petshop.entity.MapperMenu;
-import com.petshop.entity.MapperOrder;
 
 @Repository
 public class ActivityDao extends BaseDao {
@@ -27,6 +21,7 @@ public class ActivityDao extends BaseDao {
 			System.out.println(e);
 			return null; // hoặc trả về danh sách rỗng tùy thuộc vào yêu cầu
 		}
+	}
 		public int AddActivity(Activity activity)
 		{
 			try {
@@ -46,7 +41,6 @@ public class ActivityDao extends BaseDao {
 				return 0; // or return an empty list depending on the requirement
 			}
 		}
-	}
 
 	public List<String> FindDataOrderInMonthAndYear() {
 
@@ -69,7 +63,8 @@ public class ActivityDao extends BaseDao {
 			StringBuffer sql = new StringBuffer();
 			sql.append("SELECT * FROM activities_history WHERE ");
 			sql.append( " YEAR(activity_time)=" + year);
-			if(month==null)
+			
+			if(!month.equals("null"))
 					sql.append(" AND MONTH(activity_time) = " + month);
 			
 			
@@ -90,7 +85,6 @@ public class ActivityDao extends BaseDao {
 			String sql = SqlOrderPaginate(start, end, month, year).toString();
 			listOrder = _JdbcTemplate.query(sql, new MapperActivity());
 			System.out.println(sql);
-			
 			return listOrder;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -106,9 +100,9 @@ public class ActivityDao extends BaseDao {
 		if (!month.equals("null")) {
 			sql.append(" AND MONTH(activity_time)='" + month + "'");
 		}
-
 		sql.append(" LIMIT ");
 		sql.append(start + ", " + totalPage);
+		
 		return sql;
 	}
 }

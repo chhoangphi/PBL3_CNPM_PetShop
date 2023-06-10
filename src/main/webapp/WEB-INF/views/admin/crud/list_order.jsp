@@ -399,8 +399,7 @@ nav.order-status a.active {
 							class="${status=='canceled' ? 'active' : ''}">Đã hủy</a></li>
 					</ul>
 				</nav>
-				<div class="red" id="baoLoi">${statusUpdate}
-				</div>
+				
 				<table class="table table-striped table-hover">
 				
 					<thead>
@@ -421,6 +420,9 @@ nav.order-status a.active {
   				 </c:if>
   				 <c:if test="${update==1}"> 
   				<span id="notify" style="color: red">Cập nhật đơn hàng thành công</span>
+  				 </c:if>
+  				 <c:if test="${update==0}"> 
+  				<span id="notify" style="color: red">Không thể hủy đơn hàng</span>
   				 </c:if>
 					<tbody>
 						<c:forEach var="item" items="${OrderPaginate}">

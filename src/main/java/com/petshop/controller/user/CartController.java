@@ -81,6 +81,8 @@ public class CartController extends BaseController {
 	@RequestMapping(value = "/thanh-toan", method = RequestMethod.GET)
 	public String checkout(HttpServletRequest request, HttpSession session) {
 		User user = (User) session.getAttribute("LoginInfo");
+		mvShare.addObject("menu", HomeService.GetDataMenu());
+
 		
 		if (user != null) {
 			mvShare.setViewName("customer/checkout");
@@ -97,6 +99,7 @@ public class CartController extends BaseController {
 
 	@RequestMapping(value = "/thanh-toan", method = RequestMethod.POST)
 	public String checkout(HttpSession session, HttpServletRequest request, @ModelAttribute("order") Order order) {
+		mvShare.addObject("menu", HomeService.GetDataMenu());
 
 		Random rd = new Random();
 		String orderID = System.currentTimeMillis() + rd.nextInt(1000) + "";

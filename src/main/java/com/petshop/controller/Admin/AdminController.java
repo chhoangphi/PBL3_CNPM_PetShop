@@ -1,11 +1,6 @@
-package com.petshop.controller.admin;
+package com.petshop.controller.Admin;
 
-import java.sql.Date;
-import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.Calendar;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,42 +8,26 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import com.petshop.controller.user.BaseController;
-import com.petshop.dao.UserDao;
-import com.petshop.dto.PaginatesDto;
-import com.petshop.entity.Activity;
-import com.petshop.entity.ItemType;
-import com.petshop.entity.Order;
-import com.petshop.entity.Order.OrderStatus;
-import com.petshop.entity.ProductCategory;
-import com.petshop.entity.Products;
-import com.petshop.entity.TypeOfCategory;
-import com.petshop.entity.User;
 import com.petshop.service.ActivityServiceImpl;
 import com.petshop.service.CategoriesServiceImpl;
-import com.petshop.service.HomeServiceImpl;
 import com.petshop.service.ItemTypeServiceImpl;
-import com.petshop.service.OrderServiceImpl;
-import com.petshop.service.PaginatesServiceImpl;
-import com.petshop.service.ProductService;
 import com.petshop.service.RevenueStatisticsServiceImpl;
-import com.petshop.service.TypeOfCategoryServiceImpl;
-import com.petshop.service.UserServiceImpl;
+
 
 @Controller
 public class AdminController extends AdminBaseController {
 	@Autowired
 	private RevenueStatisticsServiceImpl  RevenueStatisticService;
-	@Autowired OrderDetailServiceImpl orderDetailServiceImpl;
+	@Autowired
+	private CategoriesServiceImpl categoryService;
+	@Autowired
+	private ActivityServiceImpl activityServiceImpl;
+	@Autowired
+	private ItemTypeServiceImpl itemTypeService;
+	
 	@RequestMapping(value = {"/admin/home", "/admin/"}, method = RequestMethod.GET)
 	public ModelAndView Admin(HttpServletRequest request, HttpServletResponse response, HttpSession session,
 			Model model) {
@@ -88,6 +67,8 @@ public class AdminController extends AdminBaseController {
 			        mvShare.addObject("totalPriceInMonth",RevenueStatisticService.GetDataTotalPriceInMonthAndYear(currentMonth, currentYear));
 			        mvShare.addObject("totalOrderInMonth",RevenueStatisticService.GetDataTotalOrderInMonthAndYear(currentMonth, currentYear));
 			        mvShare.addObject("dataOrder",RevenueStatisticService.FindDataOrderInMonthAndYear());
+			        mvShare.addObject("monthOfActivity",activityServiceImpl.FindDataActivityInMonthAndYear());
+
 				mvShare.setViewName("admin/index");
 			}
 		}

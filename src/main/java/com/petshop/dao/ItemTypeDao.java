@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.petshop.entity.MapperItemType;
-import com.petshop.entity.TypeOfCategory;
 import com.petshop.entity.ItemType;
 
 @Repository

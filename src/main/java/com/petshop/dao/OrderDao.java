@@ -2,12 +2,12 @@ package com.petshop.dao;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.petshop.entity.MapperOrder;
@@ -240,13 +240,18 @@ public class OrderDao extends BaseDao {
 	}
 	public int UpdateSoldQuantity(OrderDetail orderDetail)
 	{
+		System.out.println("product_id= "+ orderDetail.getProduct().getProduct_id());
 		System.out.println("soldquantity= "+ orderDetail.getProduct().getSold_quantity());
 		System.out.println("quantity= "+ orderDetail.getQuantity());
+		System.out.println("productsquantity= "+ orderDetail.getProduct().getAmountOfProducts());
 
 		int x = orderDetail.getProduct().getSold_quantity()+orderDetail.getQuantity();
 		String sql = "  UPDATE  products SET sold_quantity=  ?,amountOfProducts = ? WHERE product_id=?" ;
 		Object[] param = { x, orderDetail.getProduct().getAmountOfProducts()-orderDetail.getQuantity(),orderDetail.getProduct().getProduct_id() };
+		
 		int updatedRow = _JdbcTemplate.update(sql,param);
+		int y = orderDetail.getProduct().getAmountOfProducts()-orderDetail.getQuantity();
+		 sql = "  UPDATE  products SET sold_quantity="+x+",amountOfProducts = "+y+" WHERE product_id='"+orderDetail.getProduct().getProduct_id()+"'";
 		System.out.println(sql);
 		return updatedRow;
 	}

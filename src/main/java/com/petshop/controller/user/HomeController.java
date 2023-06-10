@@ -52,12 +52,16 @@ public class HomeController extends BaseController{
 	@RequestMapping(value = { "/deny-access" })
 	public ModelAndView Test() {
 		mvShare.setViewName("error/denyaccess");
+		mvShare.addObject("menu", HomeService.GetDataMenu());
+
 
 		return mvShare;
 	}
 	@RequestMapping(value = { "/gioi-thieu" })
 	public ModelAndView AboutUs() {
 		mvShare.setViewName("customer/aboutus");
+		mvShare.addObject("menu", HomeService.GetDataMenu());
+
 
 		return mvShare;
 	}

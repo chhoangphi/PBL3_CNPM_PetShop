@@ -30,6 +30,7 @@ public class CategoriesController extends BaseController {
 	public ModelAndView Product(@RequestParam(name = "shop", defaultValue = "item01") String item_id) {
 	
 		mvShare.setViewName("customer/productByItem");
+		mvShare.addObject("menu", HomeService.GetDataMenu());
 
 		ItemType itemType=new ItemType(HomeService.GetDataItemTypeByItemID(item_id));
 		mvShare.addObject("ItemType",itemType);
@@ -48,6 +49,8 @@ public class CategoriesController extends BaseController {
 			                           ,@RequestParam(name="sort",defaultValue="price-asc") String sort
 			                           ,@RequestParam(name="currentPage",defaultValue="1") String currentPage) {
 		mvShare.setViewName("customer/productByType");
+		mvShare.addObject("menu", HomeService.GetDataMenu());
+
 		
 		List<Products> productList=	CategoriesService.GetDataProductByTypeID(type_id,sort);
 		TypeOfCategory typeOfCategory=new TypeOfCategory(HomeService.GetDataTypeOfCategory(type_id));
@@ -65,6 +68,8 @@ public class CategoriesController extends BaseController {
 											 ,@RequestParam(name = "currentPage", defaultValue = "1") String currentPage
 											 ,@RequestParam(name = "sort", defaultValue = "price-asc") String sort) {
 		mvShare.setViewName("customer/productByProductcateg");
+		mvShare.addObject("menu", HomeService.GetDataMenu());
+
 		ProductCategory productCategory=new ProductCategory(HomeService.GetDataProductCategory(product_cate_id));
 		mvShare.addObject("productCategory", productCategory);
 		System.out.println(currentPage);

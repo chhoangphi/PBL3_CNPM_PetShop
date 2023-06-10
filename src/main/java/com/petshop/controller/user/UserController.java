@@ -68,6 +68,8 @@ public class UserController extends BaseController {
 		request.setAttribute("gender", gender);
 		request.setAttribute("dateofbirth", dateOfBirth);
 		request.setAttribute("phonenumber", phoneNumber);
+		mvShare.addObject("menu", HomeService.GetDataMenu());
+
 		Role role = new Role();
 		role.setCode("USER");
 		role.setName("Người dùng");
@@ -111,11 +113,15 @@ public class UserController extends BaseController {
 
 	@RequestMapping(value = "/dang-xuat", method = RequestMethod.GET)
 	public String DangXuat(HttpServletRequest request, HttpSession session) {
+		mvShare.addObject("menu", HomeService.GetDataMenu());
+
 		session.removeAttribute("LoginInfo");
 		return "redirect:dang-nhap";
 	}
 	@RequestMapping(value="/thong-tin-ca-nhan",method = RequestMethod.GET)
 	public String Profile(HttpSession session,HttpServletRequest request) {
+		mvShare.addObject("menu", HomeService.GetDataMenu());
+
 		User user=(User) session.getAttribute("LoginInfo");
 		if (user!=null) {
 		mvShare.setViewName("customer/profile");
@@ -141,6 +147,7 @@ public class UserController extends BaseController {
 	}
 	@RequestMapping(value="/tai-khoan-va-bao-mat",method = RequestMethod.GET)
 	public String Security(HttpSession session,HttpServletRequest request) {
+		mvShare.addObject("menu", HomeService.GetDataMenu());
 		User user=(User) session.getAttribute("LoginInfo");
 		if (user!=null) {
 			mvShare.setViewName("customer/profile");
@@ -170,6 +177,7 @@ public class UserController extends BaseController {
 	}
 	@RequestMapping(value="/don-hang/{status}",method = RequestMethod.GET)
 	public String order(HttpSession session,HttpServletRequest request,@PathVariable String status) {
+		mvShare.addObject("menu", HomeService.GetDataMenu());
 		User user=(User) session.getAttribute("LoginInfo");
 		if (user!=null) {
 			mvShare.setViewName("customer/profile");
@@ -188,6 +196,7 @@ public class UserController extends BaseController {
 	}
 	@GetMapping(value = "/chi-tiet-don-hang/{orderID}")
 	public String OrderDetail(HttpServletRequest request,HttpSession session,@PathVariable String orderID) {
+		mvShare.addObject("menu", HomeService.GetDataMenu());
 		if (session.getAttribute("LoginInfo")==null) {
 			return "redirect:/dang-nhap";
 		}
@@ -218,6 +227,7 @@ public class UserController extends BaseController {
 	@RequestMapping(value = "/thong-tin-tai-khoan", method = RequestMethod.GET)
 	public ModelAndView Profile(HttpSession session) {
 		User user = (User) session.getAttribute("LoginInfo");
+		mvShare.addObject("menu", HomeService.GetDataMenu());
 		if (user != null) {
 			List<Order> orderList = orderService.findAllOrder(user.getUsername());
 			mvShare.addObject("orderList", orderList);
@@ -236,7 +246,7 @@ public class UserController extends BaseController {
 	@RequestMapping(value = "/dang-nhap", method = RequestMethod.GET)
 	public ModelAndView LoginGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		mvShare.addObject("menu", HomeService.GetDataMenu());
 		mvShare.setViewName("customer/login");
 		mvShare.addObject("user", new User());
 		return mvShare;
