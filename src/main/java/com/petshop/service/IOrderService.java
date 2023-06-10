@@ -1,7 +1,6 @@
 package com.petshop.service;
 
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -25,4 +24,5 @@ public interface IOrderService {
 	public List<Order> GetDataOrderPaginate(int start, int end,String status,String month,String year);
 	public int UpdateOrder(Order order);
 	public List<Order> GetDataOrderByStatus(String status,String month,String year) throws NullPointerException, SQLException;
+	public int UpdateSoldQuantity(OrderDetail orderDetail);
 }

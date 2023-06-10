@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.petshop.dao.TypeOfCategoryDao;
 import com.petshop.dao.ProductCategoryDao;
 
 public class MapperTypeOfCategory implements RowMapper<TypeOfCategory>{

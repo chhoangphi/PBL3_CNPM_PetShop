@@ -59,23 +59,23 @@ username = (username.equals("null")) ? "" : username;
 					id="navbarCollapse">
 					<div class="navbar-nav mr-auto py-0">
 						<c:set var="count" value="1"></c:set>
+						
+						<a href='<c:url value="/trang-chu"/>' class="nav-item nav-link">Trang chủ</a>
+							
 						<c:forEach var="item" items="${menu}" varStatus="index">
-							<c:if test="${index.first}">
-								<a href='<c:url value="/trang-chu"/>' class="nav-item nav-link">${item.menu_name}</a>
-							</c:if>
+							
 
-							<c:if test="${not index.first}">
+							<c:if test="${item.order!= 1}">
 								<c:if test="${empty item.item_id}">
-								<c:if test="${index.index==3 }">
+								<c:if test="${index.index==menu.size()-2 }">
 									 <a href='<c:url value="/gioi-thieu"/>'
 										class="nav-item nav-link">${item.menu_name}</a>
 										</c:if>
-									<c:if test="${index.index==4 }">
+									<c:if test="${index.index==menu.size()-1}">
 									 <a href="https://zalo.me/84377382067"
 										class="nav-item nav-link">${item.menu_name}</a>
 										</c:if>
 								</c:if>
-
 								<c:if test="${not empty item.item_id}">
 									<div class="nav-item dropdown">
 
@@ -89,6 +89,7 @@ username = (username.equals("null")) ? "" : username;
 
 							</c:if>
 						</c:forEach>
+						
 					</div>
 					<c:if test="${empty LoginInfo}">
 						<div class="navbar-nav ml-auto py-0">

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Random;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -88,12 +87,9 @@ public class UserController extends BaseController {
 			if (count > 0) {
 				mvShare.addObject("status", "Đăng ký tài khoản thành công");
 				activityHistory = "Đăng ký tài khoản " + user.getUsername();
-				Random rd = new Random();
 				String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
-				String activityTime = System.currentTimeMillis() + "";
-				User admin=(User) session.getAttribute("LoginInfo");
 				Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),"");
-				int add = activityServiceImpl.AddActivity(activity);
+				activityServiceImpl.AddActivity(activity);
 				mvShare.setViewName("redirect:dang-nhap");
 				
 			} else {
@@ -211,12 +207,10 @@ public class UserController extends BaseController {
 	public String Cancel(HttpSession session,RedirectAttributes redirectAttributes,HttpServletRequest request,@PathVariable String orderID) {
 			orderService.DeleteOrder(orderID);
 			activityHistory = "Hủy đơn hàng " + orderID ;
-			Random rd = new Random();
 			String activity_id = "activity_id_" + System.currentTimeMillis() +  "";
-			String activityTime = System.currentTimeMillis() + "";
 			User admin=(User) session.getAttribute("LoginInfo");
 			Activity activity = new Activity(activity_id, activityHistory, LocalDateTime.now(),admin.getUsername());
-			int add = activityServiceImpl.AddActivity(activity);
+			activityServiceImpl.AddActivity(activity);
 			redirectAttributes.addFlashAttribute("abc",1);
 
 			return "redirect:"+request.getHeader("Referer");

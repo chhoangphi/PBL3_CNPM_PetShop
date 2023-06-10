@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +31,6 @@ import com.petshop.entity.Order;
 import com.petshop.entity.Order.OrderStatus;
 import com.petshop.entity.ProductCategory;
 import com.petshop.entity.Products;
-import com.petshop.entity.Role;
 import com.petshop.entity.TypeOfCategory;
 import com.petshop.entity.User;
 import com.petshop.service.ActivityServiceImpl;
@@ -50,8 +48,8 @@ import com.petshop.service.UserServiceImpl;
 public class AdminController extends AdminBaseController {
 	@Autowired
 	private RevenueStatisticsServiceImpl  RevenueStatisticService;
-
-	@RequestMapping(value = {"/admin/*"}, method = RequestMethod.GET)
+	@Autowired OrderDetailServiceImpl orderDetailServiceImpl;
+	@RequestMapping(value = {"/admin/home", "/admin/"}, method = RequestMethod.GET)
 	public ModelAndView Admin(HttpServletRequest request, HttpServletResponse response, HttpSession session,
 			Model model) {
 		boolean isLogined = session.getAttribute("LoginInfo") != null ? true : false;
@@ -76,6 +74,12 @@ public class AdminController extends AdminBaseController {
 				mvShare.setViewName("redirect:/deny-access");
 				// mvShare.setViewName("admin/index");
 			} else {
+				mvShare.addObject("productCategory", categoryService.GetAllDataProductCategory());
+				mvShare.addObject("dataItemType", itemTypeService.GetDataItemType());
+				mvShare.addObject("typeOfCategory", typeOfCategoryServiceImpl.GetDataTypeOfCategory());
+				mvShare.addObject("dataProductCategory", categoryService.GetAllDataProductCategory());
+		        mvShare.addObject("monthOfActivity",activityServiceImpl.FindDataActivityInMonthAndYear());
+
 				 Calendar calendar = Calendar.getInstance();
 			        int currentMonth = calendar.get(Calendar.MONTH) + 1;
 			        int currentYear = calendar.get(Calendar.YEAR);

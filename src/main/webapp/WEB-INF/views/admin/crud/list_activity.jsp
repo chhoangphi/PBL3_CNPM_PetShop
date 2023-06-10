@@ -13,9 +13,9 @@
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <link rel="stylesheet"
-	href="https://fonts.googleapis.com/icon?family=Material+Icons"><link rel="stylesheet"
+	href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
@@ -255,7 +255,35 @@ table.table .avatar {
 .modal .modal-dialog {
 	max-width: 400px;
 }
+nav.order-status {
+	padding: 10px;
+}
 
+nav.order-status ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+}
+
+nav.order-status li {
+	margin-right: 10px;
+}
+
+nav.order-status a {
+	display: block;
+	color: #333;
+	padding: 15px;
+	text-decoration: none;
+}
+
+nav.order-status a:hover {
+	background-color: #ddd;
+}
+
+nav.order-status a.active {
+	color: #E51F28;
+}
 .modal .modal-header, .modal .modal-body, .modal .modal-footer {
 	padding: 20px 30px;
 }
@@ -292,64 +320,33 @@ table.table .avatar {
 .modal form label {
 	font-weight: normal;
 }
-
-.red {
-	color: red;
-}
-
-nav.order-status li.active {
-	border-bottom: 2px solid #E51F28;
-	border-bottom-color: #E51F28;
-}
-nav.order-status {
-	padding: 10px;
-}
-
-nav.order-status ul {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	display: flex;
-}
-
-nav.order-status li {
-	margin-right: 10px;
-}
-
-nav.order-status a {
-	display: block;
-	color: #333;
-	padding: 15px;
-	text-decoration: none;
-}
-
-nav.order-status a:hover {
-	background-color: #ddd;
-}
-
-nav.order-status a.active {
-	color: #E51F28;
-}
 </style>
+<script>
+	$(document).ready(function() {
+		// Activate tooltip
+		$('[data-toggle="tooltip"]').tooltip();
+
+		// Select/Deselect checkboxes
+		var checkbox = $('table tbody input[type="checkbox"]');
+		$("#selectAll").click(function() {
+			if (this.checked) {
+				checkbox.each(function() {
+					this.checked = true;
+				});
+			} else {
+				checkbox.each(function() {
+					this.checked = false;
+				});
+			}
+		});
+		checkbox.click(function() {
+			if (!this.checked) {
+				$("#selectAll").prop("checked", false);
+			}
+		});
+	});
+</script>
 </head>
-<%
-String username = request.getAttribute("username") + "";
-username = (username.equals("null")) ? "" : username;
-String fullName = request.getAttribute("fullName") + "";
-fullName = (fullName.equals("null")) ? "" : fullName;
-
-String gender = request.getAttribute("gender") + "";
-gender = (gender.equals("null")) ? "" : gender;
-
-String dateofbirth = request.getAttribute("dateofbirth") + "";
-dateofbirth = (dateofbirth.equals("null")) ? "" : dateofbirth;
-
-String phonenumber = request.getAttribute("phonenumber") + "";
-phonenumber = (phonenumber.equals("null")) ? "" : phonenumber;
-
-String email = request.getAttribute("email") + "";
-email = (email.equals("null")) ? "" : email;
-%>
 <body>
 	<div class="container-xl">
 		<div class="table-responsive">
@@ -357,105 +354,72 @@ email = (email.equals("null")) ? "" : email;
 				<div class="table-title">
 					<div class="row">
 						<div class="col-sm-6">
-						<c:if test="${param.code=='user'}">
 							<h2>
-								Quản lý tài khoản <b>Người dùng</b>
+								Quản lý <b>hoạt động</b>
 							</h2>
-						</c:if>
-						<c:if test="${param.code=='admin'}">
-							<h2>
-								Quản lý tài khoản <b>Admin</b>
-							</h2>
-						</c:if>
+							<c:if test="${param.month=='null'}">
+							<h3>
+								Năm <b>${param.year}</b>
+							</h3>
+							</c:if>
+							<c:if test="${param.month!='null'}">
+							<h3>
+								Tháng <b>${param.month}/${param.year}</b>
+							</h3>
+							</c:if>
 						</div>
 						<div class="col-sm-6">
-							<a href="#addEmployeeModal" class="btn btn-success"
-								data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add
-									New User</span></a> <a href="#deleteEmployeeModal" class="btn btn-danger"
+							<a href="#deleteEmployeeModal" class="btn btn-danger"
 								data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
 						</div>
 					</div>
 				</div>
-				<div class="red" id="baoLoi">${registerStatus}
-					${registerStatus1}</div>
-									New User</span></a> 
-						</div>
-					</div>
-				</div>
-				<nav class="order-status">
-									<ul>
-										<li class="${param.stt=='all' ? 'active' : ''}"><a
-											href='<c:url value="/admin/quan-ly-tai-khoan?code=${param.code}&currentPage=1&stt=all"/>'
-											class="">Tất cả</a></li>
-										<li class="${param.stt=='active' ? 'active' : ''}"><a
-											href='<c:url value="/admin/quan-ly-tai-khoan?code=${param.code}&currentPage=1&stt=active"/>'
-											class="">Hoạt động</a></li>
-										<li class="${param.stt=='inactive' ? 'active' : ''}"><a
-											href='<c:url value="/admin/quan-ly-tai-khoan?code=${param.code}&currentPage=1&stt=inactive"/>'
-											class="">Bị khóa</a></li>
-									</ul>
-				</nav>
 				<table class="table table-striped table-hover">
+				
 					<thead>
 						<tr>
 							<th><span class="custom-checkbox"> <input
 									type="checkbox" id="selectAll"> <label for="selectAll"></label>
 							</span></th>
-							<th>Username</th>
-							<th>Fullname</th>
-							<th>Gender</th>
-							<th>Date Of Birth</th>
-							<th>Phone Number</th>
-							<th>Email</th>
-							<th>Status</th>
-							<th>Action</th>
-
+							<th>Activity ID</th>
+							<th>Activity</th>
+							<th>Activity Time</th>
+							<th>Modified By</th>
 						</tr>
 					</thead>
-					<c:if test="${abc==1}"> 
-  				<span id="notify" style="color: red">Xóa tài khoản thành công</span>
-  				 </c:if>
-  				 <c:if test="${update==1}"> 
-  				<span id="notify" style="color: red">Cập nhật tài khoản thành công</span>
-  				 </c:if>
-  				 <c:if test="${addaccount!=null}"> 
-  				<span id="notify" style="color: red">${addaccount}</span>
-  				 </c:if>
 					<tbody>
-						 <c:forEach var="item" items="${userPaginate}">
-
+						<c:forEach var="item" items="${activityPaginates}">
 							<tr>
 								<td><span class="custom-checkbox"> <input
 										type="checkbox" id="checkbox1" name="options[]" value="1">
 										<label for="checkbox1"></label>
 								</span></td>
-								<td>${item.username}</td>
-								<td>${item.fullName}</td>
-								<td>${item.gender}</td>
- 								<td>${item.dateOfBirth}</td>
- 								<td>${item.phoneNumber}</td>
- 								<td> <a
-									href="<c:url value="/admin/cap-nhat-tai-khoan/${item.username }"/>"
-									class="edit" title="Edit" data-toggle="tooltip"><i
-										class="material-icons">&#xE254;</i></a> <a
-     									class="delete" title="Delete" data-toggle="tooltip" onclick="confirmCancel('${item.username}')"><i
-										class="material-icons">&#xE872;</i></a></td>
+								<td>${item.activity_id}</td>
+								<td>${item.activity}</td>
+								<td>${item.activityTime}</td>
+								<td>${item.modifiedBy}</td>
+								
 							</tr>
-
 						</c:forEach>
 					</tbody>
 				</table>
-				
 				<div class="clearfix">
+					<div class="hint-text">
+						Showing <b>5</b> out of <b>25</b> entries
+					</div>
 					<ul class="pagination">
-
-					<c:forEach var="item" begin="1" end="${pageinfo.totalPage}" varStatus ="loop">
-					<c:if test="${loop.index==pageinfo.currentPage}">
-						<li class="page-item active"><a href="<c:url value="/admin/quan-ly-tai-khoan?code=${param.code}&currentPage=${loop.index}&stt=${param.stt}"/>" class="page-link">${loop.index }</a></li>
-						</c:if>
-						<c:if test="${loop.index!=pageinfo.currentPage}">
-						<li class="page-item"><a href="<c:url value="/admin/quan-ly-tai-khoan?code=${param.code}&currentPage=${loop.index}&stt=${param.stt}"/>" class="page-link">${loop.index }</a></li>
-						</c:if>
+						<c:forEach var="item" begin="1" end="${pageinfo.totalPage}"
+							varStatus="loop">
+							<c:if test="${loop.index==pageinfo.currentPage}">
+								<li class="page-item active"><a
+									href="<c:url value="/admin/quan-ly-hoat-dong/${loop.index}?year=${param.year}&month=${param.month}"/>"
+									class="page-link">${loop.index }</a></li>
+							</c:if>
+							<c:if test="${loop.index!=pageinfo.currentPage}">
+								<li class="page-item"><a
+									href="<c:url value="/admin/quan-ly-hoat-dong/${loop.index}?year=${param.year}&month=${param.month}"/>"
+									class="page-link">${loop.index }</a></li>
+							</c:if>
 						</c:forEach>
 					</ul>
 				</div>
@@ -463,130 +427,41 @@ email = (email.equals("null")) ? "" : email;
 		</div>
 	</div>
 	<!-- Edit Modal HTML -->
-	<div id="addEmployeeModal" class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<form:form action="/petshop-5/admin/them-tai-khoan" method="POST"
-					modelAttribute="user">
-					<div class="modal-header">
-						<h4 class="modal-title">Add User</h4>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-hidden="true">&times;</button>
-					</div>
-					<div class="modal-body">
 
-
-						<div class="form-group">
-							<form:label path="username">Username</form:label>
-							<form:input type="text" class="form-control" path="username"
-								id="username" name="username" required="required"
-								value="<%=username%>" />
-
-						</div>
-						<div class="mb-3">
-							<label for="gender" class="form-label">Role</label> <select class="form-control"
-								id="roleId" name="roleId">
-									<option value="0" label="Admin &#9660;" ></option>
-									<option value="1" label="User &#9660;" />
-							</select>
-						</div>
-						<div class="form-group">
-							<form:label path="password">Password</form:label>
-							<form:input type="password" class="form-control" path="password" />
-						</div>
-						<div class="form-group">
-							<form:label path="fullName">Fullname</form:label>
-							<form:input type="text" class="form-control" path="fullName"
-								id="fullName" name="fullName" required="required"
-								value="<%=fullName%>" />
-						</div>
-						<div class="form-group">
-							<form:label path="email">Email</form:label>
-							<form:input type="text" class="form-control" path="email"
-								id="email" name="email" required="required" value="<%=email%>" />
-						</div>
-						<div class="form-group">
-							<form:label path="dateOfBirth">Date Of Birth</form:label>
-							<form:input type="date" class="form-control" path="dateOfBirth"
-								id="dateOfBirth" name="dateOfBirth" required="required"
-								value="<%=dateofbirth%>" />
-						</div>
-						<div class="form-group">
-							<form:label path="phoneNumber">Phone Number</form:label>
-							<form:input type="text" class="form-control" path="phoneNumber"
-								id="phonenumber" name="phonenumber" required="required"
-								value="<%=phonenumber%>" />
-						</div>
-						<div class="mb-3">
-							<label for="gender" class="form-label">Gender</label> <select class="form-control"
-								id="gender" name="gender">
-									<option value="Nam" label="Nam &#9660;" />
-									<option value="Nữ" label="Nữ &#9660;" />
-									<option value="Khác" label="Khác &#9660;" />
-							</select>
-						</div>
-						
-					</div>
-					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal"
-							value="Cancel"> <input type="submit"
-							class="btn btn-success" value="Add">
-					</div>
-				</form:form>
-			</div>
-		</div>
-	</div>
 	<!-- Edit Modal HTML -->
 	<div id="editEmployeeModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form:form action="/petshop-5/admin/chinh-sua-tai-khoan"
-					method="POST" modelAttribute="user">
+				<form>
 					<div class="modal-header">
-						<h4 class="modal-title">Edit User</h4>
+						<h4 class="modal-title">Edit Product</h4>
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
-							<form:label path="username">Username</form:label>
-							<form:input type="text" class="form-control" path="username" />
+							<label>Name</label> <input type="text" class="form-control"
+								required>
 						</div>
 						<div class="form-group">
-							<form:label path="password">Password</form:label>
-							<form:input type="password" class="form-control" path="password" />
+							<label>Email</label> <input type="email" class="form-control"
+								required>
 						</div>
 						<div class="form-group">
-							<form:label path="fullName">Fullname</form:label>
-							<form:input type="text" class="form-control" path="fullName" />
+							<label>Address</label>
+							<textarea class="form-control" required></textarea>
 						</div>
 						<div class="form-group">
-							<form:label path="email">Email</form:label>
-							<form:input type="email" class="form-control" path="email" />
-						</div>
-						<div class="form-group">
-							<form:label path="dateOfBirth">Date Of Birth</form:label>
-							<form:input type="text" class="form-control" path="dateOfBirth" />
-						</div>
-						<div class="form-group">
-							<form:label path="phoneNumber">Phone Number</form:label>
-							<form:input type="text" class="form-control" path="phoneNumber" />
-						</div>
-						<div class="mb-3">
-							<label for="gender" class="form-label">Gender</label> <select class="form-control"
-								id="gender" name="gender">
-									<option value="Nam" label="Nam" />
-									<option value="Nữ" label="Nữ" />
-									<option value="Khác" label="Khác" />
-							</select>
+							<label>Phone</label> <input type="text" class="form-control"
+								required>
 						</div>
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal"
-							value="Cancel"> <input type="submit"
-							class="btn btn-success" value="Update">
+							value="Cancel"> <input type="submit" class="btn btn-info"
+							value="Save">
 					</div>
-				</form:form>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -615,7 +490,6 @@ email = (email.equals("null")) ? "" : email;
 			</div>
 		</div>
 	</div>
-
 	<c:forEach var="itemTypeOfCategory" items="${typeOfCategory}">
 		<div id="addTypeOfCategory${itemTypeOfCategory.type_id }"
 			class="modal fade">
@@ -711,37 +585,13 @@ email = (email.equals("null")) ? "" : email;
 			</div>
 		</div>
 	</div>
-		
 	<script>
-	$(document).ready(function() {
-		// Activate tooltip
-		$('[data-toggle="tooltip"]').tooltip();
-
-		// Select/Deselect checkboxes
-		var checkbox = $('table tbody input[type="checkbox"]');
-		$("#selectAll").click(function() {
-			if (this.checked) {
-				checkbox.each(function() {
-					this.checked = true;
-				});
-			} else {
-				checkbox.each(function() {
-					this.checked = false;
-				});
-			}
-		});
-		checkbox.click(function() {
-			if (!this.checked) {
-				$("#selectAll").prop("checked", false);
-			}
-		});
-	});
-	   function confirmCancel(username){
+	function confirmCancel(orderId){
 		   if (confirm("Xác nhận xóa tài khoản")){
-			    window.location.href = "/petshop-5/admin/xoa-tai-khoan/" + username;
+			    window.location.href = "/petshop-5/admin/xoa-don-hang/" + orderId;
 				document.getElementById("msg").innerHTML = "Xóa thành công";	 
 		   }
 	   }
-</script>
+	</script>
 </body>
 </html>

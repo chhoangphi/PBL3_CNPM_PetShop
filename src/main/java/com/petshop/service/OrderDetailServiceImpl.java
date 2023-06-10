@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.petshop.dao.OrderDao;
 import com.petshop.dao.OrderDetailDao;
-import com.petshop.entity.Order;
 import com.petshop.entity.OrderDetail;
 
 @Service
@@ -44,6 +43,13 @@ public class OrderDetailServiceImpl implements IOrderDetailService{
 	public int updateOrderDetail(OrderDetail orderDetail) {
 		// TODO Auto-generated method stub
 		return orderDetailDao.updateOrderDetail(orderDetail);
+	}
+
+
+	@Override
+	public int UpdateSoldQuantity(OrderDetail orderDetail) {
+		// TODO Auto-generated method stub
+		return orderDao.UpdateSoldQuantity(orderDetail);
 	}
 	
 }

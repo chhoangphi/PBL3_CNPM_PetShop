@@ -4,9 +4,6 @@ package com.petshop.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-
-import com.petshop.entity.User;
-import com.petshop.entity.Products;
 import com.petshop.entity.Reviews;
 
 @Service

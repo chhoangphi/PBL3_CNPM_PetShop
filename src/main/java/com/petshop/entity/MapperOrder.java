@@ -5,14 +5,10 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Repository;
 
-import com.petshop.dao.OrderDao;
 import com.petshop.dao.OrderDetailDao;
-import com.petshop.service.HomeServiceImpl;
-import com.petshop.service.OrderServiceImpl;
+
 
 public class MapperOrder implements  RowMapper<Order>{
 	
@@ -37,12 +33,18 @@ public class MapperOrder implements  RowMapper<Order>{
 		LocalDateTime confirmTime = rs.getTimestamp("confirmTime") != null ? rs.getTimestamp(
 				"confirmTime").toLocalDateTime() : null;
 		order.setConfirmTime(confirmTime);
-		LocalDateTime shipTime = rs.getTimestamp("shipTime") != null ? rs.getTimestamp(
-				"ship_time").toLocalDateTime() : null;
+		LocalDateTime shipTime = rs.getTimestamp("shiptime") != null ? rs.getTimestamp(
+				"shiptime").toLocalDateTime() : null;
 		order.setShipTime(shipTime);
-		LocalDateTime completedTime = rs.getTimestamp("completedTime") != null ? rs.getTimestamp(
-				"completed_time").toLocalDateTime() : null;
+		LocalDateTime receiveTime = rs.getTimestamp("receivetime") != null ? rs.getTimestamp(
+				"receivetime").toLocalDateTime() : null;
+		order.setCompletedTime(receiveTime);
+		LocalDateTime completedTime = rs.getTimestamp("completedtime") != null ? rs.getTimestamp(
+				"completedtime").toLocalDateTime() : null;
 		order.setCompletedTime(completedTime);
+		LocalDateTime cancleTime = rs.getTimestamp("cancletime") != null ? rs.getTimestamp(
+				"cancletime").toLocalDateTime() : null;
+		order.setCompletedTime(cancleTime);
 		
 		List<OrderDetail> orderDetailList=orderDetailDao.findAll(orderID);
 		order.setOrderDetailList(orderDetailList);

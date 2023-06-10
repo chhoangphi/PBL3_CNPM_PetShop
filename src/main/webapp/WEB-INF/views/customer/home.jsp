@@ -48,23 +48,26 @@ height: 130px;
                 </a>
                 <nav class="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical">
                     <div class="navbar-nav w-100 overflow-hidden" style="height: 410px">
-                    
+                    	<c:forEach var="itemMenu" items="${menu}">
+                    	<c:if test="${itemMenu.item_id != null }">
                         <div class="nav-item dropdown">
-                            <a href="#" class="nav-link" data-toggle="dropdown">Shop Cún<i class="fa fa-angle-down float-right mt-1"></i></a>
+                            <a href="#" class="nav-link" data-toggle="dropdown">${itemMenu.menu_name}<i class="fa fa-angle-down float-right mt-1"></i></a>
                             <div class="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
                            <c:forEach var="type01" items="${itemType01.typeOfCategoryList}">
                                 <a href='<c:url value="/san-pham/${type01.type_id}"/>' class="dropdown-item">${type01.type_name}</a>
                                 </c:forEach>
                             </div>
                         </div>
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link" data-toggle="dropdown">Shop mèo<i class="fa fa-angle-down float-right mt-1"></i></a>
+                        <%-- <div class="nav-item dropdown">
+                            <a href="#" class="nav-link" data-toggle="dropdown">${menu.size()}<i class="fa fa-angle-down float-right mt-1"></i></a>
                             <div class="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
                            <c:forEach var="type02" items="${itemType02.typeOfCategoryList}">
                                 <a href='<c:url value="/san-pham/${type02.type_id}"/>' class="dropdown-item">${type02.type_name}</a>
                                 </c:forEach>
                             </div>
-                        </div>
+                        </div> --%>
+                        </c:if>
+                        </c:forEach>
                     </div>
                 </nav>
             </div>

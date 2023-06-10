@@ -1,7 +1,6 @@
 package com.petshop.service;
 
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,5 +92,9 @@ public class OrderServiceImpl implements IOrderService{
 		// TODO Auto-generated method stub
 		return orderDao.GetDataOrderByStatus(status, month, year);
 	}
-
+	@Override
+	public int UpdateSoldQuantity(OrderDetail orderDetail) {
+		// TODO Auto-generated method stub
+		return orderDao.UpdateSoldQuantity(orderDetail);
+	}
 }

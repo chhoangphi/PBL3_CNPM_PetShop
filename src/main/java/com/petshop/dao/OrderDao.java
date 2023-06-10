@@ -4,23 +4,16 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.petshop.entity.MapperOrder;
-import com.petshop.entity.MapperOrderDetail;
 import com.petshop.entity.Order;
-import com.petshop.entity.OrderDetail;
 import com.petshop.entity.Order.OrderStatus;
-import com.mysql.cj.protocol.a.SqlTimestampValueEncoder;
-import com.petshop.dao.OrderDetailDao;
+import com.petshop.entity.OrderDetail;
 
 @Repository
 public class OrderDao extends BaseDao {
@@ -187,14 +180,26 @@ public class OrderDao extends BaseDao {
 
 	public int UpdateOrder(Order order) {
 		try {
-			String sql = "UPDATE order_customer SET order_status = ?, address = ?, confirmtime = ? WHERE orderID = ?";
-			Object[] param = {
-				order.getStatus(),
-				order.getAddress(),
-				order.getConfirmTime(),
-				order.getOrderId()
-			};
-			int updatedRow = _JdbcTemplate.update(sql, param);
+
+			StringBuilder sql = new StringBuilder();
+			sql.append("  UPDATE order_customer SET order_status='");
+			sql.append(order.getStatus());
+			sql.append("', address='");
+			sql.append(order.getAddress()+"'");
+			if(order.getConfirmTime()!= null)
+				sql.append(", confirmtime = '" + order.getConfirmTime()+"'");
+			if(order.getShipTime()!= null)
+				sql.append(", shiptime = '" + order.getShipTime()+"'");
+			if(order.getReceiveTime()!= null)
+				sql.append(", receivetime = '" + order.getReceiveTime()+"'");
+			if(order.getCompletedTime()!= null) {
+				sql.append(", completedtime = '" + order.getCompletedTime()+"'");
+			}
+			if(order.getCancleTime()!= null)
+				sql.append(", cancletime = '" + order.getCancleTime()+"'");
+			sql.append( " WHERE orderID='"+ order.getOrderId()+"'");					
+			System.out.println(sql);
+			int updatedRow = _JdbcTemplate.update(sql.toString());
 			return updatedRow;
 		} catch (Exception e) {
 			System.out.println(e);
@@ -232,5 +237,17 @@ public class OrderDao extends BaseDao {
 			System.out.println(e);
 			return null;
 		}
+	}
+	public int UpdateSoldQuantity(OrderDetail orderDetail)
+	{
+		System.out.println("soldquantity= "+ orderDetail.getProduct().getSold_quantity());
+		System.out.println("quantity= "+ orderDetail.getQuantity());
+
+		int x = orderDetail.getProduct().getSold_quantity()+orderDetail.getQuantity();
+		String sql = "  UPDATE  products SET sold_quantity=  ?,amountOfProducts = ? WHERE product_id=?" ;
+		Object[] param = { x, orderDetail.getProduct().getAmountOfProducts()-orderDetail.getQuantity(),orderDetail.getProduct().getProduct_id() };
+		int updatedRow = _JdbcTemplate.update(sql,param);
+		System.out.println(sql);
+		return updatedRow;
 	}
 }

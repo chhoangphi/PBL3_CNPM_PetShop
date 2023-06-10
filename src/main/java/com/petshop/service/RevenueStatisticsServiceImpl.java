@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.petshop.dao.RevenueStatisticsDao;
-import com.petshop.dto.RevenueStatistics;
+import com.petshop.dto.RevenueStatisticsDto;
 
 @Service
 public class RevenueStatisticsServiceImpl implements IRevenueStatisticsService{
@@ -22,7 +22,7 @@ public class RevenueStatisticsServiceImpl implements IRevenueStatisticsService{
 		// TODO Auto-generated method stub
 		return revenueStatisticsDao.GetDataTotalOrderInMonthAndYear(month, year);
 	}
-	public List<RevenueStatistics> FindDataOrderInMonthAndYear() {
+	public List<RevenueStatisticsDto> FindDataOrderInMonthAndYear() {
 		// TODO Auto-generated method stub
 		return revenueStatisticsDao.FindDataOrderInMonthAndYear();
 	}

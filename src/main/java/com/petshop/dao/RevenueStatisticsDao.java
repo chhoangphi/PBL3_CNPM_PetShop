@@ -6,8 +6,7 @@ import java.util.List;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.petshop.dto.RevenueStatistics;
-import com.petshop.entity.ProductCategory;
+import com.petshop.dto.RevenueStatisticsDto;
 
 @Repository
 public class RevenueStatisticsDao extends BaseDao {
@@ -45,8 +44,8 @@ public class RevenueStatisticsDao extends BaseDao {
 				return 0;
 			}
 	}
-	public List<RevenueStatistics> FindDataOrderInMonthAndYear(){
-		List<RevenueStatistics> list=new ArrayList<>();
+	public List<RevenueStatisticsDto> FindDataOrderInMonthAndYear(){
+		List<RevenueStatisticsDto> list=new ArrayList<>();
 		try {
 			String sql="SELECT  DISTINCT(MONTH(orderTime)) AS monthOfOrder,SUM(totalPrice) AS totalPriceOfMonth ,count(orderID) AS totalOrderOfMonth FROM order_customer WHERE  YEAR(OrderTime)=2023\r\n"
 					+ "	 GROUP BY MONTH(orderTime)\r\n"
